@@ -517,5 +517,4 @@ void ZombiesGame::addBlood(const glm::vec2& position, int numParticles)
 	for (int i = 0; i < numParticles; i++) {
 		bloodParticleBatch_->addParticle(position, glm::rotate(velocity, randAngle(randEngine)), col, 10.f);
 	}
-	// comment
 }
