@@ -62,5 +62,6 @@ protected:
 	int lives_;
 	const float radius_ = 20.f;
 	ge::ColorRGBA8 color_; 
+	GLuint textureId_;
 };
 

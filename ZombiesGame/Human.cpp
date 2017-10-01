@@ -1,4 +1,5 @@
 #include "Human.h"
+#include <GameEngineOpenGL\ResourceManager.h>
 #include <random>
 #include <time.h>
 #include <glm\gtx\rotate_vector.hpp>
@@ -20,7 +21,7 @@ void Human::init(glm::vec2 initialPos, float initialSpeed)
 
 	this->pos_ = initialPos;
 	this->speed_ = initialSpeed;
-	this->color_.setColor(230, 30, 230, 255);
+	this->color_.setColor(255, 255, 255, 255);
 	this->health_ =15.f;
 
 	// getting random direction
@@ -32,6 +33,7 @@ void Human::init(glm::vec2 initialPos, float initialSpeed)
 	}
 
 	this->dir_ = glm::normalize(this->dir_);
+	textureId_ = ge::ResourceManager::getTexture("Textures/human.png").id;
 }
 
 void Human::update(const std::vector<std::string>& lvlData,

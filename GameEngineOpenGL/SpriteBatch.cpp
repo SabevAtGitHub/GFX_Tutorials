@@ -2,6 +2,70 @@
 #include <algorithm>
 
 namespace ge {
+
+	Glyph::Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color) :
+		texture(texture),
+		depth(depth) 
+	{
+		topLeft.color = color;
+		topLeft.setPos(destRect.x, destRect.y + destRect.w);
+		topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
+
+		bottomLeft.color = color;
+		bottomLeft.setPos(destRect.x, destRect.y);
+		bottomLeft.setUV(uvRect.x, uvRect.y);
+
+		bottomRight.color = color;
+		bottomRight.setPos(destRect.x + destRect.z, destRect.y);
+		bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
+
+		topRight.color = color;
+		topRight.setPos(destRect.x + destRect.z, destRect.y + destRect.w);
+		topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
+	}
+
+	Glyph::Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, float angle) :
+		texture(texture),
+		depth(depth)
+	{
+		glm::vec2 halfDims(destRect.z / 2.0f, destRect.w / 2.0f);
+
+		// Get points centered at origin
+		glm::vec2 tl(-halfDims.x, halfDims.y);
+		glm::vec2 bl(-halfDims.x, -halfDims.y);
+		glm::vec2 br(halfDims.x, -halfDims.y);
+		glm::vec2 tr(halfDims.x, halfDims.y);
+
+		// Rotate the points
+		tl = rotatePoint(tl, angle) + halfDims;
+		bl = rotatePoint(bl, angle) + halfDims;
+		br = rotatePoint(br, angle) + halfDims;
+		tr = rotatePoint(tr, angle) + halfDims;
+
+		topLeft.color = color;
+		topLeft.setPos(destRect.x, destRect.y + destRect.w);
+		topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
+
+		bottomLeft.color = color;
+		bottomLeft.setPos(destRect.x, destRect.y);
+		bottomLeft.setUV(uvRect.x, uvRect.y);
+
+		bottomRight.color = color;
+		bottomRight.setPos(destRect.x + destRect.z, destRect.y);
+		bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
+
+		topRight.color = color;
+		topRight.setPos(destRect.x + destRect.z, destRect.y + destRect.w);
+		topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
+	}
+
+	glm::vec2 Glyph::rotatePoint(const glm::vec2& pos, float angle) {
+		glm::vec2 newv;
+		newv.x = pos.x * cos(angle) - pos.y * sin(angle);
+		newv.y = pos.x * sin(angle) + pos.y * cos(angle);
+		return newv;
+	}
+
 	/// <summary>
 	///  To be able to draw bathces of textures
 	/// </summary>
@@ -13,6 +77,7 @@ namespace ge {
 	{
 		createVertexArray();
 	}
+
 	void SpriteBatch::begin(GlyphSortType sortBy /* GlyphSortType::TEXTURE */)
 	{ /// to setup any state before rendering
 		
@@ -21,6 +86,7 @@ namespace ge {
 		renderBatches.clear();
 		glyphs.clear();
 	}
+
 	void SpriteBatch::end()
 	{
 		// resize and retarget
@@ -32,11 +98,23 @@ namespace ge {
 		sortGlyphs();
 		createRenderBatches();
 	}
+
 	void SpriteBatch::draw(const glm::vec4 & destRect, 
 		const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color)
 	{
 		glyphs.emplace_back(destRect, uvRect, texture, depth, color);
 	}
+
+	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, float angle)
+	{
+
+	}
+
+	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, const glm::vec3 dir)
+	{
+
+	}
+
 	void SpriteBatch::renderBatch()
 	{
 		// binding vertex array object

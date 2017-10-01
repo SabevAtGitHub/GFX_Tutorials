@@ -1,5 +1,6 @@
 #include "Zombie.h"
 #include "Human.h"
+#include <GameEngineOpenGL\ResourceManager.h>
 
 Zombie::Zombie()
 { /*empty*/ }
@@ -12,8 +13,9 @@ void Zombie::init(glm::vec2 initialPos, float initialSpeed)
 {
 	this->pos_ = initialPos;
 	this->speed_ = initialSpeed;
-	this->color_.setColor(30, 230, 30, 255);
+	this->color_.setColor(255, 255, 255, 255);
 	this->health_ = 20.f;
+	textureId_ = ge::ResourceManager::getTexture("Textures/zombie.png").id;
 }
 
 void Zombie::update(const std::vector<std::string>& lvlData,

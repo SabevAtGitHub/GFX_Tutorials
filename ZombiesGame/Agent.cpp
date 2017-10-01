@@ -83,13 +83,11 @@ bool Agent::collideWithAgent(Agent * agent)
 
 void Agent::draw(ge::SpriteBatch & spriteBatch)
 {
-	static int texId = ge::ResourceManager::getTexture("Textures/agent.png").id;
-
 	glm::vec4 destRect(pos_.x , pos_.y, AGENT_WIDTH, AGENT_WIDTH);
 
 	const auto uvRect = glm::vec4(0.f, 0.f, 1.f, 1.f);
 	// drawing
-	spriteBatch.draw(destRect, uvRect, texId, 0.f, color_);
+	spriteBatch.draw(destRect, uvRect, textureId_, 0.f, color_);
 }
 
 bool Agent::applyDamage(float damage)

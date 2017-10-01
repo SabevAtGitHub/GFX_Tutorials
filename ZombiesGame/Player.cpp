@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Gun.h"
+#include <GameEngineOpenGL\ResourceManager.h>
 #include <SDL\SDL.h>
 
 
@@ -18,8 +19,8 @@ Player::Player(glm::vec2 position, glm::vec2 direction,
 	currGunIdx_ = -1;
 
 	// hardcoded color blue
-	color_.setColor(0, 0, 185, 255); 
-	
+	color_.setColor(255, 255, 255, 255);
+	textureId_ = ge::ResourceManager::getTexture("Textures/player.png").id;
 }
 
 

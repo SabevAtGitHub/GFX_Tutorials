@@ -1,11 +1,9 @@
 #pragma once
 
-#include <GL\glew.h>
-#include <glm\glm.hpp>
-#include "Vertex.h"
+#include <glm/glm.hpp>
 #include <vector>
-#include <memory>
-
+#include <GL\glew.h>
+#include "Vertex.h"
 
 namespace ge {
 
@@ -14,6 +12,22 @@ namespace ge {
 		FRONT_TO_BACK,
 		BACK_TO_FRONT,
 		TEXTURE
+	};
+
+	class Glyph {
+	public:
+		Glyph() {};
+		Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color);
+		
+		Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, float angle);
+
+		GLuint texture;
+		float depth;
+
+		Vertex topLeft, bottomLeft, topRight, bottomRight;
+	private:
+		// Rotates a point about (0,0) by angle
+		glm::vec2 rotatePoint(const glm::vec2& pos, float angle);
 	};
 
 	class RenderBatch {
@@ -25,35 +39,6 @@ namespace ge {
 		GLuint texture;
 	};
 
-	class Glyph {
-	public:
-		Glyph() {};
-		Glyph(const glm::vec4 & destRect,
-			const glm::vec4 & uvRect, GLuint Texture, float Depth, const ColorRGBA8 & color) :
-		texture(Texture), depth(Depth)
-		{
-			this->topLeft.color = color;
-			this->topLeft.setPos(destRect.x, destRect.y + destRect.w);
-			this->topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
-
-			this->bottomLeft.color = color;
-			this->bottomLeft.setPos(destRect.x, destRect.y);
-			this->bottomLeft.setUV(uvRect.x, uvRect.y);
-
-			this->bottomRight.color = color;
-			this->bottomRight.setPos(destRect.x + destRect.z, destRect.y);
-			this->bottomRight.setUV(uvRect.x + uvRect.w, uvRect.y);
-
-			this->topRight.color = color;
-			this->topRight.setPos(destRect.x + destRect.z, destRect.y + destRect.w);
-			this->topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
-		}
-
-		GLuint texture;
-		float depth;
-
-		Vertex topLeft, bottomLeft, topRight, bottomRight;
-	};
 
 	class SpriteBatch /// To be able to draw bathces of textures
 	{
@@ -65,7 +50,17 @@ namespace ge {
 
 		void begin(GlyphSortType sortBy = GlyphSortType::TEXTURE);
 		void end();
+
+		/// <summary>
+		/// adds a Glyph to the sprite batch
+		/// </summary>
 		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color);
+		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color, float angle);
+		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color, const glm::vec3 dir);
+
+		/// <summary>
+		/// renders entire SpriteBatch
+		/// </summary>
 		void renderBatch();
 
 	private:

@@ -21,7 +21,7 @@ namespace ge {
 	};
 
 	// if a particle is active, update it
-	inline void defaultParticleupdate(Particle2D& p, float deltaTime) {
+	inline void defaultParticleUpdate(Particle2D& p, float deltaTime) {
 		p.pos += p.velocity * deltaTime;
 	}
 
@@ -34,7 +34,7 @@ namespace ge {
 		void init(int maxParticles, 
 				  float decayRate,
 				  GLTexture texture,
-				  std::function<void(Particle2D&, float)> updateFunc = defaultParticleupdate);
+				  std::function<void(Particle2D&, float)> updateFunc = defaultParticleUpdate);
 
 		void update(float deltaTime);
 
