@@ -1,11 +1,11 @@
 #include "BallRenderer.h"
 
-void BallRenderer::renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
+void BallRenderer::renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
                                const glm::mat4& projectionMatrix) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     // Lazily initialize the program
     if (m_program == nullptr) {
-        m_program = std::make_unique<Bengine::GLSLProgram>();
+        m_program = std::make_unique<ge::GLSLProgram>();
         m_program->compileShaders("Shaders/textureShading.vert", "Shaders/textureShading.frag");
         m_program->addAttribute("vertexPosition");
         m_program->addAttribute("vertexColor");
@@ -39,14 +39,14 @@ void BallRenderer::renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vec
     m_program->unuse();
 }
 
-void MomentumBallRenderer::renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
+void MomentumBallRenderer::renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
                                const glm::mat4& projectionMatrix) {
 
     glClearColor(0.0f, 0.1f, 0.5f, 1.0f);
 
     // Lazily initialize the program
     if (m_program == nullptr) {
-        m_program = std::make_unique<Bengine::GLSLProgram>();
+        m_program = std::make_unique<ge::GLSLProgram>();
         m_program->compileShaders("Shaders/textureShading.vert", "Shaders/textureShading.frag");
         m_program->addAttribute("vertexPosition");
         m_program->addAttribute("vertexColor");
@@ -71,7 +71,7 @@ void MomentumBallRenderer::renderBalls(Bengine::SpriteBatch& spriteBatch, const 
         const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
         const glm::vec4 destRect(ball.position.x - ball.radius, ball.position.y - ball.radius,
                                  ball.radius * 2.0f, ball.radius * 2.0f);
-        Bengine::ColorRGBA8 color;
+        ge::ColorRGBA8 color;
         GLubyte colorVal = (GLubyte)(glm::clamp(glm::length(ball.velocity) * ball.mass * 12.0f, 0.0f, 255.0f));
         color.r = colorVal;
         color.g = colorVal;
@@ -93,13 +93,13 @@ VelocityBallRenderer::VelocityBallRenderer(int screenWidth, int screenHeight) :
 }
 
 
-void VelocityBallRenderer::renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
+void VelocityBallRenderer::renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
                                        const glm::mat4& projectionMatrix) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // Lazily initialize the program
     if (m_program == nullptr) {
-        m_program = std::make_unique<Bengine::GLSLProgram>();
+        m_program = std::make_unique<ge::GLSLProgram>();
         m_program->compileShaders("Shaders/textureShading.vert", "Shaders/textureShading.frag");
         m_program->addAttribute("vertexPosition");
         m_program->addAttribute("vertexColor");
@@ -124,7 +124,7 @@ void VelocityBallRenderer::renderBalls(Bengine::SpriteBatch& spriteBatch, const 
         const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
         const glm::vec4 destRect(ball.position.x - ball.radius, ball.position.y - ball.radius,
                                  ball.radius * 2.0f, ball.radius * 2.0f);
-        Bengine::ColorRGBA8 color;
+        ge::ColorRGBA8 color;
 
         float mult = 100.0f;
         GLubyte colorVal = (GLubyte)(glm::clamp(ball.velocity.x * mult, 0.0f, 255.0f));
@@ -147,12 +147,12 @@ TrippyBallRenderer::TrippyBallRenderer(int screenWidth, int screenHeight) :
     // Empty
 }
 
-void TrippyBallRenderer::renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vector<Ball>& balls, const glm::mat4& projectionMatrix) {
+void TrippyBallRenderer::renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls, const glm::mat4& projectionMatrix) {
     glClearColor(0.1f, 0.0f, 0.0f, 1.0f);
 
     // Lazily initialize the program
     if (m_program == nullptr) {
-        m_program = std::make_unique<Bengine::GLSLProgram>();
+        m_program = std::make_unique<ge::GLSLProgram>();
         m_program->compileShaders("Shaders/textureShading.vert", "Shaders/textureShading.frag");
         m_program->addAttribute("vertexPosition");
         m_program->addAttribute("vertexColor");
@@ -184,7 +184,7 @@ void TrippyBallRenderer::renderBalls(Bengine::SpriteBatch& spriteBatch, const st
         const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
         const glm::vec4 destRect(ball.position.x - ball.radius, ball.position.y - ball.radius,
                                  ball.radius * 2.0f, ball.radius * 2.0f);
-        Bengine::ColorRGBA8 color;
+        ge::ColorRGBA8 color;
        
         // Get vector from center point
         glm::vec2 centerVec = ball.position - glm::vec2(m_screenWidth / 2, m_screenHeight / 2);

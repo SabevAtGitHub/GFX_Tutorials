@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <Bengine/Vertex.h>
+#include <GameEngineOpenGL\Vertex.h>
 
 struct Cell;
 
@@ -9,14 +9,14 @@ struct Cell;
 struct Ball {
     Ball(float radius, float mass, const glm::vec2& pos,
          const glm::vec2& vel, unsigned int textureId,
-         const Bengine::ColorRGBA8& color);
+         const ge::ColorRGBA8& color);
 
     float radius; 
     float mass; 
     glm::vec2 velocity;
     glm::vec2 position;
     unsigned int textureId = 0;
-    Bengine::ColorRGBA8 color;
+    ge::ColorRGBA8 color;
     Cell* ownerCell = nullptr;
     int cellVectorIndex = -1;
 };

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Bengine/SpriteBatch.h>
-#include <Bengine/GLSLProgram.h>
+#include <GameEngineOpenGL\SpriteBatch.h>
+#include <GameEngineOpenGL\GLSLProgram.h>
 #include <vector>
 #include <memory>
 #include "Ball.h"
@@ -9,16 +9,16 @@
 // Ball renderer interface
 class BallRenderer {
 public:
-    virtual void renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
+    virtual void renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
                              const glm::mat4& projectionMatrix);
 protected:
-    std::unique_ptr<Bengine::GLSLProgram> m_program = nullptr;
+    std::unique_ptr<ge::GLSLProgram> m_program = nullptr;
 };
 
 // Visualizes kinetic energy
 class MomentumBallRenderer : public BallRenderer {
 public:
-    virtual void renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
+    virtual void renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
                              const glm::mat4& projectionMatrix) override;
 };
 
@@ -27,7 +27,7 @@ class VelocityBallRenderer : public BallRenderer {
 public:
     VelocityBallRenderer(int screenWidth, int screenHeight);
 
-    virtual void renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
+    virtual void renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
                              const glm::mat4& projectionMatrix) override;
 private:
     int m_screenWidth;
@@ -39,7 +39,7 @@ class TrippyBallRenderer : public BallRenderer {
 public:
     TrippyBallRenderer(int screenWidth, int screenHeight);
 
-    virtual void renderBalls(Bengine::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
+    virtual void renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
                              const glm::mat4& projectionMatrix) override;
 private:
     int m_screenWidth;

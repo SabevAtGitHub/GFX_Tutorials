@@ -1,8 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS // To shut up the compiler about sprintf...
 #include "MainGame.h"
 
-#include <Bengine/Bengine.h>
-#include <Bengine/ResourceManager.h>
+#include <GameEngineOpenGL\GameEngineOpenGL.h>
+#include <GameEngineOpenGL\ResourceManager.h>
 #include <SDL/SDL.h>
 #include <random>
 #include <ctime>
@@ -29,7 +29,7 @@ void MainGame::run() {
 
     // Game loop
     while (m_gameState == GameState::RUNNING) {
-        m_fpsLimiter.begin();
+        m_fpsLimiter.beginFrame();
         processInput();
 
         // Calculate the frameTime in milliseconds
@@ -56,17 +56,17 @@ void MainGame::run() {
 
         m_camera.update();
         draw();
-        m_fps = m_fpsLimiter.end();
+        m_fps = m_fpsLimiter.endFrame();
     }
 }
 
 void MainGame::init() {
-    Bengine::init();
+    ge::init();
 
     m_screenWidth = 1920;
     m_screenHeight = 1080;
 
-    m_window.create("Ball Game", m_screenWidth, m_screenHeight, 0);
+    m_window.create("Ball Game", (float)m_screenWidth, (float)m_screenHeight, ge::WINDOW_SHOWN);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     m_camera.init(m_screenWidth, m_screenHeight);
     // Point the camera to the center of the screen
@@ -74,7 +74,7 @@ void MainGame::init() {
     
     m_spriteBatch.init();
     // Initialize sprite font
-    m_spriteFont = std::make_unique<Bengine::SpriteFont>("Fonts/chintzy.ttf", 40);
+    m_spriteFont = std::make_unique<ge::SpriteFont>("Fonts/chintzy.ttf", 40);
 
     // Compile our texture shader
     m_textureProgram.compileShaders("Shaders/textureShading.vert", "Shaders/textureShading.frag");
@@ -83,7 +83,7 @@ void MainGame::init() {
     m_textureProgram.addAttribute("vertexUV");
     m_textureProgram.linkShaders();
 
-    m_fpsLimiter.setMaxFPS(60.0f);
+    m_fpsLimiter.setTargetFps(60.0f);
 
     initRenderers();
     
@@ -98,7 +98,7 @@ void MainGame::initRenderers() {
 }
 
 struct BallSpawn {
-    BallSpawn(const Bengine::ColorRGBA8& colr,
+    BallSpawn(const ge::ColorRGBA8& colr,
               float rad, float m, float minSpeed,
               float maxSpeed, float prob) :
               color(colr),
@@ -108,7 +108,7 @@ struct BallSpawn {
               probability(prob) {
         // Empty
     }
-    Bengine::ColorRGBA8 color;
+    ge::ColorRGBA8 color;
     float radius;
     float mass;
     float probability;
@@ -142,21 +142,21 @@ void MainGame::initBalls() {
     std::uniform_int_distribution<int> r2(0, 255);
 
     // Adds the balls using a macro
-    ADD_BALL(1.0f, Bengine::ColorRGBA8(255, 255, 255, 255),
+    ADD_BALL(1.0f, ge::ColorRGBA8(255, 255, 255, 255),
              2.0f, 1.0f, 0.1f, 7.0f, totalProbability);
-    ADD_BALL(1.0f, Bengine::ColorRGBA8(1, 254, 145, 255),
+    ADD_BALL(1.0f, ge::ColorRGBA8(1, 254, 145, 255),
              2.0f, 2.0f, 0.1f, 3.0f, totalProbability);
-    ADD_BALL(1.0f, Bengine::ColorRGBA8(177, 0, 254, 255),
+    ADD_BALL(1.0f, ge::ColorRGBA8(177, 0, 254, 255),
              3.0f, 4.0f, 0.0f, 0.0f, totalProbability)
-    ADD_BALL(1.0f, Bengine::ColorRGBA8(254, 0, 0, 255),
+    ADD_BALL(1.0f, ge::ColorRGBA8(254, 0, 0, 255),
              3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
-    ADD_BALL(1.0f, Bengine::ColorRGBA8(0, 255, 255, 255),
+    ADD_BALL(1.0f, ge::ColorRGBA8(0, 255, 255, 255),
              3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
-    ADD_BALL(1.0f, Bengine::ColorRGBA8(255, 255, 0, 255),
+    ADD_BALL(1.0f, ge::ColorRGBA8(255, 255, 0, 255),
              3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
     // Make a bunch of random ball types
     for (int i = 0; i < 10000; i++) {
-        ADD_BALL(1.0f, Bengine::ColorRGBA8(r2(randomEngine), r2(randomEngine), r2(randomEngine), 255),
+        ADD_BALL(1.0f, ge::ColorRGBA8(r2(randomEngine), r2(randomEngine), r2(randomEngine), 255),
                  r1(randomEngine), r1(randomEngine), 0.0f, 0.0f, totalProbability);
     }
 
@@ -193,7 +193,7 @@ void MainGame::initBalls() {
 
         // Add ball
         m_balls.emplace_back(ballToSpawn->radius, ballToSpawn->mass, pos, direction * ballToSpawn->randSpeed(randomEngine),
-                             Bengine::ResourceManager::getTexture("Textures/circle.png").id,
+                             ge::ResourceManager::getTexture("Textures/circle.png").id,
                              ballToSpawn->color);
         // Add the ball do the grid. IF YOU EVER CALL EMPLACE BACK AFTER INIT BALLS, m_grid will have DANGLING POINTERS!
         m_grid->addBall(&m_balls.back());
@@ -234,7 +234,7 @@ void MainGame::draw() {
 }
 
 void MainGame::drawHud() {
-    const Bengine::ColorRGBA8 fontColor(255, 0, 0, 255);
+    const ge::ColorRGBA8 fontColor(255, 0, 0, 255);
     // Convert float to char *
     char buffer[64];
     sprintf(buffer, "%.1f", m_fps);
