@@ -3,7 +3,7 @@
 
 #include <GameEngineOpenGL\GameEngineOpenGL.h>
 #include <GameEngineOpenGL\ResourceManager.h>
-#include <SDL/SDL.h>
+#include <SDL\SDL.h>
 #include <random>
 #include <ctime>
 #include <algorithm>
@@ -63,12 +63,12 @@ void MainGame::run() {
 void MainGame::init() {
     ge::init();
 
-    m_screenWidth = 1920;
-    m_screenHeight = 1080;
+    m_screenWidth = 800;
+    m_screenHeight = 600;
 
     m_window.create("Ball Game", (float)m_screenWidth, (float)m_screenHeight, ge::WINDOW_SHOWN);
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    m_camera.init(m_screenWidth, m_screenHeight);
+    m_camera.init((float)m_screenWidth, (float)m_screenHeight);
     // Point the camera to the center of the screen
     m_camera.setPosition(glm::vec2(m_screenWidth / 2.0f, m_screenHeight / 2.0f));
     
@@ -125,7 +125,7 @@ void MainGame::initBalls() {
     possibleBalls.emplace_back(__VA_ARGS__);
 
     // Number of balls to spawn
-    const int NUM_BALLS = 20000;
+    const int NUM_BALLS = 1000;
 
     // Random engine stuff
     std::mt19937 randomEngine((unsigned int)time(nullptr));
