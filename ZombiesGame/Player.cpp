@@ -72,13 +72,18 @@ void Player::update(const std::vector<std::string>& lvlData,
 		currGunIdx_ = 2;
 	}
 
+	auto mouseCoords = inputMngr_->getMouseCoords();
+	mouseCoords = camera_->covertScreenToWorld(mouseCoords);
+
+	auto playerCenterPos = this->pos_;// +glm::vec2(AGENT_RADIUS);
+
+	dir_ = glm::normalize(mouseCoords - playerCenterPos);
+
 	if (-1 != currGunIdx_) {
-		auto playerCenterPos = this->pos_;// +glm::vec2(AGENT_RADIUS);
-		auto mouseCoords = camera_->covertScreenToWorld(inputMngr_->getMouseCoords());
-		auto direction = glm::normalize(mouseCoords - playerCenterPos);
+
 
 		guns_[currGunIdx_]->fire(inputMngr_->isKeyDown(SDL_BUTTON_LEFT),
-			playerCenterPos, direction, *bullets_, deltaTime);
+			playerCenterPos, dir_, *bullets_, deltaTime);
 	}
 
 	this->collideWithLevel(lvlData);

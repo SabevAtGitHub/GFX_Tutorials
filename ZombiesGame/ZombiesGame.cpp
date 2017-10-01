@@ -120,12 +120,12 @@ void ZombiesGame::initGameProps()
 
 	// random POS to use when initializing humans
 	std::mt19937 randEngine;
-	randEngine.seed(time(nullptr));
+	randEngine.seed(static_cast<unsigned int>(time(nullptr)));
 	std::uniform_int_distribution <int> randX(1, levels_[currLvl_]->getWidth() - 2);
 	std::uniform_int_distribution <int> randY(1, levels_[currLvl_]->getHeight() - 2);
 	
 	// initializing humans
-	for (size_t i = 0; i < levels_[currLvl_]->getNumHumans(); i++) {		
+	for (int i = 0; i < levels_[currLvl_]->getNumHumans(); i++) {		
 		humans_.push_back(new Human);
 		auto pos = glm::vec2((float)randX(randEngine) * TILE_WITH, (float)randY(randEngine) * TILE_WITH);
 		humans_.back()->init(pos, HUMAN_SPEED);
@@ -508,7 +508,7 @@ void ZombiesGame::drawHud()
 void ZombiesGame::addBlood(const glm::vec2& position, int numParticles)
 {
 	// randomize shooting direction based on the spread
-	static std::mt19937 randEngine(time(nullptr));
+	static std::mt19937 randEngine(static_cast<unsigned int>(time(nullptr)));
 	static std::uniform_real_distribution<float> randAngle(0.f, 360.f);
 
 	glm::vec2 velocity(2.f, 0.0f);	

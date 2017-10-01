@@ -43,27 +43,27 @@ namespace ge {
 		tr = rotatePoint(tr, angle) + halfDims;
 
 		topLeft.color = color;
-		topLeft.setPos(destRect.x, destRect.y + destRect.w);
+		topLeft.setPos(destRect.x + tl.x, destRect.y + tl.y);
 		topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
 
 		bottomLeft.color = color;
-		bottomLeft.setPos(destRect.x, destRect.y);
+		bottomLeft.setPos(destRect.x + bl.x, destRect.y + bl.y);
 		bottomLeft.setUV(uvRect.x, uvRect.y);
 
 		bottomRight.color = color;
-		bottomRight.setPos(destRect.x + destRect.z, destRect.y);
+		bottomRight.setPos(destRect.x + br.x, destRect.y + br.y);
 		bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
 
 		topRight.color = color;
-		topRight.setPos(destRect.x + destRect.z, destRect.y + destRect.w);
+		topRight.setPos(destRect.x + tr.x, destRect.y +tr.y);
 		topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
 	}
 
 	glm::vec2 Glyph::rotatePoint(const glm::vec2& pos, float angle) {
-		glm::vec2 newv;
-		newv.x = pos.x * cos(angle) - pos.y * sin(angle);
-		newv.y = pos.x * sin(angle) + pos.y * cos(angle);
-		return newv;
+		glm::vec2 newVec;
+		newVec.x = pos.x * cos(angle) - pos.y * sin(angle);
+		newVec.y = pos.x * sin(angle) + pos.y * cos(angle);
+		return newVec;
 	}
 
 	/// <summary>
@@ -99,6 +99,7 @@ namespace ge {
 		createRenderBatches();
 	}
 
+	// TODO
 	void SpriteBatch::draw(const glm::vec4 & destRect, 
 		const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color)
 	{
@@ -107,12 +108,17 @@ namespace ge {
 
 	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, float angle)
 	{
-
+		glyphs.emplace_back(destRect, uvRect, texture, depth, color, angle);
 	}
 
-	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, const glm::vec3 dir)
+	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, const glm::vec2& dir)
 	{
+		// determining angle from direction
+		const glm::vec2 right(1.f, 0.f);
+		float angle = acos(glm::dot(right, dir));
+		if (dir.y < 0.f)  angle = -angle;
 
+		glyphs.emplace_back(destRect, uvRect, texture, depth, color, angle);
 	}
 
 	void SpriteBatch::renderBatch()

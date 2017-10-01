@@ -29,14 +29,13 @@ void Gun::fire(bool isMouseDown, const glm::vec2& position, const glm::vec2& dir
 {
 	frameCounter_ += 1 * detaTime;
 	// randomize shooting direction based on the spread
-	std::mt19937 randEngine(time(nullptr));
+	std::mt19937 randEngine(static_cast<unsigned int>(time(nullptr)));
 	std::uniform_real_distribution<float> randRotate(-spread_, spread_);
-
 
 	if (frameCounter_ >= fireRate_  && isMouseDown) {
 		soundEffect_.play();
 		
-		for (size_t i = 0; i < bulletsPerShot_; i++) {
+		for (int i = 0; i < bulletsPerShot_; i++) {
 			bullets.emplace_back(position, 
 								glm::rotate(direction, randRotate(randEngine)),
 								bulletsDamage_, bulletsSpeed_);

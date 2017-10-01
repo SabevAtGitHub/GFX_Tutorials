@@ -26,8 +26,8 @@ void Zombie::update(const std::vector<std::string>& lvlData,
 	// chase humans
 	auto closestHuman = getNearestHuman(humans);
 	if (nullptr != closestHuman) {
-		auto newDir = glm::normalize(closestHuman->getPos() - this->pos_);
-		this->pos_ += newDir * this->speed_ * deltaTime;
+		dir_ = glm::normalize(closestHuman->getPos() - this->pos_);
+		this->pos_ += dir_ * this->speed_ * deltaTime;
 	}
 
 	// collide with level

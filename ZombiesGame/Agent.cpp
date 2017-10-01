@@ -5,22 +5,20 @@
 
 Agent::Agent() :
 	pos_(0.f, 0.f),
-	dir_(0.f, 0.f),
+	dir_(1.f, 0.f),
 	speed_(0.f),
 	lives_(1)
 { /* empty */ }
 
 Agent::Agent(glm::vec2 position, glm::vec2 direction, 
-	float speed, int numLives)
-{
-	pos_ = position;
-	dir_ = direction;
-	speed_ = speed;
-}
+	float speed, int numLives) :
+	pos_(position),
+	dir_(direction),
+	speed_(speed)
+{ /*empty*/ }
 
 Agent::~Agent()
-{
-}
+{ /*empty*/}
 
 bool Agent::collideWithLevel(const std::vector<std::string>& lvlData)
 {
@@ -83,11 +81,11 @@ bool Agent::collideWithAgent(Agent * agent)
 
 void Agent::draw(ge::SpriteBatch & spriteBatch)
 {
+	const auto uvRect = glm::vec4(0.f, 0.f, 1.f, 1.f);
 	glm::vec4 destRect(pos_.x , pos_.y, AGENT_WIDTH, AGENT_WIDTH);
 
-	const auto uvRect = glm::vec4(0.f, 0.f, 1.f, 1.f);
 	// drawing
-	spriteBatch.draw(destRect, uvRect, textureId_, 0.f, color_);
+	spriteBatch.draw(destRect, uvRect, textureId_, 0.f, color_, dir_);
 }
 
 bool Agent::applyDamage(float damage)
