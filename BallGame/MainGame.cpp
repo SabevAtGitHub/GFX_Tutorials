@@ -7,6 +7,7 @@
 #include <random>
 #include <ctime>
 #include <algorithm>
+#include <iostream>
 #include <cmath>
 
 // Some helpful constants.
@@ -114,7 +115,7 @@ struct BallSpawn {
     float probability;
     std::uniform_real_distribution<float> randSpeed;
 };
-#include <iostream>
+
 void MainGame::initBalls() {
 
     // Initialize the grid
@@ -123,7 +124,7 @@ void MainGame::initBalls() {
 #define ADD_BALL(p, ...) \
     totalProbability += p; \
     possibleBalls.emplace_back(__VA_ARGS__);
-
+	 
     // Random engine stuff
     std::mt19937 randomEngine((unsigned int)time(nullptr));
     std::uniform_real_distribution<float> randX(0.0f, (float)m_screenWidth);
@@ -139,11 +140,11 @@ void MainGame::initBalls() {
     std::uniform_int_distribution<int> r2(0, 255);
 
     // Adds the balls using a macro
-    ADD_BALL(1.0f, ge::ColorRGBA8(255, 255, 255, 255),
+    ADD_BALL(21.0f, ge::ColorRGBA8(255, 255, 255, 255),
              2.0f, 1.0f, 0.1f, 7.0f, totalProbability);
-    ADD_BALL(1.0f, ge::ColorRGBA8(1, 254, 145, 255),
+    ADD_BALL(11.0f, ge::ColorRGBA8(1, 254, 145, 255),
              2.0f, 2.0f, 0.1f, 3.0f, totalProbability);
-    ADD_BALL(1.0f, ge::ColorRGBA8(177, 0, 254, 255),
+    ADD_BALL(8.0f, ge::ColorRGBA8(177, 0, 254, 255),
              3.0f, 4.0f, 0.0f, 0.0f, totalProbability)
     //ADD_BALL(1.0f, ge::ColorRGBA8(254, 0, 0, 255),
     //         3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
@@ -151,7 +152,8 @@ void MainGame::initBalls() {
     //         3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
     //ADD_BALL(1.0f, ge::ColorRGBA8(255, 255, 0, 255),
     //         3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
-    //
+
+    
 	// Make a bunch of random ball types
     for (int i = 0; i < 10000; i++) {
         ADD_BALL(1.0f, ge::ColorRGBA8(r2(randomEngine), r2(randomEngine), r2(randomEngine), 255),

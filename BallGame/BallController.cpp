@@ -156,13 +156,13 @@ void BallController::checkCollision(Ball& b1, Ball& b2) {
         b1.velocity += (acf - aci) * distDir;
         b2.velocity += (bcf - bci) * distDir;
 
-        if (glm::length(b1.velocity + b2.velocity) > 0.5f) {
-            // Choose the faster ball
-            bool choice = glm::length(b1.velocity) < glm::length(b2.velocity);
+        //if (glm::length(b1.velocity + b2.velocity) > 0.5f) {
+        //    // Choose the faster ball
+        //    bool choice = glm::length(b1.velocity) < glm::length(b2.velocity);
 
-            // Faster ball transfers it's color to the slower ball
-            choice ? b2.color = b1.color : b1.color = b2.color;
-        }
+        //    // Faster ball transfers it's color to the slower ball
+        //    choice ? b2.color = b1.color : b1.color = b2.color;
+        //}
     }
 }
 
