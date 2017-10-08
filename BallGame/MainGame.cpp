@@ -63,8 +63,8 @@ void MainGame::run() {
 void MainGame::init() {
     ge::init();
 
-    m_screenWidth = 800;
-    m_screenHeight = 600;
+    m_screenWidth =SCR_W ;
+    m_screenHeight =SCR_H;
 
     m_window.create("Ball Game", (float)m_screenWidth, (float)m_screenHeight, ge::WINDOW_SHOWN);
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -124,9 +124,6 @@ void MainGame::initBalls() {
     totalProbability += p; \
     possibleBalls.emplace_back(__VA_ARGS__);
 
-    // Number of balls to spawn
-    const int NUM_BALLS = 1000;
-
     // Random engine stuff
     std::mt19937 randomEngine((unsigned int)time(nullptr));
     std::uniform_real_distribution<float> randX(0.0f, (float)m_screenWidth);
@@ -138,7 +135,7 @@ void MainGame::initBalls() {
     float totalProbability = 0.0f;
 
     /// Random values for ball types
-    std::uniform_real_distribution<float> r1(2.0f, 6.0f);
+    std::uniform_real_distribution<float> r1(BALL_MIN_RADIUS, BALL_MAX_RADIUS);
     std::uniform_int_distribution<int> r2(0, 255);
 
     // Adds the balls using a macro
@@ -148,13 +145,14 @@ void MainGame::initBalls() {
              2.0f, 2.0f, 0.1f, 3.0f, totalProbability);
     ADD_BALL(1.0f, ge::ColorRGBA8(177, 0, 254, 255),
              3.0f, 4.0f, 0.0f, 0.0f, totalProbability)
-    ADD_BALL(1.0f, ge::ColorRGBA8(254, 0, 0, 255),
-             3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
-    ADD_BALL(1.0f, ge::ColorRGBA8(0, 255, 255, 255),
-             3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
-    ADD_BALL(1.0f, ge::ColorRGBA8(255, 255, 0, 255),
-             3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
-    // Make a bunch of random ball types
+    //ADD_BALL(1.0f, ge::ColorRGBA8(254, 0, 0, 255),
+    //         3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
+    //ADD_BALL(1.0f, ge::ColorRGBA8(0, 255, 255, 255),
+    //         3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
+    //ADD_BALL(1.0f, ge::ColorRGBA8(255, 255, 0, 255),
+    //         3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
+    //
+	// Make a bunch of random ball types
     for (int i = 0; i < 10000; i++) {
         ADD_BALL(1.0f, ge::ColorRGBA8(r2(randomEngine), r2(randomEngine), r2(randomEngine), 255),
                  r1(randomEngine), r1(randomEngine), 0.0f, 0.0f, totalProbability);

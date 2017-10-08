@@ -3,7 +3,7 @@
 #include "Grid.h"
 
 void BallController::updateBalls(std::vector <Ball>& balls, Grid* grid, float deltaTime, int maxX, int maxY) {
-    const float FRICTION = 0.01f;
+    const float FRICTION = 0.02f;
     // Update our grabbed balls velocity
     if (m_grabbedBall != -1) {
         balls[m_grabbedBall].velocity = balls[m_grabbedBall].position - m_prevPos;
