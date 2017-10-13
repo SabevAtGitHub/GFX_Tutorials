@@ -19,12 +19,12 @@
 // Visualize position with color
 
 enum class GameState { RUNNING, EXIT };
-const float BALL_MAX_RADIUS = 35.0f;
-const float BALL_MIN_RADIUS = 14.0f;
-const int NUM_BALLS = 60; // Number of balls to spawn
-const int CELL_SIZE = (int)( BALL_MAX_RADIUS + 1.0f);
-const int SCR_W = 960;
-const int SCR_H = 600;
+const float BALL_MAX_RADIUS = 4.f;
+const float BALL_MIN_RADIUS = 1.5f;
+const int NUM_BALLS = 10000; // Number of balls to spawn
+const int CELL_SIZE = (int)( BALL_MAX_RADIUS *2.f + 1.f);
+const int SCR_W = 1366;
+const int SCR_H = 768;
 
 class MainGame {
 public:

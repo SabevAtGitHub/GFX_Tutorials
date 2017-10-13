@@ -8,7 +8,7 @@ void BallController::updateBalls(std::vector <Ball>& balls, Grid* grid, float de
     if (m_grabbedBall != -1) {
         balls[m_grabbedBall].velocity = balls[m_grabbedBall].position - m_prevPos;
     }
-
+	 
     glm::vec2 gravity = getGravityAccel();
 
     for (size_t i = 0; i < balls.size(); i++) {
@@ -16,7 +16,7 @@ void BallController::updateBalls(std::vector <Ball>& balls, Grid* grid, float de
         Ball& ball = balls[i];
         // Update motion if its not grabbed
         if (i != m_grabbedBall) {
-            ball.position += ball.velocity * deltaTime;
+            
             // Apply friction
             glm::vec2 momentumVec = ball.velocity * ball.mass;
             if (momentumVec.x != 0 || momentumVec.y != 0) {
@@ -28,6 +28,7 @@ void BallController::updateBalls(std::vector <Ball>& balls, Grid* grid, float de
             }
             // Apply gravity
             ball.velocity += gravity * deltaTime;
+			ball.position += ball.velocity * deltaTime;
         }
         // Check wall collision
         if (ball.position.x < ball.radius) {
