@@ -66,7 +66,7 @@ void MainGame::init() {
 
     m_screenWidth =SCR_W ;
     m_screenHeight =SCR_H;
-
+	
     m_window.create("Ball Game", (float)m_screenWidth, (float)m_screenHeight, ge::WINDOW_SHOWN);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     m_camera.init((float)m_screenWidth, (float)m_screenHeight);

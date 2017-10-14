@@ -22,46 +22,46 @@ enum class GameState { RUNNING, EXIT };
 const float BALL_MAX_RADIUS = 4.f;
 const float BALL_MIN_RADIUS = 1.5f;
 const int NUM_BALLS = 10000; // Number of balls to spawn
-const int CELL_SIZE = (int)( BALL_MAX_RADIUS *2.f + 1.f);
+const int CELL_SIZE = (int)(BALL_MAX_RADIUS * 2.f + 1.f);
 const int SCR_W = 1366;
 const int SCR_H = 768;
 
 class MainGame {
 public:
-    ~MainGame();
-    void run();
+	~MainGame();
+	void run();
 
 
 private:
-    void init();
-    void initRenderers();
-    void initBalls();
-    void update(float deltaTime);
-    void draw();
-    void drawHud();
-    void processInput();
+	void init();
+	void initRenderers();
+	void initBalls();
+	void update(float deltaTime);
+	void draw();
+	void drawHud();
+	void processInput();
 
-    int m_screenWidth = 0;
-    int m_screenHeight = 0;
+	int m_screenWidth = 0;
+	int m_screenHeight = 0;
 
-    std::vector<Ball> m_balls; ///< All the balls
-    std::unique_ptr<Grid> m_grid; ///< Grid for spatial partitioning for collision
+	std::vector<Ball> m_balls; ///< All the balls
+	std::unique_ptr<Grid> m_grid; ///< Grid for spatial partitioning for collision
 
-    int m_currentRenderer = 0;
-    std::vector<std::unique_ptr<BallRenderer> > m_ballRenderers;
+	int m_currentRenderer = 0;
+	std::vector<std::unique_ptr<BallRenderer> > m_ballRenderers;
 
-    BallController m_ballController; ///< Controls balls
+	BallController m_ballController; ///< Controls balls
 
-    ge::Window m_window; ///< The main window
+	ge::Window m_window; ///< The main window
 	ge::SpriteBatch m_spriteBatch; ///< Renders all the balls
-    std::unique_ptr<ge::SpriteFont> m_spriteFont; ///< For font rendering
+	std::unique_ptr<ge::SpriteFont> m_spriteFont; ///< For font rendering
 	ge::Camera2D m_camera; ///< Renders the scene
 	ge::InputManager m_inputManager; ///< Handles input
 	ge::GLSLProgram m_textureProgram; ///< Shader for textures]
 
 	ge::FpsLimiter m_fpsLimiter; ///< Limits and calculates fps
-    float m_fps = 0.0f;
+	float m_fps = 0.0f;
 
-    GameState m_gameState = GameState::RUNNING; ///< The state of the game
+	GameState m_gameState = GameState::RUNNING; ///< The state of the game
 };
 
