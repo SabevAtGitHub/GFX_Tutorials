@@ -95,7 +95,7 @@ void MainGame::initRenderers() {
     m_ballRenderers.push_back(std::make_unique<MomentumBallRenderer>());
     m_ballRenderers.push_back(std::make_unique<VelocityBallRenderer>(m_screenWidth, m_screenHeight));
     m_ballRenderers.push_back(std::make_unique<TrippyBallRenderer>(m_screenWidth, m_screenHeight));
-
+	m_ballRenderers.push_back(std::make_unique<ExperimentalBallRenderer>(m_screenWidth, m_screenHeight));
 }
 
 struct BallSpawn {

@@ -46,3 +46,15 @@ private:
     int m_screenHeight;
     float m_time = 0.0f;
 };
+
+class ExperimentalBallRenderer : public BallRenderer {
+public:
+	ExperimentalBallRenderer(int screenWidth, int screenHeight);
+
+	virtual void renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<Ball>& balls,
+		const glm::mat4& projectionMatrix) override;
+private:
+	int m_screenWidth;
+	int m_screenHeight;
+	float m_time = 0.0f;
+};

@@ -24,8 +24,8 @@ const float CAMERA_SCALE = 1.f / 2.5f;
 
 ZombiesGame::ZombiesGame() :
 	gameState_(GameState::PLAY),
-	scrW_(800),
-	scrH_(600),
+	scrW_(1366),
+	scrH_(768),
 	maxFps_(60.f),
 	currFps_(0),
 	player_(nullptr),
@@ -393,6 +393,9 @@ void ZombiesGame::processInput()
 	}
 
 	// execute all input actions
+	if (inputMngr_.isKeyDown(SDLK_ESCAPE)) {
+		gameState_ = GameState::EXIT;
+	}
 	if (inputMngr_.isKeyDown(SDLK_q)) {
 		camera_.setScale(camera_.getScale() - 0.02f);
 	}

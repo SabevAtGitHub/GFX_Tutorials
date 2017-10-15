@@ -12,8 +12,6 @@ class Zombie;
 class Agent
 {
 public:
-	//friend class Player;
-
 	Agent();
 	Agent(glm::vec2 position, glm::vec2 direction, 
 		float speed, int numLives);
