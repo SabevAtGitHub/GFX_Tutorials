@@ -1,10 +1,10 @@
 #pragma once
 
+#define NO_NEXT_SCREEN_INDEX -1
+
 namespace ge
-
 {
-
-	class MainGame;
+	class IMainGame;
 
 	enum class ScreenState {
 		NONE,
@@ -18,7 +18,7 @@ namespace ge
 	{
 	public:
 		IGameScreen() {/*empty*/ }
-		~IGameScreen() { /*empty*/ }
+		virtual ~IGameScreen() { /*empty*/ }
 
 		virtual int getNextScreenIndex() const = 0;
 		virtual int getPreviousScreenIndex() const = 0;
@@ -36,13 +36,14 @@ namespace ge
 		virtual void update() = 0;
 		virtual void draw() = 0;
 
-		int getIndex() const { return m_screenIndex; }
+		int getScreenIndex() const { return m_screenIndex; }
+
+		void setParentGame(IMainGame* game) { m_game = game; }
 
 	private:
 		int m_screenIndex = -1;
 		ScreenState m_currentState = ScreenState::NONE;
-		MainGame* m_game = nullptr;
-
+		IMainGame* m_game = nullptr;
 	};
 
 }

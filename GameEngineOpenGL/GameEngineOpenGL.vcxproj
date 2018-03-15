@@ -161,7 +161,7 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="IOManager.cpp" />
-    <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="IMainGame.cpp" />
     <ClCompile Include="ParticleBatch2D.cpp" />
     <ClCompile Include="ParticleEngine2D.cpp" />
     <ClCompile Include="PicoPNG.cpp" />
@@ -185,7 +185,7 @@
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="IOManager.h" />
-    <ClInclude Include="MainGame.h" />
+    <ClInclude Include="IMainGame.h" />
     <ClInclude Include="ParticleBatch2D.h" />
     <ClInclude Include="ParticleEngine2D.h" />
     <ClInclude Include="PicoPNG.h" />

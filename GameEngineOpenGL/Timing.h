@@ -14,7 +14,7 @@ namespace ge {
 		void setTargetFps(float targetFps);
 		void beginFrame();
 		/// <summary>
-		/// will returng the current Fps and end
+		/// Returning the current Fps and ending the frme
 		/// </summary>
 		/// <returns>Current fps</returns>
 		float endFrame();

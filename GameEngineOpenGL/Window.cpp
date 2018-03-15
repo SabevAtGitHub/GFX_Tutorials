@@ -8,10 +8,10 @@ namespace ge {
 
 	Window::~Window() { /* empty */ }
 
-	int Window::create(std::string windowName, float scrWidth, float scrHeight, WindowFlags windowFlags)
+	int Window::create(std::string windowTitle, int width, int height, WindowFlags windowFlags)
 	{
-		w = scrWidth;
-		h = scrHeight;
+		m_width = width;
+		m_height = height;
 
 		// assigning all flags (if any)
 		Uint32 flags = SDL_WINDOW_OPENGL; /// default window flag
@@ -29,11 +29,11 @@ namespace ge {
 		}
 
 		/// Creating the main window
-		sdlWindow = SDL_CreateWindow(windowName.c_str(),
+		sdlWindow = SDL_CreateWindow(windowTitle.c_str(),
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
-			(int)w,
-			(int)h,
+			(int)m_width,
+			(int)m_height,
 			flags);
 		if (nullptr == sdlWindow) {
 			fatalError("BallGameMainGame: SDL Window could not be created!");

@@ -1,32 +1,33 @@
 #pragma once
 
 #include <vector>
-
+#include <memory>
 
 namespace ge
 {
-	class MainGame;
+	class IMainGame;
 	class IGameScreen;
 
 
 	class ScreenList
 	{
 	public:
-		ScreenList(MainGame* game);
+		ScreenList(IMainGame* game);
 		~ScreenList();
 
 		void setScreen(int nextScreen);
-		void addScreen(IGameScreen* newScreen);
+		void addScreen(std::unique_ptr<IGameScreen> newScreen);
 
 		IGameScreen* moveNext();
-		IGameScreen* mvePrevious();
+		IGameScreen* movePrevious();
+		IGameScreen* getCurrent() const;
 
 		void destroy();
 
 	protected:
-		std::vector<IGameScreen*> m_screens;
+		std::vector<std::unique_ptr<IGameScreen>> m_screens;
 		int m_currentScreenIndex = -1;
-		MainGame*  m_mainGame = nullptr;
+		IMainGame*  m_game = nullptr;
 	};
 
 
