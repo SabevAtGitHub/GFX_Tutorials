@@ -6,7 +6,7 @@
 #include <GameEngineOpenGL\ResourceManager.h>
 
 
-MainGame::MainGame() :
+BallGameMainGame::BallGameMainGame() :
 	time(0),
 	scrWidth(900.f),
 	scrHeight(600.f),
@@ -18,12 +18,12 @@ MainGame::MainGame() :
 	
 }
 
-MainGame::~MainGame() { }
+BallGameMainGame::~BallGameMainGame() { }
 
 /// <summary>
 /// running the game
 /// </summary>
-void MainGame::run()
+void BallGameMainGame::run()
 {
 	initSystems();
 
@@ -36,7 +36,7 @@ void MainGame::run()
 /// todo - to replace above line with all syst
 /// em's names 
 /// </summary>
-void MainGame::initSystems()
+void BallGameMainGame::initSystems()
 {
 	// initiating SDL engine
 	ge::init(); // SDL_Init(SDL_INIT_EVERYTHING);
@@ -56,7 +56,7 @@ void MainGame::initSystems()
 /// <summary>
 /// Processing user's unput
 /// </summary>
-void MainGame::processInput()
+void BallGameMainGame::processInput()
 {
 	const float CAMERA_SPEED = 2.0f;
 	const float CAMERA_SCALE = 0.2f;
@@ -123,7 +123,7 @@ void MainGame::processInput()
 /// <summary>
 /// All the rendering code is here
 /// <summary>
-void MainGame::drawGame()
+void BallGameMainGame::drawGame()
 {
 	// Tells the GL the depth that should clear to
 	glClearDepth(1.0);
@@ -178,10 +178,10 @@ void MainGame::drawGame()
 }
 
 /// <summary>
-/// The main function of the MainGame
+/// The main function of the BallGameMainGame
 /// Looping while m_gameState != EXIT
 /// </summary>
-void MainGame::gameLoop()
+void BallGameMainGame::gameLoop()
 {
 	while (gameState != GameState::EXIT) {
 		fpsLimiter.beginFrame(); // will get initial frame ticks
@@ -215,7 +215,7 @@ void MainGame::gameLoop()
 	}
 }
 
-void MainGame::initShaders()
+void BallGameMainGame::initShaders()
 {
 	// adding attributes for each variable in the shader files
 	// right now the entry point is the .vert file

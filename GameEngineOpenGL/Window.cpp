@@ -36,19 +36,19 @@ namespace ge {
 			(int)h,
 			flags);
 		if (nullptr == sdlWindow) {
-			fatalError("MainGame: SDL Window could not be created!");
+			fatalError("BallGameMainGame: SDL Window could not be created!");
 		}
 
 		// Creating SDL Context and sending it to the main window
 		SDL_GLContext glContext = SDL_GL_CreateContext(sdlWindow);
 		if (nullptr == glContext) {
-			fatalError("MainGame: SDL_GL context could not be created!");
+			fatalError("BallGameMainGame: SDL_GL context could not be created!");
 		}
 
 		// Initializing Glue (does hardware check etc.)
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
-			fatalError("MainGame: Could not initialize Glew!");
+			fatalError("BallGameMainGame: Could not initialize Glew!");
 		}
 
 		std::printf("***	OpenGL version %s	***\n", glGetString(GL_VERSION));

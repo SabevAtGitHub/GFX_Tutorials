@@ -17,11 +17,11 @@ enum class GameState { PLAY, EXIT };
 /// <summary>
 /// the game
 /// </summary>
-class MainGame
+class BallGameMainGame
 {
 public:
-	MainGame();
-	~MainGame();
+	BallGameMainGame();
+	~BallGameMainGame();
 
 	void run();	
 
