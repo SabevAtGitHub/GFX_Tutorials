@@ -39,7 +39,6 @@ namespace ge
 	protected:
 		bool init();
 		bool initSystems();
-		void initShaders();
 
 	protected:
 		std::unique_ptr<ScreenList> m_screenList = nullptr;
@@ -47,9 +46,6 @@ namespace ge
 		Window m_window;
 		Camera2D m_camera;
 		InputManager m_inputMngr;
-		AudioManager m_audioEngine;
-		GLSLProgram m_colorProgram; // used in void initShaders
-
 
 		bool m_isRunning = false;
 		float m_fps = 0.f;
