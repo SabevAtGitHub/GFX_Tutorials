@@ -4,6 +4,7 @@
 #include "Camera2D.h"
 #include "InputManager.h"
 #include "AudioManager.h"
+#include "GLSLProgram.h"
 
 namespace ge
 {
@@ -31,19 +32,24 @@ namespace ge
 		virtual void addScreens() = 0;
 		virtual void onExit() = 0;
 
+		virtual void update() = 0;
+		virtual void draw() = 0;
+
 		const float getFps() const { return m_fps; }
 	protected:
 		bool init();
 		bool initSystems();
+		void initShaders();
 
 	protected:
 		std::unique_ptr<ScreenList> m_screenList = nullptr;
 		IGameScreen* m_currentScreen = nullptr;
 		Window m_window;
 		Camera2D m_camera;
-		Camera2D m_hudCamera;
 		InputManager m_inputMngr;
 		AudioManager m_audioEngine;
+		GLSLProgram m_colorProgram; // used in void initShaders
+
 
 		bool m_isRunning = false;
 		float m_fps = 0.f;

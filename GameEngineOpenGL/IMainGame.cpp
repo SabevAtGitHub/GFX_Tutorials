@@ -30,6 +30,8 @@ namespace ge
 
 			update();
 
+
+
 			draw();
 
 			m_fps = limiter.endFrame();
@@ -44,10 +46,12 @@ namespace ge
 
 	bool IMainGame::init()
 	{
-		SDL_Init(SDL_INIT_EVERYTHING);
-
 		initSystems();
-		return false;
+		onInit();
+
+
+
+		return true;
 	}
 
 
@@ -65,26 +69,24 @@ namespace ge
 
 		// set up the camera
 		m_camera.init(m_window.getWidth(), m_window.getHeight());
-		m_hudCamera.init(m_window.getWidth(), m_window.getHeight());
-		//m_hudCamera.setPosition(glm::vec2(m_window.getWidth() / 2, m_window.getHeight() / 2));
 
 	    // Calling program to compile the shaders
 		initShaders();
 
+		return true;
+	}
 
-		// initializing sprite font 
-		// ( must be initialized after initializing SDL, OpenGL and shaders )
-		spriteFont = new ge::SpriteFont("Fonts/chintzy.ttf", 31);
+	void IMainGame::initShaders()
+	{
+		// adding attributes for each variable in the shader files
+		// right now the entry point is the .vert file
+		m_colorProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+		m_colorProgram.addAttribute("vertexPos");
+		m_colorProgram.addAttribute("vertexColor");
+		m_colorProgram.addAttribute("vertexUV");
 
-		// initializing particles
-		bloodParticleBatch_ = new ge::ParticleBatch2D();
-		bloodParticleBatch_->init(1000, 0.05f,
-			ge::ResourceManager::getTexture("Textures/particle.png"),
-			[](ge::Particle2D& p, float deltaTime)
-		{ p.pos += p.velocity * deltaTime;
-		p.color.a = (GLubyte)(p.life * 255.f); }); // lampda for blood particles custom behavior
-
-		particleEngine_.addParticleBatch(bloodParticleBatch_);
+		// linking the2 shader files
+		m_colorProgram.linkShaders();
 	}
 
 }
