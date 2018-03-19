@@ -17,7 +17,7 @@ namespace ge
 	}
 
 
-	void IMainGame::run()
+	void IMainGame::runGame()
 	{
 		if (!init())
 			return;
@@ -36,7 +36,7 @@ namespace ge
 	}
 
 
-	void IMainGame::exit()
+	void IMainGame::exitGame()
 	{
 		m_currentScreen->onExit();
 
@@ -49,6 +49,52 @@ namespace ge
 	}
 
 
+	void IMainGame::update()
+	{
+		if (m_currentScreen) {
+			switch (m_currentScreen->getState())
+			{
+			case ge::ScreenState::NONE:
+				break;
+			case ge::ScreenState::RUNNING:
+				m_currentScreen->update();
+				break;
+			case ge::ScreenState::EXIT_APPLICATION:
+				exitGame();
+				break;
+			case ge::ScreenState::CHANGE_NEXT:
+				m_currentScreen->onExit();
+				m_currentScreen = m_screenList->moveNext();
+				if (m_currentScreen != nullptr) {
+					m_currentScreen->setRunning();
+					m_currentScreen->onEntry();
+				}
+				break;
+			case ge::ScreenState::CHANGE_PREVIOUS:
+				m_currentScreen->onExit();
+				m_currentScreen = m_screenList->movePrevious();
+				if (m_currentScreen != nullptr) {
+					m_currentScreen->setRunning();
+					m_currentScreen->onEntry();
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		else
+		{
+			exitGame();
+		}
+	}
+
+	void IMainGame::draw()
+	{
+		if (m_currentScreen && m_currentScreen->getState() == ScreenState::RUNNING) {
+			m_currentScreen->draw();
+		}
+	}
+
 	bool IMainGame::init()
 	{
 		// calling SDL_Init(SDL_INIT_EVERYTHING);
@@ -58,6 +104,10 @@ namespace ge
 		// apply custom init logic here ( for example,
 		// to overwrite any window settings etc.)
 		onInit();
+		addScreens();
+
+		m_currentScreen = m_screenList->getCurrent();
+		m_currentScreen->onEntry();
 		return true;
 	}
 

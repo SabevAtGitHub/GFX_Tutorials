@@ -22,15 +22,15 @@ namespace ge
 		IMainGame();
 		virtual ~IMainGame();
 
-		void run();
-		void exit();
+		void runGame();
+		void exitGame();
 
 		virtual void onInit() = 0;
 		virtual void addScreens() = 0;
 		virtual void onExit() = 0;
 
-		virtual void update() = 0;
-		virtual void draw() = 0;
+		void update();
+		void draw();
 
 		const float getFps() const { return m_fps; }
 	protected:

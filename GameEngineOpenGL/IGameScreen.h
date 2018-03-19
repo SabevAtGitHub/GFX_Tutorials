@@ -38,6 +38,10 @@ namespace ge
 
 		int getScreenIndex() const { return m_screenIndex; }
 
+		void setRunning() { m_currentState = ScreenState::RUNNING; }
+
+		ScreenState getState() const { return m_currentState; }
+
 		void setParentGame(IMainGame* game) { m_game = game; }
 
 	private:
