@@ -1,10 +1,7 @@
 #pragma once
 #include <memory>
 #include "Window.h"
-#include "Camera2D.h"
-#include "InputManager.h"
-#include "AudioManager.h"
-#include "GLSLProgram.h"
+
 
 namespace ge
 {
@@ -25,8 +22,8 @@ namespace ge
 		IMainGame();
 		virtual ~IMainGame();
 
-		void runGame();
-		void endGame();
+		void run();
+		void exit();
 
 		virtual void onInit() = 0;
 		virtual void addScreens() = 0;
@@ -44,8 +41,6 @@ namespace ge
 		std::unique_ptr<ScreenList> m_screenList = nullptr;
 		IGameScreen* m_currentScreen = nullptr;
 		Window m_window;
-		Camera2D m_camera;
-		InputManager m_inputMngr;
 
 		bool m_isRunning = false;
 		float m_fps = 0.f;

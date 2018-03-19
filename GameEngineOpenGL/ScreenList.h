@@ -16,7 +16,7 @@ namespace ge
 		~ScreenList();
 
 		void setScreen(int nextScreen);
-		void addScreen(std::unique_ptr<IGameScreen> newScreen);
+		void addScreen(IGameScreen* newScreen);
 
 		IGameScreen* moveNext();
 		IGameScreen* movePrevious();
@@ -25,7 +25,7 @@ namespace ge
 		void destroy();
 
 	protected:
-		std::vector<std::unique_ptr<IGameScreen>> m_screens;
+		std::vector<IGameScreen*> m_screens;
 		int m_currentScreenIndex = -1;
 		IMainGame*  m_game = nullptr;
 	};

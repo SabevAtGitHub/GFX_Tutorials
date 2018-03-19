@@ -21,8 +21,8 @@ namespace ge {
 		int create(std::string windowTitle, int width, int height, WindowFlags windowFlags = WINDOW_SHOWN);
 		void swapBuffer();
 
-		const float getWidth() const { return m_width; }
-		const float getHeight() const { return m_height; }
+		const int getWidth() const { return m_width; }
+		const int getHeight() const { return m_height; }
 
 	private:
 		SDL_Window* sdlWindow;

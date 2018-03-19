@@ -20,9 +20,9 @@ namespace ge
 		m_currentScreenIndex = nextScreen;
 	}
 
-	void ScreenList::addScreen(std::unique_ptr<IGameScreen> newScreen)
+	void ScreenList::addScreen(IGameScreen* newScreen)
 	{
-		m_screens.emplace_back(std::move(newScreen));
+		m_screens.push_back(newScreen);
 		newScreen->build();
 		newScreen->setParentGame(m_game);
 	}
@@ -31,9 +31,9 @@ namespace ge
 	{
 		IGameScreen* currentScreen = getCurrent();
 
-		if (currentScreen->getNextScreenIndex() != NO_NEXT_SCREEN_INDEX) 
+		if (currentScreen->getNextScreenIndex() != NO_NEXT_SCREEN_INDEX)
 			m_currentScreenIndex = currentScreen->getNextScreenIndex();
-		
+
 		return getCurrent();
 	}
 
@@ -43,7 +43,7 @@ namespace ge
 
 		if (currentScreen->getPreviousScreenIndex() != NO_NEXT_SCREEN_INDEX)
 			m_currentScreenIndex = currentScreen->getPreviousScreenIndex();
-		
+
 		return getCurrent();
 	}
 
@@ -52,17 +52,17 @@ namespace ge
 		if (m_currentScreenIndex == NO_NEXT_SCREEN_INDEX)
 			return nullptr;
 
-		return m_screens[m_currentScreenIndex].get();
+		return m_screens[m_currentScreenIndex];
 	}
 
 	void ScreenList::destroy()
 	{
-		for (auto& screen : m_screens)
-		{
-			screen->destroy();
-			m_screens.resize(0);
-			m_currentScreenIndex = NO_NEXT_SCREEN_INDEX;
+		for (size_t i = 0; i < m_screens.size(); i++) {
+			m_screens[i]->destroy();
+			delete m_screens[i];
 		}
+		m_screens.resize(0);
+		m_currentScreenIndex = NO_NEXT_SCREEN_INDEX;
 	}
 
 }
