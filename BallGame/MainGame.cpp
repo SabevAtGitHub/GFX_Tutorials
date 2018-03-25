@@ -67,9 +67,9 @@ void MainGame::init() {
     m_screenWidth =SCR_W ;
     m_screenHeight =SCR_H;
 	
-    m_window.create("Ball Game", (float)m_screenWidth, (float)m_screenHeight, ge::WINDOW_SHOWN);
+    m_window.create("Ball Game", m_screenWidth, m_screenHeight, ge::WINDOW_SHOWN);
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    m_camera.init((float)m_screenWidth, (float)m_screenHeight);
+    m_camera.init(m_screenWidth, m_screenHeight);
     // Point the camera to the center of the screen
     m_camera.setPosition(glm::vec2(m_screenWidth / 2.0f, m_screenHeight / 2.0f));
     

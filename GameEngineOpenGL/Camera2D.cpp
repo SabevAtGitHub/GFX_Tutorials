@@ -13,10 +13,10 @@ namespace ge {
 
 	Camera2D::~Camera2D() {/* empty */ }
 
-	void Camera2D::init(float screenWidth, float screenHeight)
+	void Camera2D::init(int screenWidth, int screenHeight)
 	{
-		scrW = screenWidth;
-		scrH = screenHeight;
+		scrW = (float)screenWidth;
+		scrH = (float)screenHeight;
 
 		orthoMatrix = glm::ortho(0.0f, scrW, 0.0f, scrH);
 	}

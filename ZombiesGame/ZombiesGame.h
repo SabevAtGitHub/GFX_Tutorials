@@ -54,7 +54,7 @@ private:
 	ge::SpriteFont* spriteFont_ = nullptr;
 	ge::AudioManager audioEngine_;
 	
-	float scrW_, scrH_;
+	int scrW_, scrH_;
 	float maxFps_, currFps_;
 
 	std::vector<Level*> levels_;

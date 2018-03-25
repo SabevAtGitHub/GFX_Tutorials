@@ -9,7 +9,7 @@ namespace ge {
 		Camera2D();
 		~Camera2D();
 		// must be called before window.create();
-		void init(float screenWidth, float screenHeight);
+		void init(int screenWidth, int screenHeight);
 
 		void update();
 

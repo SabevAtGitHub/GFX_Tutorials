@@ -37,7 +37,7 @@ private:
 	/// </summary>
 	ge::Window window_; 
 
-	float scrWidth, scrHeight;
+	int scrWidth, scrHeight;
 
 	GameState gameState;
 	
