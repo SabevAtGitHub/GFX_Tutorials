@@ -23,8 +23,8 @@ const float BALL_MAX_RADIUS = 4.f;
 const float BALL_MIN_RADIUS = 1.5f;
 const int NUM_BALLS = 10000; // Number of balls to spawn
 const int CELL_SIZE = (int)(BALL_MAX_RADIUS * 2.f + 1.f);
-const int SCR_W = 1366;
-const int SCR_H = 768;
+const int SCR_W = 800;
+const int SCR_H = 600;
 
 class MainGame {
 public:
