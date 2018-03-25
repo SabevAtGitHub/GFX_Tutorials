@@ -22,7 +22,6 @@ void Bullet::draw(ge::SpriteBatch & spriteBatch)
 
 	// drawing sprites
 	spriteBatch.draw(posAndSize, uv, texture.id, 0.f /* depth */, color);
-
 }
 
 bool Bullet::update()
