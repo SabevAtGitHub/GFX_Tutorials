@@ -29,6 +29,8 @@ namespace ge
 		while (m_isRunning)
 		{
 			limiter.beginFrame();
+			m_inputManager.update(); // Updates input manager
+
 			update();
 			draw();
 			m_fps = limiter.endFrame();
@@ -82,17 +84,17 @@ namespace ge
 				break;
 			}
 		}
-		else
-		{
+		else {
 			exitGame();
 		}
 	}
 
 	void IMainGame::draw()
 	{
-		if (m_currentScreen && m_currentScreen->getState() == ScreenState::RUNNING) {
+		glViewport(0, 0, m_window.getWidth(), m_window.getHeight());
+
+		if (m_currentScreen && m_currentScreen->getState() == ScreenState::RUNNING)
 			m_currentScreen->draw();
-		}
 	}
 
 	bool IMainGame::init()
@@ -108,6 +110,8 @@ namespace ge
 
 		m_currentScreen = m_screenList->getCurrent();
 		m_currentScreen->onEntry();
+		m_currentScreen->setRunning();
+
 		return true;
 	}
 
@@ -124,4 +128,30 @@ namespace ge
 		return true;
 	}
 
+	void IMainGame::onSDLEvent(SDL_Event & evnt)
+	{
+
+
+		switch (evnt.type)
+		{
+		case SDL_QUIT:
+			m_isRunning = false;
+			break;
+		case SDL_MOUSEMOTION:
+			m_inputManager.setMouseCoords((float)evnt.motion.x, (float)evnt.motion.y);
+			break;
+		case SDL_KEYDOWN:
+			m_inputManager.pressKey(evnt.key.keysym.sym);
+			break;
+		case SDL_KEYUP:
+			m_inputManager.releaseKey(evnt.key.keysym.sym);
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			m_inputManager.pressKey(evnt.button.button);
+			break;
+		case SDL_MOUSEBUTTONUP:
+			m_inputManager.releaseKey(evnt.button.button);
+			break;
+		}
+	}
 }

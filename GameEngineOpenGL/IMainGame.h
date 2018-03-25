@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Window.h"
+#include "InputManager.h"
 
 
 namespace ge
@@ -25,8 +26,13 @@ namespace ge
 		void runGame();
 		void exitGame();
 
+		// Implement any custom init logic here ( for example,
+		// to overwrite any window settings etc.)
 		virtual void onInit() = 0;
+
 		virtual void addScreens() = 0;
+
+		// Implement any custom exit logic here
 		virtual void onExit() = 0;
 
 		void update();
@@ -36,11 +42,14 @@ namespace ge
 	protected:
 		bool init();
 		bool initSystems();
+		
+		void onSDLEvent(SDL_Event& evnt);
 
 	protected:
 		std::unique_ptr<ScreenList> m_screenList = nullptr;
 		IGameScreen* m_currentScreen = nullptr;
 		Window m_window;
+		InputManager m_inputManager;
 
 		bool m_isRunning = false;
 		float m_fps = 0.f;
