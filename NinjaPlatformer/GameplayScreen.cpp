@@ -45,7 +45,9 @@ void GameplayScreen::onEntry()
 	groundBox.SetAsBox(50.f, 10.f);
 	groundBody->CreateFixture(&groundBox, 0.f);
 
-
+	Box newBox;
+	newBox.init(m_world.get(), glm::vec2(0.f, 14.f), glm::vec2(15.f, 15.f));
+	m_boxes.push_back(newBox);
 }
 
 void GameplayScreen::onExit()
