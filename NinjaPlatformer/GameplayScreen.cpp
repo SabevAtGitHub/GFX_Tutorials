@@ -2,7 +2,8 @@
 #include <GameEngineOpenGL\ResourceManager.h>
 
 
-GameplayScreen::GameplayScreen()
+GameplayScreen::GameplayScreen(ge::Window* window)
+	: m_window(window)
 {
 }
 
@@ -50,6 +51,14 @@ void GameplayScreen::onEntry()
 
 	// Initialize spriteBatch
 	m_spriteBatch.init();
+
+	initShaders();
+
+	// load the texture
+	m_texture2D = ge::ResourceManager::getTexture("Assets/bricks_top.png");
+
+	// Init the camera
+	m_camera.init(m_window->getWidth(), m_window->getHeight());
 }
 
 void GameplayScreen::onExit()
@@ -66,14 +75,31 @@ void GameplayScreen::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0f, 0.f, 0.f, 1.f); // red
 
+
+	m_textureProgram.use();
 	m_spriteBatch.begin();
 
 
 
 	m_spriteBatch.end();
 	m_spriteBatch.renderBatch();
+	m_textureProgram.unuse();
+
 }
 
 void GameplayScreen::checkInput()
 {
+}
+
+void GameplayScreen::initShaders()
+{
+	// adding attributes for each variable in the shader files
+	// right now the entry point is the .vert file
+	m_textureProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+	m_textureProgram.addAttribute("vertexPos");
+	m_textureProgram.addAttribute("vertexColor");
+	m_textureProgram.addAttribute("vertexUV");
+
+	// linking the 2 shader files
+	m_textureProgram.linkShaders();
 }
