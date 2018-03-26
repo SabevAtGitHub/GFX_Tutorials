@@ -9,31 +9,31 @@ namespace ge {
 
 	ParticleBatch2D::~ParticleBatch2D()
 	{
-		delete[] particles_;
+		delete[] m_particles;
 	}
 
 	void ParticleBatch2D::init(
 		int maxParticles, 
 		float decayRate,
-		GLTexture texture, 
+		GLTexture m_texture, 
 		std::function<void(Particle2D&, float)> updateFunc/* = defaultParticleupdate */)
 	{
-		maxParticles_ = maxParticles;
-		decayRate_ = decayRate;
-		texture_ = texture;
-		updateFunc_ = updateFunc;
+		m_maxParticles = maxParticles;
+		m_decayRate = decayRate;
+		m_texture = m_texture;
+		m_updateFunc = updateFunc;
 
-		particles_ = new Particle2D[maxParticles_];
+		m_particles = new Particle2D[m_maxParticles];
 	}
 
 	void ParticleBatch2D::update(float deltaTime)
 	{
-		for (int i = 0; i < maxParticles_; i++) {
+		for (int i = 0; i < m_maxParticles; i++) {
 			
 			// if a particle is active, update it
-			if (particles_[i].life > 0.f) {
-				updateFunc_(particles_[i], deltaTime);
-				particles_[i].life -= decayRate_ * deltaTime;
+			if (m_particles[i].life > 0.f) {
+				m_updateFunc(m_particles[i], deltaTime);
+				m_particles[i].life -= m_decayRate * deltaTime;
 			}
 		}
 
@@ -43,14 +43,14 @@ namespace ge {
 	{
 		glm::vec4 uvRect(0.f, 0.f, 1.f, 1.f);
 
-		for (int i = 0; i < maxParticles_; i++) {
-			auto& p = particles_[i];
+		for (int i = 0; i < m_maxParticles; i++) {
+			auto& p = m_particles[i];
 
 			// if a particle is active, draw it
 			if (p.life > 0.f) {
 				glm::vec4 destRect(p.pos.x, p.pos.y, p.width, p.width);
 
-				spriteBatch->draw(destRect, uvRect, texture_.id, 0.f, p.color);
+				spriteBatch->draw(destRect, uvRect, m_texture.id, 0.f, p.color);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ namespace ge {
 	{
 		int particleIdx = findFreeParticle();
 
-		auto&p = particles_[particleIdx];
+		auto&p = m_particles[particleIdx];
 		p.life = 1.0f;
 		p.pos = pos;
 		p.velocity = velocity;
@@ -70,17 +70,17 @@ namespace ge {
 	int ParticleBatch2D::findFreeParticle()
 	{
 		// this loop should find a free particle
-		for (int i = freeParticleIdx_; i < maxParticles_; i++) {
-			if (particles_[i].life <= 0.f) {
-				freeParticleIdx_ = i;
+		for (int i = m_freeParticleIdx; i < m_maxParticles; i++) {
+			if (m_particles[i].life <= 0.f) {
+				m_freeParticleIdx = i;
 				return i;
 			}
 		}
 
 		// this loop is going to check the rest of the array for a free particle
-		for (int i = 0; i < freeParticleIdx_; i++) {
-			if (particles_[i].life <= 0.f) {
-				freeParticleIdx_ = i;
+		for (int i = 0; i < m_freeParticleIdx; i++) {
+			if (m_particles[i].life <= 0.f) {
+				m_freeParticleIdx = i;
 				return i;
 			}
 		}

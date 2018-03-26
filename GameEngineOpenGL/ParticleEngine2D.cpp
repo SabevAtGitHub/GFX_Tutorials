@@ -10,7 +10,7 @@ namespace ge {
 
 	ParticleEngine2D::~ParticleEngine2D()
 	{
-		for (auto& b : batches_) {
+		for (auto& b : m_batches) {
 			delete b;
 		}
 	}
@@ -22,19 +22,19 @@ namespace ge {
 	/// <param name="particleBatch">Do not delete the batch, after passing it to this function</param>
 	void ParticleEngine2D::addParticleBatch(ParticleBatch2D * particleBatch)
 	{
-		batches_.push_back(particleBatch);
+		m_batches.push_back(particleBatch);
 	}
 
 	void ParticleEngine2D::update(float deltaTime)
 	{
-		for (auto& b : batches_) {
+		for (auto& b : m_batches) {
 			b->update(deltaTime);
 		}
 	}
 
 	void ParticleEngine2D::draw(SpriteBatch * spriteBatch)
 	{
-		for (auto& b  : batches_) {
+		for (auto& b  : m_batches) {
 			spriteBatch->begin();
 			b->draw(spriteBatch);
 			spriteBatch->end();

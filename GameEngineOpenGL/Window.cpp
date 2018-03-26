@@ -29,18 +29,18 @@ namespace ge {
 		}
 
 		/// Creating the main window
-		sdlWindow = SDL_CreateWindow(windowTitle.c_str(),
+		m_sdlWindow = SDL_CreateWindow(windowTitle.c_str(),
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
 			(int)m_width,
 			(int)m_height,
 			flags);
-		if (nullptr == sdlWindow) {
+		if (nullptr == m_sdlWindow) {
 			fatalError("BallGameMainGame: SDL Window could not be created!");
 		}
 
 		// Creating SDL Context and sending it to the main window
-		SDL_GLContext glContext = SDL_GL_CreateContext(sdlWindow);
+		SDL_GLContext glContext = SDL_GL_CreateContext(m_sdlWindow);
 		if (nullptr == glContext) {
 			fatalError("BallGameMainGame: SDL_GL context could not be created!");
 		}
@@ -69,7 +69,7 @@ namespace ge {
 	void Window::swapBuffer()
 	{
 		// Flushing current screen
-		SDL_GL_SwapWindow(sdlWindow);
+		SDL_GL_SwapWindow(m_sdlWindow);
 	}
 
 }

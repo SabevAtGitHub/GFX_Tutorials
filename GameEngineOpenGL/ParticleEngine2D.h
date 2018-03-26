@@ -19,7 +19,7 @@ namespace ge {
 		void draw(SpriteBatch* spriteBatch);
 
 	private:
-		std::vector<ParticleBatch2D*> batches_;
+		std::vector<ParticleBatch2D*> m_batches;
 	};
 
 }

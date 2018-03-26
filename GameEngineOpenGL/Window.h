@@ -9,7 +9,6 @@ namespace ge {
 		WINDOW_HIDDEN = 0x02,
 		WINDOW_FULLSCREEN = 0x04,
 		WINDOW_BORDERLESS = 0x08,
-
 	};
 
 	class Window
@@ -25,7 +24,7 @@ namespace ge {
 		const int getHeight() const { return m_height; }
 
 	private:
-		SDL_Window* sdlWindow;
+		SDL_Window* m_sdlWindow;
 		int m_width = 600;
 		int m_height = 480;
 	};

@@ -30,13 +30,13 @@ namespace ge {
 		void unuse();
 
 	private:
-		int numAttributes;
+		int m_numAttributes;
 
 		void compileShader(const std::string filePath, GLuint id);
 
-		GLuint programID;
-		GLuint vertShaderID;
-		GLuint fragShaderID;
+		GLuint m_programID;
+		GLuint m_vertShaderID;
+		GLuint m_fragShaderID;
 	};
 
 

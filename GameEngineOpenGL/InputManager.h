@@ -27,13 +27,13 @@ namespace ge {
 		void setMouseCoords(float x, float y);
 
 		// Getters
-		glm::vec2 getMouseCoords() const { return mouseCoords; }
+		glm::vec2 getMouseCoords() const { return m_mouseCoords; }
 
 	private:
 		bool wasKeyDown(unsigned int keyId);
-		std::unordered_map<unsigned int, bool> keyMap;
-		std::unordered_map<unsigned int, bool> prevKeyMap;
-		glm::vec2 mouseCoords;
+		std::unordered_map<unsigned int, bool> m_keyMap;
+		std::unordered_map<unsigned int, bool> m_prevKeyMap;
+		glm::vec2 m_mouseCoords;
 	};
 }
 

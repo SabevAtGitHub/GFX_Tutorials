@@ -15,8 +15,8 @@ namespace ge {
 
 	private:
 		float x, y, w, h;
-		GLuint vboId; // 32 bit unsigned int
-		GLTexture texture;
+		GLuint m_vboId; // 32 bit unsigned int
+		GLTexture m_texture;
 
 	};
 }

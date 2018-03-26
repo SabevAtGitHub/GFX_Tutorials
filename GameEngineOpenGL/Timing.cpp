@@ -10,13 +10,13 @@ namespace ge {
 
 	void FpsLimiter::setTargetFps(float targetFps)
 	{
-		maxFps = targetFps;
-		targetTicks = (Uint32)(1000.f / maxFps);
+		m_maxFps = targetFps;
+		m_targetTicks = (Uint32)(1000.f / m_maxFps);
 	}
 
 	void FpsLimiter::beginFrame()
 	{
-		startTicks = SDL_GetTicks(); // initial frame ticks
+		m_startTicks = SDL_GetTicks(); // initial frame ticks
 	}
 
 	float FpsLimiter::endFrame()
@@ -24,7 +24,7 @@ namespace ge {
 		calculateFps(); // changes the fps variable
 		delayFps();
 
-		return fps;
+		return m_fps;
 	}
 
 	void FpsLimiter::calculateFps()
@@ -38,8 +38,8 @@ namespace ge {
 		Uint32 currTicks;
 		currTicks = SDL_GetTicks();
 
-		frameTime = (float)(currTicks - prevTicks); // difference in millisec
-		frameTimes[currFrame % NUM_SAMPLES] = frameTime; // store it in the array
+		m_frameTime = (float)(currTicks - prevTicks); // difference in millisec
+		frameTimes[currFrame % NUM_SAMPLES] = m_frameTime; // store it in the array
 
 		prevTicks = currTicks;
 
@@ -62,21 +62,21 @@ namespace ge {
 
 		// calculate the fps
 		if (0 == frameTimeAvg) { // not to divide by 0
-			fps = 0.0f;
+			m_fps = 0.0f;
 		}
 		else {
-			fps = 1000.0f / frameTimeAvg;
+			m_fps = 1000.0f / frameTimeAvg;
 		}
 	}
 
 	void FpsLimiter::delayFps()
 	{
 		// final frame ticks
-		Uint32 frameTicks = SDL_GetTicks() - startTicks;
+		Uint32 frameTicks = SDL_GetTicks() - m_startTicks;
 
 		// delay
-		if (targetTicks > frameTicks) {
-			SDL_Delay(targetTicks - frameTicks);
+		if (m_targetTicks > frameTicks) {
+			SDL_Delay(m_targetTicks - frameTicks);
 		}
 	}
 

@@ -6,10 +6,10 @@
 namespace ge {
 
 	GLSLProgram::GLSLProgram() : 
-		numAttributes(0), 
-		programID(0), 
-		vertShaderID(0), 
-		fragShaderID(0) 
+		m_numAttributes(0), 
+		m_programID(0), 
+		m_vertShaderID(0), 
+		m_fragShaderID(0) 
 	{ /* empty */ }
 	
 	GLSLProgram::~GLSLProgram() { /* empty */ }
@@ -17,23 +17,23 @@ namespace ge {
 	void GLSLProgram::compileShaders(const std::string & vertShaderFPath, const std::string & fragShaderFPath)
 	{
 		//Get a program object.
-		programID = glCreateProgram();
+		m_programID = glCreateProgram();
 
 		// create vertex shader
-		vertShaderID = glCreateShader(GL_VERTEX_SHADER);
-		if (vertShaderID == 0) {
+		m_vertShaderID = glCreateShader(GL_VERTEX_SHADER);
+		if (m_vertShaderID == 0) {
 			fatalError("GLSLProgram: Vertex Shader creation failed!");
 		}
 
 		// create fragment shader
-		fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-		if (fragShaderID == 0) {
+		m_fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+		if (m_fragShaderID == 0) {
 			fatalError("GLSLProgram: Fragment Shader creation failed!");
 		}
 
 		// compile them
-		compileShader(vertShaderFPath, vertShaderID);
-		compileShader(fragShaderFPath, fragShaderID);
+		compileShader(vertShaderFPath, m_vertShaderID);
+		compileShader(fragShaderFPath, m_fragShaderID);
 	}
 
 	void GLSLProgram::compileShader(const std::string filePath, GLuint id)
@@ -91,28 +91,28 @@ namespace ge {
 		//Now time to link them together into a program.
 
 		//Attach our shaders to our program
-		glAttachShader(programID, vertShaderID);
-		glAttachShader(programID, fragShaderID);
+		glAttachShader(m_programID, m_vertShaderID);
+		glAttachShader(m_programID, m_fragShaderID);
 
 		//Link our program
-		glLinkProgram(programID);
+		glLinkProgram(m_programID);
 
 		//Note the different functions here: glGetProgram* instead of glGetShader*.
 		GLint isLinked = 0;
-		glGetProgramiv(programID, GL_LINK_STATUS, (int *)&isLinked);
+		glGetProgramiv(m_programID, GL_LINK_STATUS, (int *)&isLinked);
 		if (isLinked == GL_FALSE) {
 			GLint maxLength = 0;
-			glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLength);
+			glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &maxLength);
 
 			//The maxLength includes the NULL character
 			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(programID, maxLength, &maxLength, &infoLog[0]);
+			glGetProgramInfoLog(m_programID, maxLength, &maxLength, &infoLog[0]);
 
 			//We don't need the program anymore.
-			glDeleteProgram(programID);
+			glDeleteProgram(m_programID);
 			//Don't leak shaders either.
-			glDeleteShader(vertShaderID);
-			glDeleteShader(fragShaderID);
+			glDeleteShader(m_vertShaderID);
+			glDeleteShader(m_fragShaderID);
 
 			// display error
 			std::printf("%s\n", &(infoLog[0]));
@@ -120,10 +120,10 @@ namespace ge {
 		}
 
 		//Always detach shaders after a successful link.
-		glDetachShader(programID, vertShaderID);
-		glDetachShader(programID, vertShaderID);
-		glDeleteShader(vertShaderID);
-		glDeleteShader(fragShaderID);
+		glDetachShader(m_programID, m_vertShaderID);
+		glDetachShader(m_programID, m_vertShaderID);
+		glDeleteShader(m_vertShaderID);
+		glDeleteShader(m_fragShaderID);
 	}
 
 
@@ -131,14 +131,14 @@ namespace ge {
 	//Shold be called between compiling and linking
 	void GLSLProgram::addAttribute(const std::string & attrName)
 	{
-		glBindAttribLocation(programID, numAttributes++, attrName.c_str());
+		glBindAttribLocation(m_programID, m_numAttributes++, attrName.c_str());
 	}
 
 	// gets location in file for uniform variable
 	GLint GLSLProgram::getUniformLocation(const std::string & uniformName)
 	{
 
-		GLint loc = glGetUniformLocation(programID, uniformName.c_str());
+		GLint loc = glGetUniformLocation(m_programID, uniformName.c_str());
 		if (loc == GL_INVALID_INDEX) {
 			fatalError("GLSLProgram: Uniform " + uniformName + " not found in shader!");
 		}
@@ -147,8 +147,8 @@ namespace ge {
 
 	void GLSLProgram::use()
 	{
-		glUseProgram(programID);
-		for (auto i = 0; i < numAttributes; i++) {
+		glUseProgram(m_programID);
+		for (auto i = 0; i < m_numAttributes; i++) {
 			glEnableVertexAttribArray(i);
 		}
 	}
@@ -156,7 +156,7 @@ namespace ge {
 	void GLSLProgram::unuse()
 	{
 		glUseProgram(0);
-		for (auto i = 0; i < numAttributes; i++) {
+		for (auto i = 0; i < m_numAttributes; i++) {
 			glDisableVertexAttribArray(i);
 		}
 	}

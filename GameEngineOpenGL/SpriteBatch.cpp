@@ -3,8 +3,8 @@
 
 namespace ge {
 
-	Glyph::Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color) :
-		texture(texture),
+	Glyph::Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color) :
+		m_texture(m_texture),
 		depth(depth) 
 	{
 		topLeft.color = color;
@@ -24,8 +24,8 @@ namespace ge {
 		topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
 	}
 
-	Glyph::Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, float angle) :
-		texture(texture),
+	Glyph::Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color, float angle) :
+		m_texture(m_texture),
 		depth(depth)
 	{
 		glm::vec2 halfDims(destRect.z / 2.0f, destRect.w / 2.0f);
@@ -101,24 +101,24 @@ namespace ge {
 
 	// TODO
 	void SpriteBatch::draw(const glm::vec4 & destRect, 
-		const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color)
+		const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color)
 	{
-		glyphs.emplace_back(destRect, uvRect, texture, depth, color);
+		glyphs.emplace_back(destRect, uvRect, m_texture, depth, color);
 	}
 
-	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, float angle)
+	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color, float angle)
 	{
-		glyphs.emplace_back(destRect, uvRect, texture, depth, color, angle);
+		glyphs.emplace_back(destRect, uvRect, m_texture, depth, color, angle);
 	}
 
-	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, const glm::vec2& dir)
+	void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color, const glm::vec2& dir)
 	{
 		// determining angle from direction
 		const glm::vec2 right(1.f, 0.f);
 		float angle = acos(glm::dot(right, dir));
 		if (dir.y < 0.f)  angle = -angle;
 
-		glyphs.emplace_back(destRect, uvRect, texture, depth, color, angle);
+		glyphs.emplace_back(destRect, uvRect, m_texture, depth, color, angle);
 	}
 
 	void SpriteBatch::renderBatch()
@@ -128,7 +128,7 @@ namespace ge {
 
 		// drawing each batch
 		for (size_t i = 0; i < renderBatches.size(); i++) {
-			glBindTexture(GL_TEXTURE_2D, renderBatches[i].texture);
+			glBindTexture(GL_TEXTURE_2D, renderBatches[i].m_texture);
 
 			glDrawArrays(GL_TRIANGLES, renderBatches[i].offset, renderBatches[i].numVertices);
 		}
@@ -153,7 +153,7 @@ namespace ge {
 		int cv = 0; // current vertex
 
 		// storing the first batch
-		renderBatches.emplace_back(offset, 6, glyphPtrs[0]->texture);
+		renderBatches.emplace_back(offset, 6, glyphPtrs[0]->m_texture);
 		offset += 6;
 
 		vertices[cv++] = glyphPtrs[0]->topLeft;
@@ -165,8 +165,8 @@ namespace ge {
 
 		// setting the rest of the batches
 		for (size_t cg = 1; cg < glyphPtrs.size(); cg++) {
-			if (glyphPtrs[cg]->texture != glyphPtrs[cg-1]->texture) {
-				renderBatches.emplace_back(offset, 6, glyphPtrs[cg]->texture);
+			if (glyphPtrs[cg]->m_texture != glyphPtrs[cg-1]->m_texture) {
+				renderBatches.emplace_back(offset, 6, glyphPtrs[cg]->m_texture);
 			}
 			else {
 				renderBatches.back().numVertices += 6;
@@ -237,7 +237,7 @@ namespace ge {
 			break;
 		case ge::GlyphSortType::TEXTURE:
 			std::stable_sort(glyphPtrs.begin(), glyphPtrs.end(), 
-				[] (Glyph* a, Glyph* b) {return a->texture < b->texture; });
+				[] (Glyph* a, Glyph* b) {return a->m_texture < b->m_texture; });
 			break;
 		}
 		

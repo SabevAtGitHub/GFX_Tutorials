@@ -17,11 +17,11 @@ namespace ge {
 	class Glyph {
 	public:
 		Glyph() {};
-		Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color);
+		Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color);
 		
-		Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, float angle);
+		Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color, float angle);
 
-		GLuint texture;
+		GLuint m_texture;
 		float depth;
 
 		Vertex topLeft, bottomLeft, topRight, bottomRight;
@@ -33,10 +33,10 @@ namespace ge {
 	class RenderBatch {
 	public:
 		RenderBatch::RenderBatch(GLuint offsetVal, GLuint verticesCount, GLuint textureId) : 
-			offset(offsetVal), numVertices(verticesCount), texture(textureId) {}
+			offset(offsetVal), numVertices(verticesCount), m_texture(textureId) {}
 		GLuint offset;
 		GLuint numVertices;
-		GLuint texture;
+		GLuint m_texture;
 	};
 
 
@@ -54,9 +54,9 @@ namespace ge {
 		/// <summary>
 		/// adds a Glyph to the sprite batch
 		/// </summary>
-		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color);
-		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color, float angle);
-		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color, const glm::vec2& dir);
+		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint m_texture, float depth, const ColorRGBA8& color);
+		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint m_texture, float depth, const ColorRGBA8& color, float angle);
+		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint m_texture, float depth, const ColorRGBA8& color, const glm::vec2& dir);
 
 		/// <summary>
 		/// renders entire SpriteBatch

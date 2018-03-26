@@ -33,7 +33,7 @@ namespace ge {
 
 		void init(int maxParticles, 
 				  float decayRate,
-				  GLTexture texture,
+				  GLTexture m_texture,
 				  std::function<void(Particle2D&, float)> updateFunc = defaultParticleUpdate);
 
 		void update(float deltaTime);
@@ -46,13 +46,13 @@ namespace ge {
 	private:
 		int findFreeParticle();
 
-		std::function<void(Particle2D&, float)> updateFunc_;
+		std::function<void(Particle2D&, float)> m_updateFunc;
 
-		float decayRate_ = 0.1f;
-		Particle2D* particles_ = nullptr;
-		int maxParticles_ = 0;
-		int freeParticleIdx_ = 0;
-		GLTexture texture_;
+		float m_decayRate = 0.1f;
+		Particle2D* m_particles = nullptr;
+		int m_maxParticles = 0;
+		int m_freeParticleIdx = 0;
+		GLTexture m_texture;
 	};
 }
 

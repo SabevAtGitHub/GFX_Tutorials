@@ -6,7 +6,7 @@ namespace ge {
 
 	GLTexture ImageLoader::loadPNG( std::string filePath )
 	{
-		GLTexture texture = {};
+		GLTexture m_texture = {};
 
 		// file buffers
 		std::vector<unsigned char> out;
@@ -24,10 +24,10 @@ namespace ge {
 		}
 
 		// generating OpenGL texture object
-		glGenTextures(1, &(texture.id));
+		glGenTextures(1, &(m_texture.id));
 
 		// binding the texture and uploading data to it
-		glBindTexture(GL_TEXTURE_2D, texture.id);
+		glBindTexture(GL_TEXTURE_2D, m_texture.id);
 
 		// uploading image data to the texture
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &(out[0]));
@@ -45,9 +45,9 @@ namespace ge {
 		// we must awlays unbind the textures
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		texture.w = w;
-		texture.h = h;
+		m_texture.w = w;
+		m_texture.h = h;
 
-		return texture;
+		return m_texture;
 	}
 }

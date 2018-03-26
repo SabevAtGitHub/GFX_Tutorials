@@ -23,13 +23,13 @@ namespace ge {
 		void calculateFps();
 		void delayFps();
 
-		float maxFps;
-		Uint32 startTicks; // initial frame ticks
-		Uint32 targetTicks;
+		float m_maxFps;
+		Uint32 m_startTicks; // initial frame ticks
+		Uint32 m_targetTicks;
 
-		float time;
-		float fps;		
-		float frameTime;
+		float m_time;
+		float m_fps;		
+		float m_frameTime;
 	};
 
 }

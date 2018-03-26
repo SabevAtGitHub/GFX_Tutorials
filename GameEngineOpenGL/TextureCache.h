@@ -14,7 +14,7 @@ namespace ge {
 		GLTexture getTexture(std::string filePath);
 
 	private:
-		std::map<std::string, GLTexture> textureMap;
+		std::map<std::string, GLTexture> m_textureMap;
 
 	};
 }

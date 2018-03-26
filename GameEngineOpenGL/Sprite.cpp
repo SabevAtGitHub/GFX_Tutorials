@@ -6,13 +6,13 @@
 namespace ge {
 
 	Sprite::Sprite() :
-		vboId(0) {}
+		m_vboId(0) {}
 
 	Sprite::~Sprite()
 	{
-		if (0 != vboId) {
+		if (0 != m_vboId) {
 			// just in case, free the buffer
-			glDeleteBuffers(1, &vboId);
+			glDeleteBuffers(1, &m_vboId);
 		}
 	}
 
@@ -24,13 +24,13 @@ namespace ge {
 		w = width;
 		h = height;
 
-		texture = ResourceManager::getTexture(texturePath);
+		m_texture = ResourceManager::getTexture(texturePath);
 
 		// creating the vertex buffer
 		// generates buffer and is changing
 		// the vboId to the buffer id 
-		if (0 == vboId) {			
-			glGenBuffers(1, &vboId);
+		if (0 == m_vboId) {			
+			glGenBuffers(1, &m_vboId);
 		}
 
 		Vertex vertexData[12]; // 6 vertecies with 2 floats
@@ -59,7 +59,7 @@ namespace ge {
 		vertexData[4].setColor(0, 255, 0, 255);
 
 		// to make activate this buffer
-		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
 
 		// passing the data for the buffer
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData),
@@ -76,9 +76,9 @@ namespace ge {
 	{
 		// this specifies which texture were binding, since multiple
 		// textures can be used at the same time in the shaders
-		glBindTexture(GL_TEXTURE_2D, texture.id);
+		glBindTexture(GL_TEXTURE_2D, m_texture.id);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
 		   
 		// Telling OpenGL what kind of attributes we're sending
 		glEnableVertexAttribArray(0);

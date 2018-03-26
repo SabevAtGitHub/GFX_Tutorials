@@ -4,7 +4,7 @@
 
 
 namespace ge {
-	InputManager::InputManager() : mouseCoords(0.f) { /* empty */ }
+	InputManager::InputManager() : m_mouseCoords(0.f) { /* empty */ }
 		InputManager::~InputManager() { /* empty */ }
 
 	/// <summary>
@@ -12,25 +12,25 @@ namespace ge {
 	/// </summary>
 	void InputManager::update()
 	{
-		for each (auto& key in keyMap) {
-			prevKeyMap[key.first] = key.second;
+		for each (auto& key in m_keyMap) {
+			m_prevKeyMap[key.first] = key.second;
 		}
 	}
 
 	void InputManager::pressKey(unsigned int keyId)
 	{
-		keyMap[keyId] = true; // adding the keyId if not found
+		m_keyMap[keyId] = true; // adding the keyId if not found
 	}
 
 	void InputManager::releaseKey(unsigned int keyId)
 	{
-		keyMap[keyId] = false;
+		m_keyMap[keyId] = false;
 	}
 
 	bool InputManager::isKeyDown(unsigned int keyId)
 	{
-		auto it = keyMap.find(keyId);
-		if (it != keyMap.end()) {
+		auto it = m_keyMap.find(keyId);
+		if (it != m_keyMap.end()) {
 			return it->second;
 		}
 		return false;
@@ -50,8 +50,8 @@ namespace ge {
 	// private
 	bool InputManager::wasKeyDown(unsigned int keyId)
 	{
-		auto it = prevKeyMap.find(keyId);
-		if (it != prevKeyMap.end()) {
+		auto it = m_prevKeyMap.find(keyId);
+		if (it != m_prevKeyMap.end()) {
 			return it->second;
 		}
 		return false;
@@ -59,8 +59,8 @@ namespace ge {
 
 	void InputManager::setMouseCoords(float x, float y)
 	{
-		mouseCoords.x = x;
-		mouseCoords.y = y;
+		m_mouseCoords.x = x;
+		m_mouseCoords.y = y;
 	}
 
 }
