@@ -8,7 +8,8 @@ namespace ge
 {
 
 	IMainGame::IMainGame()
-	{/*empty*/
+	{
+		m_screenList = std::make_unique<ScreenList>(this);
 	}
 
 
@@ -34,6 +35,7 @@ namespace ge
 			update();
 			draw();
 			m_fps = limiter.endFrame();
+			m_window.swapBuffer();
 		}
 	}
 

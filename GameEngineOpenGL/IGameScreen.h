@@ -16,6 +16,9 @@ namespace ge
 
 	class IGameScreen
 	{
+	public: 
+		friend class ScreenList;
+
 	public:
 		IGameScreen() {/*empty*/ }
 		virtual ~IGameScreen() { /*empty*/ }
@@ -44,7 +47,7 @@ namespace ge
 
 		void setParentGame(IMainGame* game) { m_game = game; }
 
-	private:
+	protected:
 		int m_screenIndex = -1;
 		ScreenState m_currentState = ScreenState::NONE;
 		IMainGame* m_game = nullptr;

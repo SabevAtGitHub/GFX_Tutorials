@@ -22,6 +22,7 @@ namespace ge
 
 	void ScreenList::addScreen(IGameScreen* newScreen)
 	{
+		newScreen->m_screenIndex = m_screens.size();
 		m_screens.push_back(newScreen);
 		newScreen->build();
 		newScreen->setParentGame(m_game);
@@ -58,7 +59,8 @@ namespace ge
 	void ScreenList::destroy()
 	{
 		for (size_t i = 0; i < m_screens.size(); i++) {
-			m_screens[i]->destroy();
+			//if (i != m_currentScreenIndex)
+				m_screens[i]->destroy();
 		}
 		m_screens.resize(0);
 		m_currentScreenIndex = NO_NEXT_SCREEN_INDEX;

@@ -39,11 +39,13 @@ namespace ge
 		void draw();
 
 		const float getFps() const { return m_fps; }
+
+		void onSDLEvent(SDL_Event& evnt);
+
 	protected:
 		bool init();
 		bool initSystems();
 		
-		void onSDLEvent(SDL_Event& evnt);
 
 	protected:
 		std::unique_ptr<ScreenList> m_screenList = nullptr;

@@ -1,9 +1,9 @@
 #include <iostream>
+#include "App.h"
 int main(int argc, char** argv) {
 
-
-	std::cout << "Hello World1" << std::endl;
-	std::cin.get();
+	App app;
+	app.runGame();
 
 	return 0;
 }
