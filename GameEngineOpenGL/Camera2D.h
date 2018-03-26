@@ -18,26 +18,26 @@ namespace ge {
 		bool isInView(glm::vec2& Pos, const glm::vec2& Dim);
 
 		// setters
-		void setPosition(glm::vec2& newPos) { pos = newPos; needsMatrixUpdate = true; }
+		void setPosition(glm::vec2& newPos) { m_pos = newPos; m_needsMatrixUpdate = true; }
 
-		void setScale(float newScale) { scale = newScale; needsMatrixUpdate = true; }
+		void setScale(float newScale) { m_scale = newScale; m_needsMatrixUpdate = true; }
 
 		// getters
-		glm::vec2 getPosition() { return pos; }
-		float getScale() { return scale; }
+		glm::vec2 getPosition() { return m_pos; }
+		float getScale() { return m_scale; }
 		
-		glm::mat4 getCameraMatrix() { return cameraMatrix; }
+		glm::mat4 getCameraMatrix() { return m_cameraMatrix; }
 
 
 	private:
 
-		glm::vec2 pos;
-		glm::mat4 cameraMatrix; // 4x4 matrix
-		glm::mat4 orthoMatrix;
+		glm::vec2 m_pos;
+		glm::mat4 m_cameraMatrix; // 4x4 matrix
+		glm::mat4 m_orthoMatrix;
 
-		float scale;
-		bool needsMatrixUpdate;
-		float scrW, scrH;
+		float m_scale;
+		bool m_needsMatrixUpdate;
+		float m_scrW, m_scrH;
 	};
 
 

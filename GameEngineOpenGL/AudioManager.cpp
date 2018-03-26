@@ -14,7 +14,7 @@ namespace ge {
 
 	void Music::play(int loops /*= *-1*/)
 	{
-		if (-1 == Mix_PlayMusic(music_, loops)) {
+		if (-1 == Mix_PlayMusic(m_music, loops)) {
 			fatalError("Mix_PlayMusic error: " + std::string(Mix_GetError()));
 		}
 	}
@@ -28,7 +28,7 @@ namespace ge {
 
 	void AudioManager::init()
 	{
-		if (isInititalized_) {
+		if (m_isInititalized) {
 			fatalError("Tried to initialize Audio Engine twice!\n");
 		}
 		// Can be combo of: MIX_INIT_FAC, MIX_INIT_MOD, MIX_INIT_MP3, MIX_INIT_OGG
@@ -38,23 +38,23 @@ namespace ge {
 		if (-1 == Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024)) {
 			fatalError("Mix_OpenAudio error: " + std::string(Mix_GetError()));
 		}
-		isInititalized_ = true;
+		m_isInititalized = true;
 	}
 
 	void AudioManager::destroy()
 	{
-		if (isInititalized_) {
-			isInititalized_ = false;
+		if (m_isInititalized) {
+			m_isInititalized = false;
 
-			for (auto& it : effectsMap_) {
+			for (auto& it : m_effectsMap) {
 				Mix_FreeChunk(it.second);
 			}
-			effectsMap_.clear();
+			m_effectsMap.clear();
 
-			for (auto& it : musicsMap_) {
+			for (auto& it : m_musicsMap) {
 				Mix_FreeMusic(it.second);
 			}
-			musicsMap_.clear();
+			m_musicsMap.clear();
 
 			Mix_CloseAudio();
 			Mix_Quit();
@@ -64,18 +64,18 @@ namespace ge {
 	SoundEffect AudioManager::loadSoundEffect(const std::string & filePath)
 	{
 		// Attempting to find this audoi effect in the cache map
-		auto it = effectsMap_.find(filePath);
+		auto it = m_effectsMap.find(filePath);
 
 		SoundEffect effect;
 
-		if (it == effectsMap_.end()) {
+		if (it == m_effectsMap.end()) {
 			// loading sound effect
 			Mix_Chunk* chunk = Mix_LoadWAV(filePath.c_str());
 			if (nullptr == chunk) {
 				fatalError("Mix_LoadWAV error: " + std::string(Mix_GetError()));
 			}
 
-			effectsMap_[filePath] = chunk;
+			m_effectsMap[filePath] = chunk;
 			effect.chunk_ = chunk;
 		}
 		else {
@@ -89,23 +89,23 @@ namespace ge {
 	Music AudioManager::loadMusic(const std::string & filePath)
 	{
 		// Attempting to find this audoi effect in the cache map
-		auto it = musicsMap_.find(filePath);
+		auto it = m_musicsMap.find(filePath);
 
 		Music music;
 
-		if (it == musicsMap_.end()) {
+		if (it == m_musicsMap.end()) {
 			// loading sound effect
 			Mix_Music* mixMusic = Mix_LoadMUS(filePath.c_str());
 			if (nullptr == mixMusic) {
 				fatalError("Mix_LoadMUS error: " + std::string(Mix_GetError()));
 			}
 
-			musicsMap_[filePath] = mixMusic;
-			music.music_ = mixMusic;
+			m_musicsMap[filePath] = mixMusic;
+			music.m_music = mixMusic;
 		}
 		else {
 			// it's already cached
-			music.music_ = it->second;
+			music.m_music = it->second;
 		}
 
 		return music;

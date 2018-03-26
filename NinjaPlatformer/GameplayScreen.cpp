@@ -32,7 +32,19 @@ void GameplayScreen::destroy()
 
 void GameplayScreen::onEntry()
 {
-	std::cout << "OnEntry\n";
+	b2Vec2 gravity(0.f, -9.81f);
+	m_world = std::make_unique<b2World>(gravity);
+
+	// Creating the ground
+	b2BodyDef groundBodyDef;
+	groundBodyDef.position.Set(0.f, -10.f);
+	b2Body* groundBody = m_world->CreateBody(&groundBodyDef);
+
+	// Creating the ground fixture
+	b2PolygonShape groundBox;
+	groundBox.SetAsBox(50.f, 10.f);
+	groundBody->CreateFixture(&groundBox, 0.f);
+
 
 }
 

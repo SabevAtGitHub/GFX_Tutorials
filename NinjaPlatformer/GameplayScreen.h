@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngineOpenGL\IGameScreen.h>
+#include <Box2D\Box2D.h>
 
 class GameplayScreen : public ge::IGameScreen
 {
@@ -23,6 +24,9 @@ private:
 	
 	void checkInput();
 
+private:
+
+	std::unique_ptr<b2World> m_world = nullptr;
 
 };
 

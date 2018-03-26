@@ -37,7 +37,7 @@ namespace ge {
 		static void stop() { Mix_HaltMusic(); }
 		static void resume() { Mix_ResumeMusic(); }
 	private:
-		Mix_Music* music_ = nullptr;
+		Mix_Music* m_music = nullptr;
 	};
 
 	class AudioManager
@@ -52,10 +52,10 @@ namespace ge {
 		SoundEffect loadSoundEffect(const std::string& filePath);
 		Music loadMusic(const std::string& filePath);
 	private:	
-		std::map<std::string, Mix_Chunk*> effectsMap_;
-		std::map<std::string, Mix_Music*> musicsMap_;
+		std::map<std::string, Mix_Chunk*> m_effectsMap;
+		std::map<std::string, Mix_Music*> m_musicsMap;
 
-		bool isInititalized_ = false;
+		bool m_isInititalized = false;
 	};
 }
 
