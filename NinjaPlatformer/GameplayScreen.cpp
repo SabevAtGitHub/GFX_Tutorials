@@ -30,7 +30,7 @@ void GameplayScreen::destroy()
 }
 
 void GameplayScreen::onEntry()
-{ 
+{
 	b2Vec2 gravity(0.f, -9.81f);
 	m_world = std::make_unique<b2World>(gravity);
 
@@ -59,6 +59,7 @@ void GameplayScreen::onEntry()
 
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
+	m_camera.setScale(32.f);
 }
 
 void GameplayScreen::onExit()
@@ -77,9 +78,39 @@ void GameplayScreen::draw()
 
 
 	m_textureProgram.use();
+
+
+	// this specifies which texture were binding, since multiple
+	// textures can be used at the same time in the shaders
+	GLint textureLocation = m_textureProgram.getUniformLocation("mySampler");
+	glUniform1i(textureLocation, 0);
+	glActiveTexture(GL_TEXTURE0);
+
+	// grab the camera matrix
+	glm::mat4 cameraMatrix = m_camera.getCameraMatrix();
+
+	// drawing / adjusting the camera here - todo - may change
+	// set the camera matrix and pass it ot shader
+	GLint pLocation = m_textureProgram.getUniformLocation("P");
+
+	// uploading the camera matrix to the GPU
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
+
+	//// Upload texture uniform
+	//auto textureUniform = m_textureProgram.getUniformLocation(pLocation);
+
 	m_spriteBatch.begin();
 
+	// draw all boxes
+	for (auto& b : m_boxes) {
+		glm::vec4 destRect;
+		destRect.x = b.getBody()->GetPosition().x;
+		destRect.y = b.getBody()->GetPosition().y;
+		destRect.z = b.getDimentions().x;
+		destRect.w = b.getDimentions().y;
 
+		m_spriteBatch.draw(destRect, glm::vec4(0.f, 0.f, 1.f, 1.f), m_texture2D.id, 0.f, ge::ColorRGBA8(255,0, 0, 255), b.getBody()->GetAngle());
+	}
 
 	m_spriteBatch.end();
 	m_spriteBatch.renderBatch();

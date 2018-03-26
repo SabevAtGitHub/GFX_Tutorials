@@ -13,6 +13,7 @@ Box::~Box()
 
 void Box::init(b2World * world, glm::vec2 pos, glm::vec2 dims)
 {
+	m_dims = dims;
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(pos.x, pos.y);
@@ -20,7 +21,7 @@ void Box::init(b2World * world, glm::vec2 pos, glm::vec2 dims)
 	m_body = world->CreateBody(&bodyDef);
 
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(dims.x / 2.f, dims.y / 2.f);
+	boxShape.SetAsBox(m_dims.x / 2.f, m_dims.y / 2.f);
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &boxShape;
