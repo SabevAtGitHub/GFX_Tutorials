@@ -11,8 +11,8 @@ namespace ge
 	const float MAX_DELTA_TIME = 1;
 	const float MILLISEC_PER_SEC = 1000.f;
 	const float CAMERA_SCALE = 1.f / 2.5f;
-	const int WINDOW_WIDTH = 1366;
-	const int WINDOW_HEIGHT = 768;
+	const int WINDOW_WIDTH = 1280;
+	const int WINDOW_HEIGHT = 720;
 
 	class ScreenList;
 	class IGameScreen;
@@ -42,6 +42,8 @@ namespace ge
 
 		void onSDLEvent(SDL_Event& evnt);
 
+		InputManager inputManager;
+
 	protected:
 		bool init();
 		bool initSystems();
@@ -51,7 +53,6 @@ namespace ge
 		std::unique_ptr<ScreenList> m_screenList = nullptr;
 		IGameScreen* m_currentScreen = nullptr;
 		Window m_window;
-		InputManager m_inputManager;
 
 		bool m_isRunning = false;
 		float m_fps = 0.f;

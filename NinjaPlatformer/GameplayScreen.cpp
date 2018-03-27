@@ -1,7 +1,7 @@
 #include "GameplayScreen.h"
 #include <GameEngineOpenGL\ResourceManager.h>
 #include <GameEngineOpenGL\IMainGame.h>
-#include <iostream>
+#include <GameEngineOpenGL\Vertex.h>
 #include <random>
 
 GameplayScreen::GameplayScreen(ge::Window* window)
@@ -33,7 +33,7 @@ void GameplayScreen::destroy()
 
 void GameplayScreen::onEntry()
 {
-	b2Vec2 gravity(0.f, -9.81f);
+	b2Vec2 gravity(0.f, -13.81f);
 	m_world = std::make_unique<b2World>(gravity);
 
 	// Make the ground
@@ -46,35 +46,19 @@ void GameplayScreen::onEntry()
 	groundBoxShape.SetAsBox(50.f, 10.f);
 	groundBody->CreateFixture(&groundBoxShape, 0.f);
 
+	m_texture2D = ge::ResourceManager::getTexture("Assets/bricks_top.png");
+
 	// creating number of boxes
-	std::mt19937 rng;
-	
-	std::uniform_real_distribution<float> xPos(-10.f, 10.f);
-	std::uniform_real_distribution<float> yPos(-10.f, 15.f);
-	std::uniform_real_distribution<float> size(0.5f, 2.5f);
-	std::uniform_int_distribution<int> color(0, 225);
+	spawnBoxes();
 
-	const int NUM_BOXES = 50;
-
-	for (int i = 0; i < NUM_BOXES; i++) {
-
-		Box newBox;
-		newBox.init(
-			m_world.get(), 
-			glm::vec2(xPos(rng), yPos(rng)), 
-			glm::vec2(size(rng), size(rng)), 
-			ge::ColorRGBA8(color(rng), color(rng), color(rng), 255));
-
-		m_boxes.push_back(newBox);
-	}
+	// init player
+	auto color = ge::ColorRGBA8(255, 255, 255, 255);
+	m_player.init(	m_world.get(), glm::vec2(2.f, 25.f), glm::vec2(1.5f, 2.5f), color, true);
 
 	// Initialize spriteBatch
 	m_spriteBatch.init();
 
 	initShaders();
-
-	// load the texture
-	m_texture2D = ge::ResourceManager::getTexture("Assets/bricks_top.png");
 
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
@@ -89,6 +73,7 @@ void GameplayScreen::update()
 {
 	m_camera.update();
 	checkInput();
+	m_player.update(m_game->inputManager);
 
 	// updating physics simulation
 	m_world->Step(1.f / 60.f, 6, 2);
@@ -125,18 +110,10 @@ void GameplayScreen::draw()
 
 	// draw all boxes
 	for (auto& b : m_boxes) {
-		glm::vec4 destRect;
-		destRect.x = b.getBody()->GetPosition().x;
-		destRect.y = b.getBody()->GetPosition().y;
-		destRect.z = b.getDimentions().x;  // width
-		destRect.w = b.getDimentions().y;  // height
-
-		m_spriteBatch.draw(destRect,
-			glm::vec4(0.f, 0.f, 1.f, 1.f),
-			m_texture2D.id, 0.f,
-			b.getColor(),
-			b.getBody()->GetAngle());
+		b.draw(m_spriteBatch);
 	}
+
+	m_player.draw(m_spriteBatch);
 
 	m_spriteBatch.end();
 	m_spriteBatch.renderBatch();
@@ -164,4 +141,31 @@ void GameplayScreen::initShaders()
 
 	// linking the 2 shader files
 	m_textureProgram.linkShaders();
+}
+
+// creating number of boxes
+void GameplayScreen::spawnBoxes()
+{
+	std::mt19937 rng;
+
+	std::uniform_real_distribution<float> xPos(-10.f, 10.f);
+	std::uniform_real_distribution<float> yPos(-10.f, 15.f);
+	std::uniform_real_distribution<float> size(0.5f, 2.5f);
+	std::uniform_int_distribution<int> color(0, 225);
+
+	const int NUM_BOXES = 50;
+
+	for (int i = 0; i < NUM_BOXES; i++) {
+
+		Box newBox;
+		newBox.init(
+			m_world.get(),
+			glm::vec2(xPos(rng), yPos(rng)),
+			glm::vec2(size(rng), size(rng)),
+			m_texture2D,
+			ge::ColorRGBA8(color(rng), color(rng), color(rng), 255));
+
+		m_boxes.push_back(newBox);
+	}
+
 }

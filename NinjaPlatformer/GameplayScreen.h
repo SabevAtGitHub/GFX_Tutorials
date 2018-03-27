@@ -8,6 +8,7 @@
 #include <GameEngineOpenGL\Camera2D.h>
 #include <Box2D\Box2D.h>
 #include "Box.h"
+#include "Player.h"
 
 class GameplayScreen : public ge::IGameScreen
 {
@@ -39,7 +40,9 @@ private:
 
 	void checkInput();
 	void initShaders();
+	void spawnBoxes();
 
+	Player m_player;
 	std::vector<Box> m_boxes;
 	std::unique_ptr<b2World> m_world = nullptr;
 

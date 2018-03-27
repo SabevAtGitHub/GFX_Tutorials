@@ -32,7 +32,7 @@ namespace ge {
 
 	class RenderBatch {
 	public:
-		RenderBatch::RenderBatch(GLuint offsetVal, GLuint verticesCount, GLuint textureId) : 
+		RenderBatch(GLuint offsetVal, GLuint verticesCount, GLuint textureId) : 
 			offset(offsetVal), numVertices(verticesCount), m_texture(textureId) {}
 		GLuint offset;
 		GLuint numVertices;

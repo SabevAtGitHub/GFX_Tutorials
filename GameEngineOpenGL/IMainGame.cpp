@@ -30,7 +30,7 @@ namespace ge
 		while (m_isRunning)
 		{
 			limiter.beginFrame();
-			m_inputManager.update(); // Updates input manager
+			inputManager.update(); // Updates input manager
 
 			update();
 			draw();
@@ -135,22 +135,22 @@ namespace ge
 		switch (evnt.type)
 		{
 		case SDL_QUIT:
-			m_isRunning = false;
+			exitGame();
 			break;
 		case SDL_MOUSEMOTION:
-			m_inputManager.setMouseCoords((float)evnt.motion.x, (float)evnt.motion.y);
+			inputManager.setMouseCoords((float)evnt.motion.x, (float)evnt.motion.y);
 			break;
 		case SDL_KEYDOWN:
-			m_inputManager.pressKey(evnt.key.keysym.sym);
+			inputManager.pressKey(evnt.key.keysym.sym);
 			break;
 		case SDL_KEYUP:
-			m_inputManager.releaseKey(evnt.key.keysym.sym);
+			inputManager.releaseKey(evnt.key.keysym.sym);
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			m_inputManager.pressKey(evnt.button.button);
+			inputManager.pressKey(evnt.button.button);
 			break;
 		case SDL_MOUSEBUTTONUP:
-			m_inputManager.releaseKey(evnt.button.button);
+			inputManager.releaseKey(evnt.button.button);
 			break;
 		}
 	}

@@ -59,7 +59,6 @@ namespace ge
 	void ScreenList::destroy()
 	{
 		for (size_t i = 0; i < m_screens.size(); i++) {
-			//if (i != m_currentScreenIndex)
 				m_screens[i]->destroy();
 		}
 		m_screens.resize(0);
