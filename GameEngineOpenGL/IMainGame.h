@@ -11,8 +11,8 @@ namespace ge
 	const float MAX_DELTA_TIME = 1;
 	const float MILLISEC_PER_SEC = 1000.f;
 	const float CAMERA_SCALE = 1.f / 2.5f;
-	const int WINDOW_WIDTH = 800;
-	const int WINDOW_HEIGHT = 600;
+	const int WINDOW_WIDTH = 1366;
+	const int WINDOW_HEIGHT = 768;
 
 	class ScreenList;
 	class IGameScreen;

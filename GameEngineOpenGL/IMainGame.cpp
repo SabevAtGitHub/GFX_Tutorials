@@ -132,8 +132,6 @@ namespace ge
 
 	void IMainGame::onSDLEvent(SDL_Event & evnt)
 	{
-
-
 		switch (evnt.type)
 		{
 		case SDL_QUIT:

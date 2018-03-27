@@ -1,6 +1,8 @@
 #include "GameplayScreen.h"
 #include <GameEngineOpenGL\ResourceManager.h>
-
+#include <GameEngineOpenGL\IMainGame.h>
+#include <iostream>
+#include <random>
 
 GameplayScreen::GameplayScreen(ge::Window* window)
 	: m_window(window)
@@ -36,7 +38,7 @@ void GameplayScreen::onEntry()
 
 	// Make the ground
 	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0.f, -20.f);
+	groundBodyDef.position.Set(0.f, -25.f);
 	b2Body* groundBody = m_world->CreateBody(&groundBodyDef);
 
 	// Make ground fixture
@@ -44,10 +46,27 @@ void GameplayScreen::onEntry()
 	groundBoxShape.SetAsBox(50.f, 10.f);
 	groundBody->CreateFixture(&groundBoxShape, 0.f);
 
-	Box newBox;
-	newBox.init(m_world.get(), glm::vec2(0.f, 14.f), glm::vec2(15.f, 15.f));
+	// creating number of boxes
+	std::mt19937 rng;
+	
+	std::uniform_real_distribution<float> xPos(-10.f, 10.f);
+	std::uniform_real_distribution<float> yPos(-10.f, 15.f);
+	std::uniform_real_distribution<float> size(0.5f, 2.5f);
+	std::uniform_int_distribution<int> color(0, 225);
 
-	m_boxes.push_back(newBox);
+	const int NUM_BOXES = 50;
+
+	for (int i = 0; i < NUM_BOXES; i++) {
+
+		Box newBox;
+		newBox.init(
+			m_world.get(), 
+			glm::vec2(xPos(rng), yPos(rng)), 
+			glm::vec2(size(rng), size(rng)), 
+			ge::ColorRGBA8(color(rng), color(rng), color(rng), 255));
+
+		m_boxes.push_back(newBox);
+	}
 
 	// Initialize spriteBatch
 	m_spriteBatch.init();
@@ -59,7 +78,7 @@ void GameplayScreen::onEntry()
 
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
-	m_camera.setScale(32.f);
+	m_camera.setScale(22.f);
 }
 
 void GameplayScreen::onExit()
@@ -68,17 +87,20 @@ void GameplayScreen::onExit()
 
 void GameplayScreen::update()
 {
+	m_camera.update();
 	checkInput();
+
+	// updating physics simulation
+	m_world->Step(1.f / 60.f, 6, 2);
 }
 
 void GameplayScreen::draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(1.0f, 0.f, 0.f, 1.f); // red
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.f, 0.f, 1.f); // red
 
 	m_textureProgram.use();
-
 
 	// this specifies which texture were binding, since multiple
 	// textures can be used at the same time in the shaders
@@ -106,10 +128,14 @@ void GameplayScreen::draw()
 		glm::vec4 destRect;
 		destRect.x = b.getBody()->GetPosition().x;
 		destRect.y = b.getBody()->GetPosition().y;
-		destRect.z = b.getDimentions().x;
-		destRect.w = b.getDimentions().y;
+		destRect.z = b.getDimentions().x;  // width
+		destRect.w = b.getDimentions().y;  // height
 
-		m_spriteBatch.draw(destRect, glm::vec4(0.f, 0.f, 1.f, 1.f), m_texture2D.id, 0.f, ge::ColorRGBA8(255,0, 0, 255), b.getBody()->GetAngle());
+		m_spriteBatch.draw(destRect,
+			glm::vec4(0.f, 0.f, 1.f, 1.f),
+			m_texture2D.id, 0.f,
+			b.getColor(),
+			b.getBody()->GetAngle());
 	}
 
 	m_spriteBatch.end();
@@ -120,6 +146,11 @@ void GameplayScreen::draw()
 
 void GameplayScreen::checkInput()
 {
+	SDL_Event evnt;
+	//Will keep looping until there are no more events to process
+	while (SDL_PollEvent(&evnt)) {
+		m_game->onSDLEvent(evnt);
+	}
 }
 
 void GameplayScreen::initShaders()

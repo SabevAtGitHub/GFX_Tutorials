@@ -17,7 +17,5 @@ public:
 #pragma endregion // Inherited via IMainGame
 private:
 	std::unique_ptr<GameplayScreen> m_gameplayScreen = nullptr;
-
-
 };
 
