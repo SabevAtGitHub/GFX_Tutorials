@@ -5,6 +5,7 @@
 #include <GameEngineOpenGL\GLTexture.h>
 #include <GameEngineOpenGL\Window.h>
 #include <GameEngineOpenGL\GLSLProgram.h>
+#include <GameEngineOpenGL\DebugRenderer.h>
 #include <GameEngineOpenGL\Camera2D.h>
 #include <Box2D\Box2D.h>
 #include "Box.h"
@@ -42,11 +43,11 @@ private:
 	void initShaders();
 	void spawnBoxes();
 
+private:
+
 	Player m_player;
 	std::vector<Box> m_boxes;
 	std::unique_ptr<b2World> m_world = nullptr;
-
-private:
 
 	ge::SpriteBatch m_spriteBatch; 
 
@@ -59,5 +60,9 @@ private:
 
 	// Shader for the textures
 	ge::GLSLProgram m_textureProgram; 
+
+	ge::DebugRenderer m_debugRenderer;
+
+	bool m_renderDebug = true;
 };
 

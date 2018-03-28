@@ -48,12 +48,15 @@ void Box::init(
 
 void Box::draw(ge::SpriteBatch& spriteBatch)
 {
-	glm::vec4 destRect;
-	destRect.x = m_body->GetPosition().x - m_dims.x / 2.f;
-	destRect.y = m_body->GetPosition().y - m_dims.y / 2.f;
-	destRect.z = m_dims.x;  // width
-	destRect.w = m_dims.y;  // height
-
-	spriteBatch.draw(destRect, m_uvRect,
+	spriteBatch.draw(this->getDestRect(), m_uvRect,
 		m_texture2D.id, 0.f, m_color, m_body->GetAngle());
+}
+
+glm::vec4 Box::getDestRect() const
+{
+	return glm::vec4(
+		m_body->GetPosition().x - m_dims.x / 2.f, 
+		m_body->GetPosition().y - m_dims.y / 2.f, 
+		m_dims.x, 
+		m_dims.y);
 }

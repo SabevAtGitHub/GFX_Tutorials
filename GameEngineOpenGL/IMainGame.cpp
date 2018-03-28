@@ -33,6 +33,8 @@ namespace ge
 			inputManager.update(); // Updates input manager
 
 			update();
+			if (!m_isRunning) break;
+
 			draw();
 			m_fps = limiter.endFrame();
 			m_window.swapBuffer();

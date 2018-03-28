@@ -116,6 +116,9 @@ namespace ge
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // unbind
 
+		m_numElements = m_indices.size();
+		m_indices.clear();
+		m_verts.clear();
 	}
 
 	glm::vec2 rotatePoint(const glm::vec2& pos, float angle) {
@@ -167,16 +170,17 @@ namespace ge
 		m_indices.push_back(i);
 	}
 
-	void DebugRenderer::drawCircle(const glm::vec4 & center, const ColorRGBA8 & color, float radius)
+	void DebugRenderer::drawCircle(const glm::vec2 & center, const ColorRGBA8 & color, float radius)
 	{
 		// setting up the vertices
-		static const int NUM_VERTS = 100;
+		static const int NUM_VERTS = 24;
 		int start = m_verts.size();
+		m_verts.resize(start + NUM_VERTS);
 
 		for (int i = 0; i < NUM_VERTS; i++) {
-			float angle = ((float)i / NUM_VERTS) * M_PI * 2.f;
-			m_verts[start + i].pos.x + cos(angle) * radius;
-			m_verts[start + i].pos.y + sin(angle) * radius;
+			float angle = ((float)i / NUM_VERTS) * (float)M_PI * 2.f;
+			m_verts[start + i].pos.x = cos(angle) * radius + center.x;
+			m_verts[start + i].pos.y = sin(angle) * radius + center.y;
 			m_verts[start + i].color = color;
 		}
 
@@ -192,12 +196,35 @@ namespace ge
 		m_indices.push_back(start);
 	}
 
-	void DebugRenderer::render()
+	void DebugRenderer::render(const glm::mat4& projectionMatrix, float lineWidth)
 	{
+		m_program.use();
+
+		// uploading projection matrix matrix to the GPU
+		GLint pLocation = m_program.getUniformLocation("P");
+		glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
+
+		glLineWidth((GLfloat)lineWidth);
+
+		// drawing
+		glBindVertexArray(m_vao);
+		glDrawElements(GL_LINES, m_numElements, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+
+
+		m_program.unuse();
 	}
 
 	void DebugRenderer::dispose()
 	{
+		if (m_vao) 
+			glDeleteVertexArrays(1, &m_vao);
+		if (m_vbo)
+			glDeleteBuffers(1, &m_vbo);
+		if (m_ibo)
+			glDeleteBuffers(1, &m_ibo);
+
+		m_program.dispose();
 	}
 
 }

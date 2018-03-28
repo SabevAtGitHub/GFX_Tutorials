@@ -35,6 +35,8 @@ namespace ge {
 		/// </summary>
 		void unuse();
 
+		void dispose();
+
 	private:
 		int m_numAttributes;
 

@@ -33,12 +33,17 @@ void GameplayScreen::destroy()
 
 void GameplayScreen::onEntry()
 {
-	b2Vec2 gravity(0.f, -13.81f);
+	static const float CAMERA_SCALE = 30.f;
+	static const float WORLD_FLOOR_HEIGHT = -20.f;
+	static const float GRAVITY_RATE = -13.81f;
+
+	b2Vec2 gravity(0.f, GRAVITY_RATE);
 	m_world = std::make_unique<b2World>(gravity);
+	m_debugRenderer.init();
 
 	// Make the ground
 	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0.f, -25.f);
+	groundBodyDef.position.Set(0.f, WORLD_FLOOR_HEIGHT);
 	b2Body* groundBody = m_world->CreateBody(&groundBodyDef);
 
 	// Make ground fixture
@@ -62,11 +67,12 @@ void GameplayScreen::onEntry()
 
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
-	m_camera.setScale(22.f);
+	m_camera.setScale(CAMERA_SCALE);
 }
 
 void GameplayScreen::onExit()
 {
+	m_debugRenderer.dispose();
 }
 
 void GameplayScreen::update()
@@ -81,7 +87,6 @@ void GameplayScreen::update()
 
 void GameplayScreen::draw()
 {
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.f, 0.f, 1.f); // red
 
@@ -94,18 +99,17 @@ void GameplayScreen::draw()
 	glActiveTexture(GL_TEXTURE0);
 
 	// grab the camera matrix
-	glm::mat4 cameraMatrix = m_camera.getCameraMatrix();
+	glm::mat4 projectionMatrix = m_camera.getCameraMatrix();
 
 	// drawing / adjusting the camera here - todo - may change
 	// set the camera matrix and pass it ot shader
 	GLint pLocation = m_textureProgram.getUniformLocation("P");
 
 	// uploading the camera matrix to the GPU
-	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
 
 	//// Upload texture uniform
 	//auto textureUniform = m_textureProgram.getUniformLocation(pLocation);
-
 	m_spriteBatch.begin();
 
 	// draw all boxes
@@ -119,6 +123,22 @@ void GameplayScreen::draw()
 	m_spriteBatch.renderBatch();
 	m_textureProgram.unuse();
 
+		// Debug rendering...
+	if (m_renderDebug) {
+		auto color = ge::ColorRGBA8(255, 255, 255, 255); 
+		// ...boxes
+		for (auto& b : m_boxes) {
+			m_debugRenderer.drawBox(b.getDestRect(), color, b.getBody()->GetAngle());
+			//m_debugRenderer.drawCircle(glm::vec2(b.getBody()->GetPosition().x, b.getBody()->GetPosition().y), color, b.getDimentions().y / 2.f);
+		}
+
+		// ...player
+		m_debugRenderer.drawBox(m_player.getBox().getDestRect(), color, 
+			m_player.getBox().getBody()->GetAngle());
+
+		m_debugRenderer.end();
+		m_debugRenderer.render(projectionMatrix, 2.f);
+	}
 }
 
 void GameplayScreen::checkInput()
@@ -134,7 +154,8 @@ void GameplayScreen::initShaders()
 {
 	// adding attributes for each variable in the shader files
 	// right now the entry point is the .vert file
-	m_textureProgram.compileShadersFromFile(std::string("Shaders/colorShading.vert"), std::string("Shaders/colorShading.frag"));
+	m_textureProgram.compileShadersFromFile(std::string("Shaders/colorShading.vert"), 
+		std::string("Shaders/colorShading.frag"));
 	m_textureProgram.addAttribute("vertexPos");
 	m_textureProgram.addAttribute("vertexColor");
 	m_textureProgram.addAttribute("vertexUV");
@@ -153,7 +174,7 @@ void GameplayScreen::spawnBoxes()
 	std::uniform_real_distribution<float> size(0.5f, 2.5f);
 	std::uniform_int_distribution<int> color(0, 225);
 
-	const int NUM_BOXES = 50;
+	const int NUM_BOXES = 70;
 
 	for (int i = 0; i < NUM_BOXES; i++) {
 

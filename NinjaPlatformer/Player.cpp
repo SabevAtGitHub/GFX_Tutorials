@@ -25,8 +25,8 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 
 void Player::update(ge::InputManager inputManager)
 {
-	const float SIDE_IMPULSE = 80.f;
-	const float JUMP_IMPULSE = 32.f;
+	const float SIDE_IMPULSE = 90.f;
+	const float JUMP_IMPULSE = 40.f;
 	const float MAX_SPEED = 5.f;
 	const float SIDE_DAMP_RATE = 0.96f;
 

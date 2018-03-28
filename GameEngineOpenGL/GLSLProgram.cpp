@@ -6,13 +6,14 @@
 
 namespace ge {
 
-	GLSLProgram::GLSLProgram() : 
-		m_numAttributes(0), 
-		m_programID(0), 
-		m_vertShaderID(0), 
-		m_fragShaderID(0) 
-	{ /* empty */ }
-	
+	GLSLProgram::GLSLProgram() :
+		m_numAttributes(0),
+		m_programID(0),
+		m_vertShaderID(0),
+		m_fragShaderID(0)
+	{ /* empty */
+	}
+
 	GLSLProgram::~GLSLProgram() { /* empty */ }
 
 	void GLSLProgram::compileShadersFromFile(const std::string & vertShaderFPath, const std::string & fragShaderFPath)
@@ -153,5 +154,12 @@ namespace ge {
 		for (auto i = 0; i < m_numAttributes; i++) {
 			glDisableVertexAttribArray(i);
 		}
+	}
+
+	void GLSLProgram::dispose()
+	{
+		if (m_programID)
+			glDeleteProgram(m_programID);
+
 	}
 }
