@@ -2,7 +2,7 @@
 #include <fstream>
 
 namespace ge {
-	bool IOManager::readFileToBuffer(std::string filePath, std::vector<unsigned char>& buffer)
+	bool IOManager::readFileToBuffer(const std::string& filePath, std::vector<unsigned char>& buffer)
 	{
 		std::ifstream file(filePath, std::ios::binary);
 		if (file.fail()) {
@@ -25,5 +25,16 @@ namespace ge {
 		file.read((char *)&(buffer[0]), fileSize);
 		file.close();
 		return true;
+	}
+
+
+	bool IOManager::readFileToBuffer(const std::string& filePath, std::string & buffer)
+	{
+		std::vector<unsigned char> v;
+		if (readFileToBuffer(filePath, v)) {
+			buffer = std::string(v.begin(), v.end());
+			return true;
+		}
+		return false;
 	}
 }

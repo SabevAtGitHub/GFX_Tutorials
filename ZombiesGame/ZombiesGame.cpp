@@ -152,7 +152,7 @@ void ZombiesGame::initShaders()
 {
 	// adding attributes for each variable in the shader files
 	// right now the entry point is the .vert file
-	colorProgram_.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+	colorProgram_.compileShadersFromFile("Shaders/colorShading.vert", "Shaders/colorShading.frag");
 	colorProgram_.addAttribute("vertexPos");
 	colorProgram_.addAttribute("vertexColor");
 	colorProgram_.addAttribute("vertexUV");

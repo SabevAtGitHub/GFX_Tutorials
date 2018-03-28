@@ -10,8 +10,10 @@ namespace ge {
 	{
 	public:
 		// loading PNG file to char vector
-		static bool readFileToBuffer(std::string filePath,
-			std::vector<unsigned char>& buffer);
+		static bool readFileToBuffer(const std::string& filePath, std::vector<unsigned char>& buffer);
+
+		// reading file to string buffer
+		static bool readFileToBuffer(const std::string& filePath, std::string& buffer);
 	};
 }
 

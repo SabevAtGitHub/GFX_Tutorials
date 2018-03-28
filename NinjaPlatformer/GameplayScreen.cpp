@@ -134,7 +134,7 @@ void GameplayScreen::initShaders()
 {
 	// adding attributes for each variable in the shader files
 	// right now the entry point is the .vert file
-	m_textureProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+	m_textureProgram.compileShadersFromFile(std::string("Shaders/colorShading.vert"), std::string("Shaders/colorShading.frag"));
 	m_textureProgram.addAttribute("vertexPos");
 	m_textureProgram.addAttribute("vertexColor");
 	m_textureProgram.addAttribute("vertexUV");

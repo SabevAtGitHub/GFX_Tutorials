@@ -3,17 +3,23 @@
 #include <GL/glew.h>
 namespace ge {
 
-/// <summary>
-/// To combine and compile the shaders files
-/// </summary>
+	/// <summary>
+	/// To combine and compile the shaders files
+	/// </summary>
 	class GLSLProgram
 	{
 	public:
 		GLSLProgram();
 		~GLSLProgram();
 
-		void compileShaders(const std::string& vertShaderFPath,
-			const std::string& fragShaderFPath);
+		// Compile from extern shader file
+		void compileShadersFromFile(const std::string& vertShaderFPath, const std::string& fragShaderFPath);
+
+		// Compile from source code
+		void compileShadersFromSource(const char* vertexSource, const char* fragmentSource,
+			const std::string & vertShaderFPath = "Vertex Shader", 
+			const std::string & fragShaderFPath = "Fragment Shader");
+
 		void linkShaders();
 
 		void addAttribute(const std::string& attrName);
@@ -32,7 +38,7 @@ namespace ge {
 	private:
 		int m_numAttributes;
 
-		void compileShader(const std::string filePath, GLuint id);
+		void compileShader(const char* source, const std::string& name, GLuint id);
 
 		GLuint m_programID;
 		GLuint m_vertShaderID;

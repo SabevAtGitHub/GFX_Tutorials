@@ -78,7 +78,7 @@ void MainGame::init() {
     m_spriteFont = std::make_unique<ge::SpriteFont>("Fonts/chintzy.ttf", 40);
 
     // Compile our texture shader
-    m_textureProgram.compileShaders("Shaders/textureShading.vert", "Shaders/textureShading.frag");
+    m_textureProgram.compileShadersFromFile("Shaders/textureShading.vert", "Shaders/textureShading.frag");
     m_textureProgram.addAttribute("vertexPosition");
     m_textureProgram.addAttribute("vertexColor");
     m_textureProgram.addAttribute("vertexUV");

@@ -219,7 +219,7 @@ void BallGameMainGame::initShaders()
 {
 	// adding attributes for each variable in the shader files
 	// right now the entry point is the .vert file
-	colorProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+	colorProgram.compileShadersFromFile("Shaders/colorShading.vert", "Shaders/colorShading.frag");
 	colorProgram.addAttribute("vertexPos");
 	colorProgram.addAttribute("vertexColor");
 	colorProgram.addAttribute("vertexUV");

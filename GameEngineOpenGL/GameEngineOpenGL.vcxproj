@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Camera2D.cpp" />
+    <ClCompile Include="DebugRenderer.cpp" />
     <ClCompile Include="Errors.cpp" />
     <ClCompile Include="GameEngineOpenGL.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
@@ -177,6 +178,7 @@
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Camera2D.h" />
+    <ClInclude Include="DebugRenderer.h" />
     <ClInclude Include="ErrManager.h" />
     <ClInclude Include="GameEngineOpenGL.h" />
     <ClInclude Include="GLSLProgram.h" />

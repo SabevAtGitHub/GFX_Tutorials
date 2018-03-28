@@ -2,6 +2,7 @@
 #include "ErrManager.h"
 #include <fstream>
 #include <vector>
+#include "IOManager.h"
 
 namespace ge {
 
@@ -14,7 +15,20 @@ namespace ge {
 	
 	GLSLProgram::~GLSLProgram() { /* empty */ }
 
-	void GLSLProgram::compileShaders(const std::string & vertShaderFPath, const std::string & fragShaderFPath)
+	void GLSLProgram::compileShadersFromFile(const std::string & vertShaderFPath, const std::string & fragShaderFPath)
+	{
+		std::string vertSource;
+		std::string fragSource;
+
+		IOManager::readFileToBuffer(vertShaderFPath, vertSource);
+		IOManager::readFileToBuffer(fragShaderFPath, fragSource);
+
+		compileShadersFromSource(vertSource.c_str(), fragSource.c_str(), vertShaderFPath, fragShaderFPath);
+
+	}
+
+	void GLSLProgram::compileShadersFromSource(const char * vertexSource, const char * fragmentSource,
+		const std::string & vertShaderFPath/* = "Vertex Shader"*/, const std::string & fragShaderFPath/* = "Fragment Shader"*/)
 	{
 		//Get a program object.
 		m_programID = glCreateProgram();
@@ -32,34 +46,14 @@ namespace ge {
 		}
 
 		// compile them
-		compileShader(vertShaderFPath, m_vertShaderID);
-		compileShader(fragShaderFPath, m_fragShaderID);
+		compileShader(vertexSource, vertShaderFPath, m_vertShaderID);
+		compileShader(fragmentSource, fragShaderFPath, m_fragShaderID);
 	}
 
-	void GLSLProgram::compileShader(const std::string filePath, GLuint id)
+	void GLSLProgram::compileShader(const char* source, const std::string& name, GLuint id)
 	{
-
-		// load shader file
-		std::ifstream vertFile(filePath);
-		if (vertFile.fail()) {
-			perror(filePath.c_str());
-			fatalError("GLSLProgram: Failed to open " + filePath);
-		}
-
-		std::string fileContents = "";
-		std::string line;
-
-		// read file contents - line by line
-		while (std::getline(vertFile, line)) {
-			fileContents += line + "\n";
-		}
-
-		// close
-		vertFile.close();
-
 		// compile
-		const char* contentsPtr = fileContents.c_str();
-		glShaderSource(id, 1, &contentsPtr, nullptr);
+		glShaderSource(id, 1, &source, nullptr);
 
 		glCompileShader(id);
 
@@ -80,7 +74,7 @@ namespace ge {
 
 			// display error
 			std::printf("%s\n", &(errorLog[0]));
-			fatalError("GLSLProgram: Shader " + filePath + " failed to compile!");
+			fatalError("GLSLProgram: Shader " + name + " failed to compile!");
 		}
 	}
 
