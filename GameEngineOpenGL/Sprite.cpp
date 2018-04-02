@@ -1,5 +1,6 @@
 #include "Sprite.h"
 #include "Vertex.h"
+#include "ErrManager.h"
 #include <cstddef>
 #include "ResourceManager.h"
 
@@ -12,7 +13,7 @@ namespace ge {
 	{
 		if (0 != m_vboId) {
 			// just in case, free the buffer
-			glDeleteBuffers(1, &m_vboId);
+			GLCall(glDeleteBuffers(1, &m_vboId));
 		}
 	}
 
@@ -30,7 +31,7 @@ namespace ge {
 		// generates buffer and is changing
 		// the vboId to the buffer id 
 		if (0 == m_vboId) {			
-			glGenBuffers(1, &m_vboId);
+			GLCall(glGenBuffers(1, &m_vboId));
 		}
 
 		Vertex vertexData[12]; // 6 vertecies with 2 floats
@@ -59,14 +60,13 @@ namespace ge {
 		vertexData[4].setColor(0, 255, 0, 255);
 
 		// to make activate this buffer
-		glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vboId));
 
 		// passing the data for the buffer
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData),
-			vertexData, GL_STATIC_DRAW);
+		GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW));
 
 		// unbinding, not mandatory but safe
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	}
 
 	/// <summary>
@@ -76,36 +76,36 @@ namespace ge {
 	{
 		// this specifies which texture were binding, since multiple
 		// textures can be used at the same time in the shaders
-		glBindTexture(GL_TEXTURE_2D, m_texture.id);
+		GLCall(glBindTexture(GL_TEXTURE_2D, m_texture.id));
 
-		glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vboId));
 		   
 		// Telling OpenGL what kind of attributes we're sending
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
+		GLCall(glEnableVertexAttribArray(0));
+		GLCall(glEnableVertexAttribArray(1));
+		GLCall(glEnableVertexAttribArray(2));
 
 		// Passing more info (for flexibility if we don't want to draw the entire array)
 		// This is the position attribute pointer 
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
-			sizeof(Vertex), (void *)offsetof(Vertex, pos));
+		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+			sizeof(Vertex), (void *)offsetof(Vertex, pos)));
 
 		// This is the color attribute pointer 
-		glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE,
-			sizeof(Vertex), (void *)offsetof(Vertex, color));
+		GLCall(glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE,
+			sizeof(Vertex), (void *)offsetof(Vertex, color)));
 
 		// this is the UV attribute pointer
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,
-			sizeof(Vertex), (void *)offsetof(Vertex, uv));
+		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,
+			sizeof(Vertex), (void *)offsetof(Vertex, uv)));
 
 		//Actual drawing
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
 
 		// disableing the attributes
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
+		GLCall(glDisableVertexAttribArray(0));
+		GLCall(glDisableVertexAttribArray(1));
+		GLCall(glDisableVertexAttribArray(2));
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	}
 }

@@ -1,11 +1,12 @@
 #include "SpriteBatch.h"
+#include "ErrManager.h"
 #include <algorithm>
 
 namespace ge {
 
 	Glyph::Glyph(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color) :
 		m_texture(m_texture),
-		depth(depth) 
+		depth(depth)
 	{
 		topLeft.color = color;
 		topLeft.setPos(destRect.x, destRect.y + destRect.w);
@@ -55,7 +56,7 @@ namespace ge {
 		bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
 
 		topRight.color = color;
-		topRight.setPos(destRect.x + tr.x, destRect.y +tr.y);
+		topRight.setPos(destRect.x + tr.x, destRect.y + tr.y);
 		topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
 	}
 
@@ -70,8 +71,8 @@ namespace ge {
 	///  To be able to draw bathces of textures
 	/// </summary>
 	SpriteBatch::SpriteBatch() : vbo(0), vao(0) {}
-	
-	SpriteBatch::~SpriteBatch()  { }
+
+	SpriteBatch::~SpriteBatch() { }
 
 	void SpriteBatch::init()
 	{
@@ -80,7 +81,7 @@ namespace ge {
 
 	void SpriteBatch::begin(GlyphSortType sortBy /* GlyphSortType::TEXTURE */)
 	{ /// to setup any state before rendering
-		
+
 		// how to sort the Glyphs
 		sortType = sortBy;
 		renderBatches.clear();
@@ -100,7 +101,7 @@ namespace ge {
 	}
 
 	// TODO
-	void SpriteBatch::draw(const glm::vec4 & destRect, 
+	void SpriteBatch::draw(const glm::vec4 & destRect,
 		const glm::vec4 & uvRect, GLuint m_texture, float depth, const ColorRGBA8 & color)
 	{
 		glyphs.emplace_back(destRect, uvRect, m_texture, depth, color);
@@ -124,17 +125,17 @@ namespace ge {
 	void SpriteBatch::renderBatch()
 	{
 		// binding vertex array object
-		glBindVertexArray(vao);
+		GLCall(glBindVertexArray(vao));
 
 		// drawing each batch
 		for (size_t i = 0; i < renderBatches.size(); i++) {
-			glBindTexture(GL_TEXTURE_2D, renderBatches[i].m_texture);
+			GLCall(glBindTexture(GL_TEXTURE_2D, renderBatches[i].m_texture));
 
-			glDrawArrays(GL_TRIANGLES, renderBatches[i].offset, renderBatches[i].numVertices);
+			GLCall(glDrawArrays(GL_TRIANGLES, renderBatches[i].offset, renderBatches[i].numVertices));
 		}
 
 		// unbinding the array objects
-		glBindVertexArray(0);
+		GLCall(glBindVertexArray(0));
 	}
 
 	void SpriteBatch::createRenderBatches()
@@ -165,7 +166,7 @@ namespace ge {
 
 		// setting the rest of the batches
 		for (size_t cg = 1; cg < glyphPtrs.size(); cg++) {
-			if (glyphPtrs[cg]->m_texture != glyphPtrs[cg-1]->m_texture) {
+			if (glyphPtrs[cg]->m_texture != glyphPtrs[cg - 1]->m_texture) {
 				renderBatches.emplace_back(offset, 6, glyphPtrs[cg]->m_texture);
 			}
 			else {
@@ -180,67 +181,65 @@ namespace ge {
 			offset += 6;
 		}
 
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
 
 		// orphan the buffer
-		glBufferData(GL_ARRAY_BUFFER, 
-			vertices.size() * sizeof(Vertex), nullptr,  GL_DYNAMIC_DRAW);
+		GLCall(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW));
 		// uploading the data
-		glBufferSubData(GL_ARRAY_BUFFER, 0, 
-			vertices.size() * sizeof(Vertex), vertices.data());
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data()));
 		// unbinding the buffer
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	}
 	void SpriteBatch::createVertexArray()
 	{
 		if (0 == vao) {
-			glGenVertexArrays(1, &vao);
+			GLCall(glGenVertexArrays(1, &vao));
 		}
-		glBindVertexArray(vao);
+		GLCall(glBindVertexArray(vao));
 
 		if (0 == vbo) {
-			glGenBuffers(1, &vbo);
+			GLCall(glGenBuffers(1, &vbo));
 		}
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
 
 		// Telling OpenGL what kind of attributes we're sending
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
+		GLCall(glEnableVertexAttribArray(0));
+		GLCall(glEnableVertexAttribArray(1));
+		GLCall(glEnableVertexAttribArray(2));
 
 		// Passing more info (for flexibility if we don't want to draw the entire array)
 		// This is the position attribute pointer 
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
-			sizeof(Vertex), (void *)offsetof(Vertex, pos));
+		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+			sizeof(Vertex), (void *)offsetof(Vertex, pos)));
 
 		// This is the color attribute pointer 
-		glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE,
-			sizeof(Vertex), (void *)offsetof(Vertex, color));
+		GLCall(glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE,
+			sizeof(Vertex), (void *)offsetof(Vertex, color)));
 
 		// this is the UV attribute pointer
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,
-			sizeof(Vertex), (void *)offsetof(Vertex, uv));
-		
+		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,
+			sizeof(Vertex), (void *)offsetof(Vertex, uv)));
+
 		// unbinding and disableing vao and vbo
-		glBindVertexArray(0);
+		GLCall(glBindVertexArray(0));
 	}
 	void SpriteBatch::sortGlyphs()
 	{
 		switch (sortType) {
 		case ge::GlyphSortType::FRONT_TO_BACK:
-			std::stable_sort(glyphPtrs.begin(), glyphPtrs.end(), 
-				[] (Glyph* a, Glyph* b) {return a->depth < b->depth; });
+			std::stable_sort(glyphPtrs.begin(), glyphPtrs.end(),
+				[](Glyph* a, Glyph* b) {return a->depth < b->depth; });
 			break;
 		case ge::GlyphSortType::BACK_TO_FRONT:
-			std::stable_sort(glyphPtrs.begin(), glyphPtrs.end(), 
-				[] (Glyph* a, Glyph* b) {return a->depth > b->depth; });
+			std::stable_sort(glyphPtrs.begin(), glyphPtrs.end(),
+				[](Glyph* a, Glyph* b) {return a->depth > b->depth; });
 			break;
 		case ge::GlyphSortType::TEXTURE:
-			std::stable_sort(glyphPtrs.begin(), glyphPtrs.end(), 
-				[] (Glyph* a, Glyph* b) {return a->m_texture < b->m_texture; });
+			std::stable_sort(glyphPtrs.begin(), glyphPtrs.end(),
+				[](Glyph* a, Glyph* b) {return a->m_texture < b->m_texture; });
 			break;
 		}
-		
+
 	}
 
 } //namespace ge

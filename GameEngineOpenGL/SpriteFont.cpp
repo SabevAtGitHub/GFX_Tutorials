@@ -1,6 +1,6 @@
 #include "SpriteFont.h"
 #include "SpriteBatch.h"
-
+#include "ErrManager.h"
 #include <SDL/SDL.h>
 #include <iostream>
 
@@ -96,10 +96,11 @@ namespace ge {
 			fflush(stderr);
 			throw 282;
 		}
+
 		// Create the texture
-		glGenTextures(1, &m_texID);
-		glBindTexture(GL_TEXTURE_2D, m_texID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bestWidth, bestHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		GLCall(glGenTextures(1, &m_texID));
+		GLCall(glBindTexture(GL_TEXTURE_2D, m_texID));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bestWidth, bestHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
 
 		// Now draw all the glyphs
 		SDL_Color fg = { 255, 255, 255, 255 };
@@ -122,7 +123,7 @@ namespace ge {
 				}
 
 				// Save glyph image and update coordinates
-				glTexSubImage2D(GL_TEXTURE_2D, 0, lx, bestHeight - ly - 1 - glyphSurface->h, glyphSurface->w, glyphSurface->h, GL_BGRA, GL_UNSIGNED_BYTE, glyphSurface->pixels);
+				GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, lx, bestHeight - ly - 1 - glyphSurface->h, glyphSurface->w, glyphSurface->h, GL_BGRA, GL_UNSIGNED_BYTE, glyphSurface->pixels));
 				glyphRects[gi].x = lx;
 				glyphRects[gi].y = ly;
 				glyphRects[gi].z = glyphSurface->w;
@@ -140,15 +141,15 @@ namespace ge {
 		int rs = padding - 1;
 		int* pureWhiteSquare = new int[rs * rs];
 		memset(pureWhiteSquare, 0xffffffff, rs * rs * sizeof(int));
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, rs, rs, GL_RGBA, GL_UNSIGNED_BYTE, pureWhiteSquare);
+		GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, rs, rs, GL_RGBA, GL_UNSIGNED_BYTE, pureWhiteSquare));
 		delete[] pureWhiteSquare;
 		pureWhiteSquare = nullptr;
 
 		// Set some texture parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 
 		// Create spriteBatch glyphs
 		m_glyphs = new CharGlyph[m_regLength + 1];
@@ -167,7 +168,7 @@ namespace ge {
 		m_glyphs[m_regLength].size = m_glyphs[0].size;
 		m_glyphs[m_regLength].uvRect = glm::vec4(0.f, 0.f, (float)rs / (float)bestWidth, (float)rs / (float)bestHeight);
 
-		glBindTexture(GL_TEXTURE_2D, 0);
+		GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 		delete[] glyphRects;
 		delete[] bestPartition;
 		TTF_CloseFont(f);

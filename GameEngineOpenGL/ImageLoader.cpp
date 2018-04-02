@@ -24,26 +24,26 @@ namespace ge {
 		}
 
 		// generating OpenGL texture object
-		glGenTextures(1, &(m_texture.id));
+		GLCall(glGenTextures(1, &(m_texture.id)));
 
 		// binding the texture and uploading data to it
-		glBindTexture(GL_TEXTURE_2D, m_texture.id);
+		GLCall(glBindTexture(GL_TEXTURE_2D, m_texture.id));
 
 		// uploading image data to the texture
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &(out[0]));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &(out[0])));
 
 		// setting some parameters about the texture
 		// how it should be treated
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
 
 		// To use mitmapping
-		glGenerateMipmap(GL_TEXTURE_2D);
+		GLCall(glGenerateMipmap(GL_TEXTURE_2D));
 
 		// we must awlays unbind the textures
-		glBindTexture(GL_TEXTURE_2D, 0);
+		GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 
 		m_texture.w = w;
 		m_texture.h = h;

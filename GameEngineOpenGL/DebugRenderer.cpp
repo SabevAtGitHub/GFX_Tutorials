@@ -137,7 +137,6 @@ namespace ge
 		GLCall(glDrawElements(GL_LINES, m_numElements, GL_UNSIGNED_INT, 0));
 		GLCall(glBindVertexArray(0));
 
-
 		m_program.unuse();
 	}
 
