@@ -19,7 +19,7 @@ namespace ge {
 		}
 
 		int errCode = decodePNG(out, w, h, &(in[0]), in.size());
-		if (0 != errCode) {
+		if (errCode) {
 			fatalError("ImageLoader: Decode PNG failed with error: " + std::to_string(errCode));
 		}
 

@@ -41,7 +41,7 @@ private:
 
 	void checkInput();
 	void initShaders();
-	void spawnBoxes();
+	void spawnBoxes(int numBoxes);
 
 private:
 
@@ -54,7 +54,7 @@ private:
 	// Renders the scene
 	ge::Camera2D m_camera; 
 
-	ge::GLTexture m_texture2D; 
+	ge::GLTexture m_boxTexture2D; 
 
 	ge::Window* m_window = nullptr;
 
