@@ -20,14 +20,14 @@ public:
 
 	void update(ge::InputManager inputManager);
 
-	const Box& getBox() const { return m_collisionBox; }
+	//const Box& getBox() const { return m_collisionBox; }
 	const Capsule& getCapsule() const { return m_capsule; }
 	
 private:
-	Box m_collisionBox;
+	//Box m_collisionBox;
 	Capsule m_capsule;
 	ge::GLTexture m_texture2D;
-	glm::vec4 m_uvRect;
+	ge::ColorRGBA8 m_color;
 
 private:
 	// True if player's bottom has contact point

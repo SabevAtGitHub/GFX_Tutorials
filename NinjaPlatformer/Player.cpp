@@ -13,14 +13,20 @@ void Player::init(b2World* world, glm::vec2 pos, glm::vec2 dims,
 {
 	// loading player's texture
 	m_texture2D = ge::ResourceManager::getTexture("Assets/blue_ninja.png");
-	auto m_uvRect = glm::vec4(0.f, 0.f, 0.1f, 0.5f);
+	m_color = color;
 
-	m_collisionBox.init(world, pos, dims, m_texture2D, color, fixedRotation, m_uvRect);
+	//m_collisionBox.init(world, pos, dims, m_texture2D, color, fixedRotation, m_uvRect);
+
+	m_capsule.init(world, pos, dims, fixedRotation);
 }
 
 void Player::draw(ge::SpriteBatch& spriteBatch)
 {
-	m_collisionBox.draw(spriteBatch);
+	auto uvRect = glm::vec4(0.f, 0.f, 0.1f, 0.5f);
+
+	//m_collisionBox.draw(spriteBatch);
+	spriteBatch.draw(m_capsule.getBodyDestRect(), uvRect,
+		m_texture2D.id, 0.f, m_color, m_capsule.getBody()->GetAngle());
 }
 
 void Player::drawDebug(ge::DebugRenderer debugRenderer)
@@ -35,6 +41,7 @@ void Player::update(ge::InputManager inputManager)
 	const float MAX_SPEED = 5.f;
 	const float SIDE_DAMP_RATE = 0.96f;
 
+	//auto body = m_collisionBox.getBody();
 	auto body = m_collisionBox.getBody();
 
 	// Side movement
@@ -63,11 +70,12 @@ void Player::update(ge::InputManager inputManager)
 }
 
 bool Player::CanJump() {
+	//auto body = m_collisionBox.getBody();
 	auto body = m_collisionBox.getBody();
 	auto ce = body->GetContactList();
 
 	// Loop through all the contact points
-	while (ce != nullptr) 
+	while (ce != nullptr)
 	{
 		if (ce->contact->IsTouching()) {
 			b2WorldManifold manifold;
