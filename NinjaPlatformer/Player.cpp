@@ -29,7 +29,7 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 		m_texture2D.id, 0.f, m_color, m_capsule.getBody()->GetAngle());
 }
 
-void Player::drawDebug(ge::DebugRenderer debugRenderer)
+void Player::drawDebug(ge::DebugRenderer& debugRenderer)
 {
 	m_capsule.drawDebug(debugRenderer);
 }

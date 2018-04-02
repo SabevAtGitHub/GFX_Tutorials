@@ -92,34 +92,65 @@ namespace ge
 
 		GLCall(glBindVertexArray(0));
 	}
-	
+
 	void DebugRenderer::end()
 	{
-	// VBO
+		// VBO
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo)); // bind
-		
+
 		// Orphan the buffer
 		GLCall(glBufferData(GL_ARRAY_BUFFER, m_verts.size() * sizeof(DebugVertex), nullptr, GL_DYNAMIC_DRAW));
 
 		// Upload the data
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, m_verts.size() * sizeof(DebugVertex), m_verts.data()));
-		
+
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0)); // unbind
 
 	// IBO
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo)); // bind
- 
+
 		// Orphan the buffer
 		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(GLuint), nullptr, GL_DYNAMIC_DRAW));
- 
+
 		// Upload the data
 		GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_indices.size() * sizeof(GLuint), m_indices.data()));
- 
+
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)); // unbind
 
 		m_numElements = m_indices.size();
 		m_indices.clear();
 		m_verts.clear();
+	}
+
+	void DebugRenderer::render(const glm::mat4& projectionMatrix, float lineWidth)
+	{
+		m_program.use();
+
+		// uploading projection matrix matrix to the GPU
+		GLint pLocation = m_program.getUniformLocation("P");
+		GLCall(glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]));
+
+		GLCall(glLineWidth((GLfloat)lineWidth));
+
+		// drawing
+		GLCall(glBindVertexArray(m_vao));
+		GLCall(glDrawElements(GL_LINES, m_numElements, GL_UNSIGNED_INT, 0));
+		GLCall(glBindVertexArray(0));
+
+
+		m_program.unuse();
+	}
+
+	void DebugRenderer::dispose()
+	{
+		if (m_vao)
+			GLCall(glDeleteVertexArrays(1, &m_vao));
+		if (m_vbo)
+			GLCall(glDeleteBuffers(1, &m_vbo));
+		if (m_ibo)
+			GLCall(glDeleteBuffers(1, &m_ibo));
+
+		m_program.dispose();
 	}
 
 	glm::vec2 rotatePoint(const glm::vec2& pos, float angle) {
@@ -196,36 +227,4 @@ namespace ge
 		m_indices.push_back(start + NUM_VERTS - 1);
 		m_indices.push_back(start);
 	}
-
-	void DebugRenderer::render(const glm::mat4& projectionMatrix, float lineWidth)
-	{
-		m_program.use();
-
-		// uploading projection matrix matrix to the GPU
-		GLint pLocation = m_program.getUniformLocation("P");
-		GLCall(glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]));
-
-		GLCall(glLineWidth((GLfloat)lineWidth));
-
-		// drawing
-		GLCall(glBindVertexArray(m_vao));
-		GLCall(glDrawElements(GL_LINES, m_numElements, GL_UNSIGNED_INT, 0));
-		GLCall(glBindVertexArray(0));
-
-
-		m_program.unuse();
-	}
-
-	void DebugRenderer::dispose()
-	{
-		if (m_vao) 
-			GLCall(glDeleteVertexArrays(1, &m_vao));
-		if (m_vbo)
-			GLCall(glDeleteBuffers(1, &m_vbo));
-		if (m_ibo)
-			GLCall(glDeleteBuffers(1, &m_ibo));
-
-		m_program.dispose();
-	}
-
 }

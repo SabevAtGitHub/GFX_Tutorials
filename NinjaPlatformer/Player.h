@@ -16,7 +16,7 @@ public:
 		ge::ColorRGBA8 color, bool fixedRotation);
 
 	void draw(ge::SpriteBatch& spriteBatch);
-	void drawDebug(ge::DebugRenderer debugRenderer);
+	void drawDebug(ge::DebugRenderer& debugRenderer);
 
 	void update(ge::InputManager inputManager);
 

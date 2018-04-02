@@ -18,10 +18,10 @@ namespace ge
 
 		void end();
 
+		void render(const glm::mat4& projectionMatrix, float lineWidth);
+
 		void drawBox(const glm::vec4& destRect, const ColorRGBA8& color, float angle);
 		void drawCircle(const glm::vec2& center, const ColorRGBA8& color, float radius);
-
-		void render(const glm::mat4& projectionMatrix, float lineWidth);
 
 		void dispose();
 

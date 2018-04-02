@@ -31,7 +31,7 @@ void Capsule::init(b2World * world, glm::vec2 pos, glm::vec2 dims, bool fixedRot
 
 }
 
-void Capsule::drawDebug(ge::DebugRenderer debugRenderer)
+void Capsule::drawDebug(ge::DebugRenderer& debugRenderer)
 {
 	debugRenderer.drawBox(getBodyDestRect(), ge::ColorRGBA8(255, 255, 255, 255), m_body->GetAngle());
 }
