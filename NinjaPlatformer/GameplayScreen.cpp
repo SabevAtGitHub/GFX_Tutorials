@@ -37,7 +37,7 @@ void GameplayScreen::onEntry()
 	static const float WORLD_FLOOR_HEIGHT = -20.f;
 	static const float GRAVITY_RATE = -13.81f;
 	static const int NUM_BOXES = 70;
-
+	static const float PLAYER_W = 1.0f, PLAYER_H = 2.0f;
 
 	b2Vec2 gravity(0.f, GRAVITY_RATE);
 	m_world = std::make_unique<b2World>(gravity);
@@ -62,8 +62,12 @@ void GameplayScreen::onEntry()
 	initShaders();
 
 	// init player
+	auto pos = glm::vec2(2.f, 25.f);
 	auto color = ge::ColorRGBA8(255, 255, 255, 255);
-	m_player.init(m_world.get(), glm::vec2(2.f, 25.f), glm::vec2(1.5f, 2.5f), color, true);
+	auto drawDims = glm::vec2(2.5f);
+	auto collisionDims = glm::vec2(1.25f, 2.3f);
+
+	m_player.init(m_world.get(), pos, drawDims, collisionDims, color, true);
 
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());

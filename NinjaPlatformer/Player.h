@@ -12,8 +12,8 @@ public:
 	Player();
 	~Player();
 
-	void init(b2World* world, glm::vec2 pos, glm::vec2 dims,
-		ge::ColorRGBA8 color, bool fixedRotation);
+	void init(b2World* world, glm::vec2 pos, glm::vec2 drawDims,
+		glm::vec2 collitionDims, ge::ColorRGBA8 color, bool fixedRotation);
 
 	void draw(ge::SpriteBatch& spriteBatch);
 	void drawDebug(ge::DebugRenderer& debugRenderer);
@@ -25,6 +25,7 @@ public:
 	
 private:
 	//Box m_collisionBox;
+	glm::vec2 m_drawDims;
 	Capsule m_capsule;
 	ge::GLTexture m_texture2D;
 	ge::ColorRGBA8 m_color;

@@ -9,15 +9,17 @@ public:
 	Capsule();
 	~Capsule();
 
-	void init(b2World* world, glm::vec2 pos, glm::vec2 dims, bool fixedRotation = false);
+	void init(b2World* world, glm::vec2 pos, glm::vec2 dims,
+		float density, float friction, bool fixedRotation = false);
+
 
 	void drawDebug(ge::DebugRenderer& debugRenderer);
 
-	b2Body* getBody() const { return m_body; }
-	b2Fixture* getFixtures(int idx) const { return m_fixtures[idx]; }
-	const glm::vec2& getDimentions() const { return m_dims; }
-	
-	glm::vec4 getBodyDestRect() const;
+	inline b2Body* getBody() const { return m_body; }
+	inline b2Fixture* getFixtures(int idx) const { return m_fixtures[idx]; }
+	inline const glm::vec2& getDimentions() const { return m_dims; }
+
+	inline glm::vec4 getBodyDestRect() const;
 private:
 
 private:

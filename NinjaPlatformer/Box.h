@@ -22,11 +22,11 @@ public:
 
 	void draw(ge::SpriteBatch& spriteBatch);
 
-	b2Body* getBody() const { return m_body; }
-	b2Fixture* getFixture() const { return m_fixture; }
-	const glm::vec2& getDimentions() const { return m_dims; }
-	glm::vec4 getDestRect() const;
-	const ge::ColorRGBA8& getColor() const { return m_color; }
+	inline b2Body* getBody() const { return m_body; }
+	inline b2Fixture* getFixture() const { return m_fixture; }
+	inline const glm::vec2& getDimentions() const { return m_dims; }
+	inline glm::vec4 getDestRect() const;
+	inline const ge::ColorRGBA8& getColor() const { return m_color; }
 
 private:
 	b2Body * m_body = nullptr;

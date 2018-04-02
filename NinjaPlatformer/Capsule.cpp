@@ -5,7 +5,8 @@ Capsule::Capsule() { /* empty */ }
 
 Capsule::~Capsule() { /* empty */ }
 
-void Capsule::init(b2World * world, glm::vec2 pos, glm::vec2 dims, bool fixedRotation)
+void Capsule::init(b2World * world, glm::vec2 pos, glm::vec2 dims,
+	float density, float friction, bool fixedRotation)
 {
 	m_dims = dims;
 	auto halfDims = glm::vec2(m_dims.x / 2.f, m_dims.y / 2.f);
@@ -23,8 +24,8 @@ void Capsule::init(b2World * world, glm::vec2 pos, glm::vec2 dims, bool fixedRot
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &boxShape;
-	fixtureDef.density = 1.f;
-	fixtureDef.friction = 0.3f;
+	fixtureDef.density = density;
+	fixtureDef.friction = friction;
 	m_fixtures[0] = m_body->CreateFixture(&fixtureDef);
 
 #pragma endregion Creating the Rectangle shape
@@ -36,8 +37,8 @@ void Capsule::init(b2World * world, glm::vec2 pos, glm::vec2 dims, bool fixedRot
 
 	b2FixtureDef circleDef;
 	circleDef.shape = &circleShape;
-	circleDef.density = 1.f;
-	circleDef.friction = 0.3f;
+	circleDef.density = density;
+	circleDef.friction = friction;
 
 	// Bottom Circle
 	circleShape.m_p.Set(0.f, -halfDims.y + halfDims.x);
@@ -63,7 +64,7 @@ void Capsule::drawDebug(ge::DebugRenderer& debugRenderer)
 	debugRenderer.drawBox(destRect, color, m_body->GetAngle());
 
 	// drawing the circles
-	glm::vec2 pos = glm::vec2(destRect.x + m_dims.x / 2.f , destRect.y);
+	glm::vec2 pos = glm::vec2(destRect.x + m_dims.x / 2.f, destRect.y);
 	glm::vec2 pos2 = glm::vec2(destRect.x + m_dims.x / 2.f, destRect.y + destRect.w);
 
 	debugRenderer.drawCircle(pos, color, m_dims.x / 2.f);

@@ -8,24 +8,32 @@ Player::Player() { /* empty */ }
 
 Player::~Player() { /* empty */ }
 
-void Player::init(b2World* world, glm::vec2 pos, glm::vec2 dims,
-	ge::ColorRGBA8 color, bool fixedRotation)
+void Player::init(b2World* world, glm::vec2 pos, glm::vec2 drawDims,
+	glm::vec2 collitionDims, ge::ColorRGBA8 color, bool fixedRotation)
 {
 	// loading player's texture
+	m_drawDims = drawDims;
 	m_texture2D = ge::ResourceManager::getTexture("Assets/blue_ninja.png");
 	m_color = color;
 
 	//m_collisionBox.init(world, pos, dims, m_texture2D, color, fixedRotation, m_uvRect);
 
-	m_capsule.init(world, pos, dims, fixedRotation);
+	m_capsule.init(world, pos, collitionDims, 0.9f, 0.1f, fixedRotation);
 }
 
 void Player::draw(ge::SpriteBatch& spriteBatch)
 {
 	auto uvRect = glm::vec4(0.f, 0.f, 0.1f, 0.5f);
 
+	b2Body * m_body = m_capsule.getBody();
+	auto destRect = glm::vec4(
+		m_body->GetPosition().x - m_drawDims.x / 2.f,
+		m_body->GetPosition().y - m_capsule.getDimentions().y / 2.f,
+		m_drawDims.x,
+		m_drawDims.y);
+
 	//m_collisionBox.draw(spriteBatch);
-	spriteBatch.draw(m_capsule.getBodyDestRect(), uvRect,
+	spriteBatch.draw(destRect, uvRect,
 		m_texture2D.id, 0.f, m_color, m_capsule.getBody()->GetAngle());
 }
 
