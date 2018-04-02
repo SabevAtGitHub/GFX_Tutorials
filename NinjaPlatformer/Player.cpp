@@ -42,7 +42,7 @@ void Player::update(ge::InputManager inputManager)
 	const float SIDE_DAMP_RATE = 0.96f;
 
 	//auto body = m_collisionBox.getBody();
-	auto body = m_collisionBox.getBody();
+	auto body = m_capsule.getBody();
 
 	// Side movement
 	if (inputManager.isKeyDown(SDLK_a)) {
@@ -71,7 +71,7 @@ void Player::update(ge::InputManager inputManager)
 
 bool Player::CanJump() {
 	//auto body = m_collisionBox.getBody();
-	auto body = m_collisionBox.getBody();
+	auto body = m_capsule.getBody();
 	auto ce = body->GetContactList();
 
 	// Loop through all the contact points
@@ -83,7 +83,7 @@ bool Player::CanJump() {
 
 			for (size_t i = 0; i < b2_maxManifoldPoints; i++) {
 				// Check if the points are below
-				if (manifold.points[i].y < body->GetPosition().y - m_collisionBox.getDimentions().y / 2.f + 0.01f) {
+				if (manifold.points[i].y < body->GetPosition().y - m_capsule.getDimentions().y / 2.f + 0.01f) {
 					return true;
 				}
 			}

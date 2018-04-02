@@ -1,3 +1,4 @@
+#include "ErrManager.h"
 #include "DebugRenderer.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -73,48 +74,48 @@ namespace ge
 		m_program.linkShaders();
 
 		// Set up buffers
-		glGenVertexArrays(1, &m_vao);
-		glGenBuffers(1, &m_vbo);
-		glGenBuffers(1, &m_ibo);
+		GLCall(glGenVertexArrays(1, &m_vao));
+		GLCall(glGenBuffers(1, &m_vbo));
+		GLCall(glGenBuffers(1, &m_ibo));
 
-		glBindVertexArray(m_vao);
+		GLCall(glBindVertexArray(m_vao));
 
-		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));
 
 		// Vertex attrib pointers
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(DebugVertex), (void *)offsetof(DebugVertex, pos));
-		
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(DebugVertex), (void *)offsetof(DebugVertex, color));
+		GLCall(glEnableVertexAttribArray(0));
+		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(DebugVertex), (void *)offsetof(DebugVertex, pos)));
 
-		glBindVertexArray(0);
+		GLCall(glEnableVertexAttribArray(1));
+		GLCall(glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(DebugVertex), (void *)offsetof(DebugVertex, color)));
+
+		GLCall(glBindVertexArray(0));
 	}
 	
 	void DebugRenderer::end()
 	{
 	// VBO
-		glBindBuffer(GL_ARRAY_BUFFER, m_vbo); // bind
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo)); // bind
 		
 		// Orphan the buffer
-		glBufferData(GL_ARRAY_BUFFER, m_verts.size() * sizeof(DebugVertex), nullptr, GL_DYNAMIC_DRAW);
+		GLCall(glBufferData(GL_ARRAY_BUFFER, m_verts.size() * sizeof(DebugVertex), nullptr, GL_DYNAMIC_DRAW));
 
 		// Upload the data
-		glBufferSubData(GL_ARRAY_BUFFER, 0, m_verts.size() * sizeof(DebugVertex), m_verts.data());
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, m_verts.size() * sizeof(DebugVertex), m_verts.data()));
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0)); // unbind
 
 	// IBO
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo); // bind
-
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo)); // bind
+ 
 		// Orphan the buffer
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(GLuint), nullptr, GL_DYNAMIC_DRAW);
-
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(GLuint), nullptr, GL_DYNAMIC_DRAW));
+ 
 		// Upload the data
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_indices.size() * sizeof(GLuint), m_indices.data());
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // unbind
+		GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_indices.size() * sizeof(GLuint), m_indices.data()));
+ 
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)); // unbind
 
 		m_numElements = m_indices.size();
 		m_indices.clear();
@@ -202,14 +203,14 @@ namespace ge
 
 		// uploading projection matrix matrix to the GPU
 		GLint pLocation = m_program.getUniformLocation("P");
-		glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
+		GLCall(glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]));
 
-		glLineWidth((GLfloat)lineWidth);
+		GLCall(glLineWidth((GLfloat)lineWidth));
 
 		// drawing
-		glBindVertexArray(m_vao);
-		glDrawElements(GL_LINES, m_numElements, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+		GLCall(glBindVertexArray(m_vao));
+		GLCall(glDrawElements(GL_LINES, m_numElements, GL_UNSIGNED_INT, 0));
+		GLCall(glBindVertexArray(0));
 
 
 		m_program.unuse();
@@ -218,11 +219,11 @@ namespace ge
 	void DebugRenderer::dispose()
 	{
 		if (m_vao) 
-			glDeleteVertexArrays(1, &m_vao);
+			GLCall(glDeleteVertexArrays(1, &m_vao));
 		if (m_vbo)
-			glDeleteBuffers(1, &m_vbo);
+			GLCall(glDeleteBuffers(1, &m_vbo));
 		if (m_ibo)
-			glDeleteBuffers(1, &m_ibo);
+			GLCall(glDeleteBuffers(1, &m_ibo));
 
 		m_program.dispose();
 	}

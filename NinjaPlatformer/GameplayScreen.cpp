@@ -56,14 +56,14 @@ void GameplayScreen::onEntry()
 	// creating number of boxes
 	spawnBoxes(NUM_BOXES);
 
-	// init player
-	auto color = ge::ColorRGBA8(255, 255, 255, 255);
-	m_player.init(m_world.get(), glm::vec2(2.f, 25.f), glm::vec2(1.5f, 2.5f), color, true);
-
 	// Initialize spriteBatch
 	m_spriteBatch.init();
 
 	initShaders();
+
+	// init player
+	auto color = ge::ColorRGBA8(255, 255, 255, 255);
+	m_player.init(m_world.get(), glm::vec2(2.f, 25.f), glm::vec2(1.5f, 2.5f), color, true);
 
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
@@ -133,8 +133,9 @@ void GameplayScreen::draw()
 		}
 
 		// ...player
-		m_debugRenderer.drawBox(m_player.getBox().getDestRect(), color,
-			m_player.getBox().getBody()->GetAngle());
+		m_player.drawDebug(m_debugRenderer);
+		//m_debugRenderer.drawBox(m_player.getBox().getDestRect(), color,
+		//	m_player.getBox().getBody()->GetAngle());
 
 		m_debugRenderer.end();
 		m_debugRenderer.render(projectionMatrix, 2.f);
