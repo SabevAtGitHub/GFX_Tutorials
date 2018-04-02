@@ -23,6 +23,11 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 	m_collisionBox.draw(spriteBatch);
 }
 
+void Player::drawDebug(ge::DebugRenderer debugRenderer)
+{
+	m_capsule.drawDebug(debugRenderer);
+}
+
 void Player::update(ge::InputManager inputManager)
 {
 	const float SIDE_IMPULSE = 90.f;

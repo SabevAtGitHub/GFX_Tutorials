@@ -2,7 +2,9 @@
 #include <GameEngineOpenGL\SpriteBatch.h>
 #include <GameEngineOpenGL\GLTexture.h>
 #include <GameEngineOpenGL\InputManager.h>
+#include <GameEngineOpenGL\DebugRenderer.h>
 #include "Box.h"
+#include "Capsule.h"
 
 class Player
 {
@@ -14,13 +16,16 @@ public:
 		ge::ColorRGBA8 color, bool fixedRotation);
 
 	void draw(ge::SpriteBatch& spriteBatch);
+	void drawDebug(ge::DebugRenderer debugRenderer);
 
 	void update(ge::InputManager inputManager);
 
 	const Box& getBox() const { return m_collisionBox; }
-
+	const Capsule& getCapsule() const { return m_capsule; }
+	
 private:
 	Box m_collisionBox;
+	Capsule m_capsule;
 	ge::GLTexture m_texture2D;
 	glm::vec4 m_uvRect;
 
