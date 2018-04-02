@@ -158,8 +158,9 @@ namespace ge {
 
 	void GLSLProgram::dispose()
 	{
-		if (m_programID)
+		if (m_programID){
 			GLCall(glDeleteProgram(m_programID));
-
+			m_programID = 0;
+		}
 	}
 }
