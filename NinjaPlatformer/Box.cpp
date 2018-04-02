@@ -25,8 +25,6 @@ void Box::init(
 	m_texture2D = texture;
 	m_uvRect = uvRect;
 
-	//TODO: create texture here
-
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(pos.x, pos.y);
