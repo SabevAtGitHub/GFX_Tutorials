@@ -9,7 +9,7 @@ void Capsule::init(b2World * world, glm::vec2 pos, glm::vec2 dims, bool fixedRot
 {
 	m_dims = dims;
 
-#pragma region Setting up m_fixtures[0] (the rectangle shape)
+#pragma region Creating the Rectangle shape
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(pos.x, pos.y);
@@ -26,14 +26,20 @@ void Capsule::init(b2World * world, glm::vec2 pos, glm::vec2 dims, bool fixedRot
 	fixtureDef.friction = 0.3f;
 	m_fixtures[0] = m_body->CreateFixture(&fixtureDef);
 
-#pragma endregion // Setting up m_fixtures[0] (the rectangle shape)
+#pragma endregion Creating the Rectangle shape
 
+#pragma region Creating the Circle shapes
+
+
+
+#pragma endregion Creating the Circle shapess
 
 }
 
 void Capsule::drawDebug(ge::DebugRenderer& debugRenderer)
 {
-	debugRenderer.drawBox(getBodyDestRect(), ge::ColorRGBA8(255, 255, 255, 255), m_body->GetAngle());
+	debugRenderer.drawBox(getBodyDestRect(), 
+		ge::ColorRGBA8(255, 255, 255, 255), m_body->GetAngle());
 }
 
 glm::vec4 Capsule::getBodyDestRect() const
