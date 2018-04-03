@@ -13,12 +13,11 @@ void Player::init(b2World* world, glm::vec2 pos, glm::vec2 drawDims,
 {
 	// loading player's texture
 	m_drawDims = drawDims;
-	m_texture2D = ge::ResourceManager::getTexture("Assets/blue_ninja.png");
+	auto texture = ge::ResourceManager::getTexture("Assets/blue_ninja.png");
 	m_color = color;
-
-	//m_collisionBox.init(world, pos, dims, m_texture2D, color, fixedRotation, m_uvRect);
-
+ 
 	m_capsule.init(world, pos, collitionDims, 0.9f, 0.1f, fixedRotation);
+	m_tileSheet.init(texture, glm::ivec2(10, 2));
 }
 
 void Player::draw(ge::SpriteBatch& spriteBatch)
@@ -33,8 +32,8 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 		m_drawDims.y);
 
 	//m_collisionBox.draw(spriteBatch);
-	spriteBatch.draw(destRect, uvRect,
-		m_texture2D.id, 0.f, m_color, m_capsule.getBody()->GetAngle());
+	spriteBatch.draw(destRect, m_tileSheet.getUVs(0),
+		m_tileSheet.texture.id, 0.f, m_color, m_capsule.getBody()->GetAngle());
 }
 
 void Player::drawDebug(ge::DebugRenderer& debugRenderer)

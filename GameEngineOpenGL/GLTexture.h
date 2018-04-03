@@ -8,4 +8,3 @@ namespace ge {
 		int w, h;
 	};
 }
-

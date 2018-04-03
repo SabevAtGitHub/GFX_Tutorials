@@ -1,6 +1,6 @@
 #pragma once
 #include <GameEngineOpenGL\SpriteBatch.h>
-#include <GameEngineOpenGL\GLTexture.h>
+#include <GameEngineOpenGL\TileSheet.h>
 #include <GameEngineOpenGL\InputManager.h>
 #include <GameEngineOpenGL\DebugRenderer.h>
 #include "Box.h"
@@ -27,7 +27,7 @@ private:
 	//Box m_collisionBox;
 	glm::vec2 m_drawDims;
 	Capsule m_capsule;
-	ge::GLTexture m_texture2D;
+	ge::TileSheet m_tileSheet;
 	ge::ColorRGBA8 m_color;
 
 private:
