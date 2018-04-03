@@ -16,7 +16,7 @@ void Player::init(b2World* world, glm::vec2 pos, glm::vec2 drawDims,
 	auto texture = ge::ResourceManager::getTexture("Assets/blue_ninja.png");
 	m_color = color;
  
-	m_capsule.init(world, pos, collitionDims, 0.9f, 0.1f, fixedRotation);
+	m_capsule.init(world, pos, collitionDims, 1.0f, 0.1f, fixedRotation);
 	m_tileSheet.init(texture, glm::ivec2(10, 2));
 }
 
@@ -29,9 +29,61 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 		m_drawDims.x,
 		m_drawDims.y);
 
-	//m_collisionBox.draw(spriteBatch);
-	spriteBatch.draw(destRect, m_tileSheet.getUVs(0),
-		m_tileSheet.texture.id, 0.f, m_color, m_capsule.getBody()->GetAngle());
+	// Animation...
+	int tileIndex = 0;
+	int numTiles = 1;
+	auto vel = glm::vec2(m_body->GetLinearVelocity().x, m_body->GetLinearVelocity().y);
+	float animationSpeed = 0.2;
+
+	if (m_onGround) {
+		// ...on the ground..
+		if (abs(vel.x) > 1.0f && (vel.x < 0.0f && m_dir < 0) || (vel.x > 0.0f && m_dir > 0)) {
+ 			tileIndex = 10;	 // ...running
+			numTiles = 6;
+			animationSpeed = abs(vel.x) * 0.025f;
+			if (m_moveState != PlayerMoveState::RUNNING) {
+				m_moveState = PlayerMoveState::RUNNING;
+				m_animTime = 0.0f;
+			}
+		}
+		else { // ...standing still
+			m_moveState = PlayerMoveState::STANDING;
+			tileIndex = 0;
+			numTiles = 1;
+		}
+	}    
+	else { // ...in the air..
+		m_moveState = PlayerMoveState::IN_AIR;
+
+		if (vel.y <= 0.0f) {
+			tileIndex = 17; // ...falling
+			numTiles = 1;
+
+		}
+		else {
+			tileIndex = 16; // ...rising
+			numTiles = 1;
+		}		
+	}
+
+	// increment time
+	m_animTime += animationSpeed;
+
+	// apply animation
+	tileIndex = tileIndex + (int)m_animTime % numTiles;
+
+	// get uv coordinates from the tile index
+	auto uvRect = m_tileSheet.getUVs(tileIndex);
+
+	// left <-> right
+	if (m_dir == -1) {
+		uvRect.x += 1.0f / m_tileSheet.dims.x;
+		uvRect.z *= -1.0f;
+	}
+
+	// draw the sprite
+	spriteBatch.draw(destRect, uvRect, m_tileSheet.texture.id,
+		0.f, m_color, m_capsule.getBody()->GetAngle());
 }
 
 void Player::drawDebug(ge::DebugRenderer& debugRenderer)
@@ -41,9 +93,9 @@ void Player::drawDebug(ge::DebugRenderer& debugRenderer)
 
 void Player::update(ge::InputManager inputManager)
 {
-	const float SIDE_IMPULSE = 90.f;
-	const float JUMP_IMPULSE = 40.f;
-	const float MAX_SPEED = 5.f;
+	const float SIDE_IMPULSE = 95.f;
+	const float JUMP_IMPULSE = 48.f;
+	const float MAX_SPEED = 7.f;
 	const float SIDE_DAMP_RATE = 0.96f;
 
 	//auto body = m_collisionBox.getBody();
@@ -52,9 +104,11 @@ void Player::update(ge::InputManager inputManager)
 	// Side movement
 	if (inputManager.isKeyDown(SDLK_a)) {
 		body->ApplyForceToCenter(b2Vec2(-SIDE_IMPULSE, 0.f), true);
+		m_dir = -1;
 	}
 	else if (inputManager.isKeyDown(SDLK_d)) {
 		body->ApplyForceToCenter(b2Vec2(SIDE_IMPULSE, 0.f), true);
+		m_dir = 1;
 	}
 	else { // Apply damping
 		body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x * SIDE_DAMP_RATE, body->GetLinearVelocity().y));
@@ -69,7 +123,8 @@ void Player::update(ge::InputManager inputManager)
 	}
 
 	// Jumps
-	if (inputManager.isKeyPressed(SDLK_w) && CanJump()) {
+	m_onGround = CanJump();
+	if (inputManager.isKeyPressed(SDLK_w) && m_onGround) {
 		body->ApplyLinearImpulse(b2Vec2(0.f, JUMP_IMPULSE), b2Vec2(0.f, 0.f), true);
 	}
 }

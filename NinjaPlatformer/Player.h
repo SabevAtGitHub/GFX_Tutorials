@@ -6,8 +6,14 @@
 #include "Box.h"
 #include "Capsule.h"
 
+enum class PlayerMoveState
+{
+	STANDING, RUNNING, PUNCHING, IN_AIR
+};
+
 class Player
 {
+
 public:
 	Player();
 	~Player();
@@ -30,8 +36,11 @@ private:
 	ge::TileSheet m_tileSheet;
 	ge::ColorRGBA8 m_color;
 
+	PlayerMoveState m_moveState = PlayerMoveState::STANDING;
+	float m_animTime = 0.0f;
+	int m_dir = 1;
+	bool m_onGround = false;
 private:
 	// True if player's bottom has contact point
 	bool CanJump();
-
 };

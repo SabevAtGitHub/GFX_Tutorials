@@ -36,7 +36,7 @@ void GameplayScreen::onEntry()
 	static const float CAMERA_SCALE = 30.f;
 	static const float WORLD_FLOOR_HEIGHT = -20.f;
 	static const float GRAVITY_RATE = -13.81f;
-	static const int NUM_BOXES = 70;
+	static const int NUM_BOXES = 7;
 	static const float PLAYER_W = 1.0f, PLAYER_H = 2.0f;
 
 	b2Vec2 gravity(0.f, GRAVITY_RATE);
@@ -133,13 +133,10 @@ void GameplayScreen::draw()
 		// ...boxes
 		for (auto& b : m_boxes) {
 			m_debugRenderer.drawBox(b.getDestRect(), color, b.getBody()->GetAngle());
-			//m_debugRenderer.drawCircle(glm::vec2(b.getBody()->GetPosition().x, b.getBody()->GetPosition().y), color, b.getDimentions().y / 2.f);
 		}
 
 		// ...player
 		m_player.drawDebug(m_debugRenderer);
-		//m_debugRenderer.drawBox(m_player.getBox().getDestRect(), color,
-		//	m_player.getBox().getBody()->GetAngle());
 
 		m_debugRenderer.end();
 		m_debugRenderer.render(projectionMatrix, 2.f);
