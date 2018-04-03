@@ -63,6 +63,6 @@ private:
 
 	ge::DebugRenderer m_debugRenderer;
 
-	bool m_renderDebug = true;
+	bool m_renderDebug = false;
 };
 
