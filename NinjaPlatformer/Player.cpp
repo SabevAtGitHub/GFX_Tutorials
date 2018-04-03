@@ -22,8 +22,6 @@ void Player::init(b2World* world, glm::vec2 pos, glm::vec2 drawDims,
 
 void Player::draw(ge::SpriteBatch& spriteBatch)
 {
-	auto uvRect = glm::vec4(0.f, 0.f, 0.1f, 0.5f);
-
 	b2Body * m_body = m_capsule.getBody();
 	auto destRect = glm::vec4(
 		m_body->GetPosition().x - m_drawDims.x / 2.f,
