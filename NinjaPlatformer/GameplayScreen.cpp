@@ -35,7 +35,7 @@ void GameplayScreen::onEntry()
 {
 	static const float CAMERA_SCALE = 30.f;
 	static const float WORLD_FLOOR_HEIGHT = -20.f;
-	static const float GRAVITY_RATE = -13.81f;
+	static const float GRAVITY_RATE = -13.f;
 	static const int NUM_BOXES = 7;
 	static const float PLAYER_W = 1.0f, PLAYER_H = 2.0f;
 

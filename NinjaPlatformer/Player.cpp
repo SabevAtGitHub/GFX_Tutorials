@@ -15,7 +15,7 @@ void Player::init(b2World* world, glm::vec2 pos, glm::vec2 drawDims,
 	m_drawDims = drawDims;
 	auto texture = ge::ResourceManager::getTexture("Assets/blue_ninja.png");
 	m_color = color;
- 
+
 	m_capsule.init(world, pos, collitionDims, 1.0f, 0.1f, fixedRotation);
 	m_tileSheet.init(texture, glm::ivec2(10, 2));
 }
@@ -35,10 +35,19 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 	auto vel = glm::vec2(m_body->GetLinearVelocity().x, m_body->GetLinearVelocity().y);
 	float animationSpeed = 0.2;
 
-	if (m_onGround) {
-		// ...on the ground..
-		if (abs(vel.x) > 1.0f && (vel.x < 0.0f && m_dir < 0) || (vel.x > 0.0f && m_dir > 0)) {
- 			tileIndex = 10;	 // ...running
+
+	if (m_onGround) { // ...on the ground..
+
+		if (m_isPunching) {
+			numTiles = 4;
+			tileIndex = 1;
+			if (m_moveState != PlayerMoveState::PUNCHING) {
+				m_moveState = PlayerMoveState::PUNCHING;
+				m_animTime = 0.0f;
+			}
+		}
+		else if (abs(vel.x) > 1.0f && (vel.x < 0.0f && m_dir < 0) || (vel.x > 0.0f && m_dir > 0)) {
+			tileIndex = 10;	 // ...running
 			numTiles = 6;
 			animationSpeed = abs(vel.x) * 0.025f;
 			if (m_moveState != PlayerMoveState::RUNNING) {
@@ -51,23 +60,35 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 			tileIndex = 0;
 			numTiles = 1;
 		}
-	}    
+	}
 	else { // ...in the air..
-		m_moveState = PlayerMoveState::IN_AIR;
-
-		if (vel.y <= 0.0f) {
+		if (m_isPunching) {
+			numTiles = 1;
+			tileIndex = 18;
+			animationSpeed *= 0.25f;
+			if (m_moveState != PlayerMoveState::PUNCHING) {
+				m_moveState = PlayerMoveState::PUNCHING;
+				m_animTime = 0.0f;
+			}
+		}
+		else if (vel.y <= 0.0f) {
 			tileIndex = 17; // ...falling
 			numTiles = 1;
-
+			m_moveState = PlayerMoveState::IN_AIR;
 		}
 		else {
 			tileIndex = 16; // ...rising
 			numTiles = 1;
-		}		
+			m_moveState = PlayerMoveState::IN_AIR;
+		}
 	}
 
 	// increment time
 	m_animTime += animationSpeed;
+
+	// Check for punch end
+	if (m_animTime > numTiles)
+		m_isPunching = false;
 
 	// apply animation
 	tileIndex = tileIndex + (int)m_animTime % numTiles;
@@ -93,8 +114,8 @@ void Player::drawDebug(ge::DebugRenderer& debugRenderer)
 
 void Player::update(ge::InputManager inputManager)
 {
-	const float SIDE_IMPULSE = 95.f;
-	const float JUMP_IMPULSE = 48.f;
+	const float SIDE_IMPULSE = 65.f;
+	const float JUMP_IMPULSE = 35.f;
 	const float MAX_SPEED = 7.f;
 	const float SIDE_DAMP_RATE = 0.96f;
 
@@ -112,6 +133,11 @@ void Player::update(ge::InputManager inputManager)
 	}
 	else { // Apply damping
 		body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x * SIDE_DAMP_RATE, body->GetLinearVelocity().y));
+	}
+
+	//cheking for punch
+	if (inputManager.isKeyPressed(SDLK_SPACE)) {
+		m_isPunching = true;
 	}
 
 	// Limiting max side speed
@@ -143,7 +169,9 @@ bool Player::CanJump() {
 
 			for (size_t i = 0; i < b2_maxManifoldPoints; i++) {
 				// Check if the points are below
-				if (manifold.points[i].y < body->GetPosition().y - m_capsule.getDimentions().y / 2.f + 0.01f) {
+				if (manifold.points[i].y < body->GetPosition().y - 
+					m_capsule.getDimentions().y / 2.f + 
+					m_capsule.getDimentions().x / 2.f + 0.01f) {
 					return true;
 				}
 			}

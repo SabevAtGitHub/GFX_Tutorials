@@ -40,6 +40,8 @@ private:
 	float m_animTime = 0.0f;
 	int m_dir = 1;
 	bool m_onGround = false;
+	bool m_isPunching = false;
+
 private:
 	// True if player's bottom has contact point
 	bool CanJump();
