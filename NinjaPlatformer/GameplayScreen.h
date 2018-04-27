@@ -59,7 +59,10 @@ private:
 	ge::Window* m_window = nullptr;
 
 	// Shader for the textures
-	ge::GLSLProgram m_textureProgram; 
+	ge::GLSLProgram m_textureProgram;
+
+	// Shader for the lights
+	ge::GLSLProgram m_lightProgram;
 
 	ge::DebugRenderer m_debugRenderer;
 

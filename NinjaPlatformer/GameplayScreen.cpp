@@ -141,6 +141,10 @@ void GameplayScreen::draw()
 		m_debugRenderer.end();
 		m_debugRenderer.render(projectionMatrix, 2.f);
 	}
+
+	// Render some test lights
+	// TODO: Start here!
+
 }
 
 void GameplayScreen::checkInput()
@@ -154,13 +158,19 @@ void GameplayScreen::checkInput()
 
 void GameplayScreen::initShaders()
 {
-	// adding attributes for each variable in the shader files
-	// right now the entry point is the .vert file
-	m_textureProgram.compileShadersFromFile(std::string("Shaders/colorShading.vert"),
-		std::string("Shaders/colorShading.frag"));
+	// Compile the texture
+	m_textureProgram.compileShadersFromFile(std::string("Shaders/textureShading.vert"),
+		std::string("Shaders/textureShading.frag"));
 	m_textureProgram.addAttribute("vertexPos");
 	m_textureProgram.addAttribute("vertexColor");
 	m_textureProgram.addAttribute("vertexUV");
+
+	// compile the lights
+	m_lightProgram.compileShadersFromFile(std::string("Shaders/lightShading.vert"),
+		std::string("Shaders/lightShading.frag"));
+	m_lightProgram.addAttribute("vertexPos");
+	m_lightProgram.addAttribute("vertexColor");
+	m_lightProgram.addAttribute("vertexUV");
 
 	// linking the 2 shader files
 	m_textureProgram.linkShaders();
