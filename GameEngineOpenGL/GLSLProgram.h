@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <GL/glew.h>
+#include <SDL/SDL.h>
+
 namespace ge {
 
 	/// <summary>

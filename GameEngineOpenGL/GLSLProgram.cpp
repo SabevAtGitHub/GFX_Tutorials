@@ -1,4 +1,5 @@
 ﻿#include "GLSLProgram.h"
+#include <SDL\SDL.h>
 #include "ErrManager.h"
 #include <fstream>
 #include <vector>

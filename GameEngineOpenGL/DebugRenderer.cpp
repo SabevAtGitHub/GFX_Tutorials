@@ -1,7 +1,9 @@
-#include "ErrManager.h"
+#define _USE_MATH_DEFINES // for C++
+#include <cmath>
+#include <SDL\SDL.h>
 #include "DebugRenderer.h"
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include "ErrManager.h"
+
 
 namespace ge
 {

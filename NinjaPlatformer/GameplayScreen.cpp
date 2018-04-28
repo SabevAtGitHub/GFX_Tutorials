@@ -4,6 +4,9 @@
 #include <GameEngineOpenGL\Vertex.h>
 #include <random>
 
+#include <CEGUI\CEGUI.h>
+#include <CEGUI\RendererModules\OpenGL\GL3Renderer.h>
+
 GameplayScreen::GameplayScreen(ge::Window* window)
 	: m_window(window)
 {
@@ -82,6 +85,9 @@ void GameplayScreen::onEntry()
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
 	m_camera.setScale(CAMERA_SCALE);
+
+	// TODO: TEMPORARY UI
+	auto& myRenderer = CEGUI::OpenGL3Renderer::bootstrapSystem();
 
 }
 

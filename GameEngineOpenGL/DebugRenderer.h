@@ -1,6 +1,8 @@
 #pragma once
 #include "GLSLProgram.h"
 #include "Vertex.h"
+
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <vector>
 
