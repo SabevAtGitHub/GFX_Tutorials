@@ -26,7 +26,10 @@ public:
 
 	void update(ge::InputManager inputManager);
 
-	//const Box& getBox() const { return m_collisionBox; }
+	glm::vec2 getPos() const {
+		return glm::vec2(m_capsule.getBody()->GetPosition().x,
+						 m_capsule.getBody()->GetPosition().y);
+	}
 	const Capsule& getCapsule() const { return m_capsule; }
 	
 private:

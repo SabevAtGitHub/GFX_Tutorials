@@ -12,7 +12,7 @@ namespace ge {
 
 	bool GLLogCall(const char* function, const char* file, int line) {
 		if (GLenum error = glGetError()) {
-			std::cout << "[OpenGL Error] (0x" << std::hex << error << std::dec << "): " <<
+			std::cout << "[OpenGL Error] (0x0" << std::hex << error << std::dec << "): " <<
 				function << ", File: " << file << ", Line: " << line << std::endl;
 			return false;
 		}

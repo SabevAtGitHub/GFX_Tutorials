@@ -9,10 +9,12 @@ in vec2 fragmentUV;
 // for each pixel and the alpha.
 out vec4 color;
 
+// uniform sampler2D mySampler; // variable for the texture
 
 void main ()
 { 
-	float distance = lenght(fragmentUV);
- 
-	color =vec4(fragmentColor.rgb, fragmentColor.a * (1.0 - distance);
+	// vec4 textureColor = texture(mySampler, fragmentUV); // to create some texture
+	
+	float distance = length(fragmentUV);
+	color = vec4(fragmentColor.rgb, fragmentColor.a * pow( 0.01 , distance - 0.01 ));
 }

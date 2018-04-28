@@ -33,14 +33,15 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 	int tileIndex = 0;
 	int numTiles = 1;
 	auto vel = glm::vec2(m_body->GetLinearVelocity().x, m_body->GetLinearVelocity().y);
-	float animationSpeed = 0.2;
+	float animationSpeed = 0.2f;
 
 
 	if (m_onGround) { // ...on the ground..
 
-		if (m_isPunching) {
+		if (m_isPunching) { // ...punching
 			numTiles = 4;
 			tileIndex = 1;
+
 			if (m_moveState != PlayerMoveState::PUNCHING) {
 				m_moveState = PlayerMoveState::PUNCHING;
 				m_animTime = 0.0f;
@@ -62,10 +63,10 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 		}
 	}
 	else { // ...in the air..
-		if (m_isPunching) {
+		if (m_isPunching) { //.. kicking
 			numTiles = 1;
 			tileIndex = 18;
-			animationSpeed *= 0.25f;
+			animationSpeed *= 0.5f;
 			if (m_moveState != PlayerMoveState::PUNCHING) {
 				m_moveState = PlayerMoveState::PUNCHING;
 				m_animTime = 0.0f;
@@ -115,7 +116,7 @@ void Player::drawDebug(ge::DebugRenderer& debugRenderer)
 void Player::update(ge::InputManager inputManager)
 {
 	const float SIDE_IMPULSE = 65.f;
-	const float JUMP_IMPULSE = 35.f;
+	const float JUMP_IMPULSE = 50.f;
 	const float MAX_SPEED = 7.f;
 	const float SIDE_DAMP_RATE = 0.96f;
 

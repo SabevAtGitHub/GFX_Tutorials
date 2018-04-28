@@ -5,6 +5,7 @@
 
 class Light
 {
+
 public:
 	void draw(ge::SpriteBatch& spriteBatch) {
 		glm::vec4 destRect;
@@ -15,7 +16,7 @@ public:
 		destRect.z = size;
 		destRect.w = size;
 
-		spriteBatch.draw(destRect, uvRect, 0, 0.f, color, 0);
+		spriteBatch.draw(destRect, uvRect, 0, 0.f, color, 0.0f);
 	}
 
 		

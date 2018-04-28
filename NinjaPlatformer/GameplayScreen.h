@@ -10,6 +10,7 @@
 #include <Box2D\Box2D.h>
 #include "Box.h"
 #include "Player.h"
+#include "Light.h"
 
 class GameplayScreen : public ge::IGameScreen
 {
@@ -48,6 +49,9 @@ private:
 	Player m_player;
 	std::vector<Box> m_boxes;
 	std::unique_ptr<b2World> m_world = nullptr;
+
+	Light m_playerLight;
+	Light m_mouseLight;
 
 	ge::SpriteBatch m_spriteBatch; 
 

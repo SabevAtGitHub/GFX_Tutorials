@@ -33,9 +33,9 @@ void GameplayScreen::destroy()
 
 void GameplayScreen::onEntry()
 {
-	static const float CAMERA_SCALE = 30.f;
+	static const float CAMERA_SCALE = 28.f;
 	static const float WORLD_FLOOR_HEIGHT = -20.f;
-	static const float GRAVITY_RATE = -13.f;
+	static const float GRAVITY_RATE = -24.f;
 	static const int NUM_BOXES = 7;
 	static const float PLAYER_W = 1.0f, PLAYER_H = 2.0f;
 
@@ -69,9 +69,20 @@ void GameplayScreen::onEntry()
 
 	m_player.init(m_world.get(), pos, drawDims, collisionDims, color, true);
 
+	// init the lights
+	m_playerLight.color = ge::ColorRGBA8(255, 255, 255, 128);
+	m_playerLight.pos = m_player.getPos();
+	m_playerLight.size = 20;
+
+	// init the lights
+	m_mouseLight.color = ge::ColorRGBA8(230, 20, 255, 128);
+	m_mouseLight.pos = m_player.getPos();
+	m_mouseLight.size = 35;
+
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
 	m_camera.setScale(CAMERA_SCALE);
+
 }
 
 void GameplayScreen::onExit()
@@ -112,8 +123,9 @@ void GameplayScreen::draw()
 	// uploading the camera matrix to the GPU
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
 
-	//// Upload texture uniform
-	//auto textureUniform = m_textureProgram.getUniformLocation(pLocation);
+	// Rendering the boxes and the player
+#pragma region Rendering the boxes and the player
+
 	m_spriteBatch.begin();
 
 	// draw all boxes
@@ -126,8 +138,11 @@ void GameplayScreen::draw()
 	m_spriteBatch.end();
 	m_spriteBatch.renderBatch();
 	m_textureProgram.unuse();
+#pragma endregion // Rendering the boxes and the player
 
 	// Debug rendering...
+#pragma region Debug rendering...
+
 	if (m_renderDebug) {
 		auto color = ge::ColorRGBA8(255, 255, 255, 255);
 		// ...boxes
@@ -141,9 +156,36 @@ void GameplayScreen::draw()
 		m_debugRenderer.end();
 		m_debugRenderer.render(projectionMatrix, 2.f);
 	}
+#pragma endregion // Debug rendering...
 
-	// Render some test lights
-	// TODO: Start here!
+	// Render test lights
+#pragma region Render test lights
+
+	m_lightProgram.use();
+	pLocation = m_lightProgram.getUniformLocation("P");
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
+
+	// additive blending
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+	m_spriteBatch.begin();
+
+	// drawing player light
+	m_playerLight.pos = m_player.getPos();
+	m_playerLight.draw(m_spriteBatch);
+
+	// drawing mouse light
+	m_mouseLight.pos = m_camera.covertScreenToWorld(m_game->inputManager.getMouseCoords());
+	m_mouseLight.draw(m_spriteBatch);
+
+	m_spriteBatch.end();
+	m_spriteBatch.renderBatch();
+	m_lightProgram.unuse();
+
+	// reset blending
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+#pragma endregion // Render test lights
 
 }
 
@@ -164,6 +206,7 @@ void GameplayScreen::initShaders()
 	m_textureProgram.addAttribute("vertexPos");
 	m_textureProgram.addAttribute("vertexColor");
 	m_textureProgram.addAttribute("vertexUV");
+	m_textureProgram.linkShaders();
 
 	// compile the lights
 	m_lightProgram.compileShadersFromFile(std::string("Shaders/lightShading.vert"),
@@ -171,9 +214,7 @@ void GameplayScreen::initShaders()
 	m_lightProgram.addAttribute("vertexPos");
 	m_lightProgram.addAttribute("vertexColor");
 	m_lightProgram.addAttribute("vertexUV");
-
-	// linking the 2 shader files
-	m_textureProgram.linkShaders();
+	m_lightProgram.linkShaders();
 }
 
 // creating number of boxes
