@@ -7,6 +7,7 @@
 #include <GameEngineOpenGL\GLSLProgram.h>
 #include <GameEngineOpenGL\DebugRenderer.h>
 #include <GameEngineOpenGL\Camera2D.h>
+#include <GameEngineOpenGL\GUI.h>
 #include <Box2D\Box2D.h>
 #include "Box.h"
 #include "Player.h"
@@ -47,28 +48,19 @@ private:
 private:
 
 	Player m_player;
-	std::vector<Box> m_boxes;
-	std::unique_ptr<b2World> m_world = nullptr;
-
 	Light m_playerLight;
 	Light m_mouseLight;
 
-	ge::SpriteBatch m_spriteBatch; 
-
-	// Renders the scene
-	ge::Camera2D m_camera; 
-
+	std::vector<Box> m_boxes;
+	std::unique_ptr<b2World> m_world = nullptr;
+	ge::SpriteBatch m_spriteBatch; 	
+	ge::Camera2D m_camera; // Renders the scene
 	ge::GLTexture m_boxTexture2D; 
-
-	ge::Window* m_window = nullptr;
-
-	// Shader for the textures
-	ge::GLSLProgram m_textureProgram;
-
-	// Shader for the lights
-	ge::GLSLProgram m_lightProgram;
-
+	ge::Window* m_window = nullptr;	
+	ge::GLSLProgram m_textureProgram;// Shader for the textures	
+	ge::GLSLProgram m_lightProgram;// Shader for the lights
 	ge::DebugRenderer m_debugRenderer;
+	ge::GUI m_gui;
 
 	bool m_renderDebug = false;
 };

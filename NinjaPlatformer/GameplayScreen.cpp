@@ -3,9 +3,6 @@
 #include <GameEngineOpenGL\IMainGame.h>
 #include <GameEngineOpenGL\Vertex.h>
 #include <random>
-#include <SDL\SDL.h>
-#include <CEGUI\CEGUI.h>
-#include <CEGUI\RendererModules\OpenGL\GL3Renderer.h>
 
 GameplayScreen::GameplayScreen(ge::Window* window)
 	: m_window(window)
@@ -41,6 +38,8 @@ void GameplayScreen::onEntry()
 	static const float GRAVITY_RATE = -24.f;
 	static const int NUM_BOXES = 7;
 	static const float PLAYER_W = 1.0f, PLAYER_H = 2.0f;
+
+	ge::GUI::init("GUI");
 
 	b2Vec2 gravity(0.f, GRAVITY_RATE);
 	m_world = std::make_unique<b2World>(gravity);
@@ -85,9 +84,6 @@ void GameplayScreen::onEntry()
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
 	m_camera.setScale(CAMERA_SCALE);
-
-	// TODO: TEMPORARY UI
-	auto& myRenderer = CEGUI::OpenGL3Renderer::bootstrapSystem();
 
 }
 
