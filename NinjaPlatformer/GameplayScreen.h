@@ -42,8 +42,7 @@ private:
 	void initActors();
 	void spawnBoxes(int numBoxes);
 	void checkInput();
-
-private:
+	bool onExitClicked(const CEGUI::EventArgs& eargs);
 
 	Player m_player;
 	Light m_playerLight;

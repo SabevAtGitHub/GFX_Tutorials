@@ -3,6 +3,7 @@
 #include <GameEngineOpenGL\IMainGame.h>
 #include <GameEngineOpenGL\Vertex.h>
 #include <random>
+#include <iostream>
 
 GameplayScreen::GameplayScreen(ge::Window* window)
 	: m_window(window)
@@ -159,23 +160,29 @@ void GameplayScreen::initGUI()
 
 #pragma region TODO: TEST GUI ELEMENTS
 
-	std::string elementName;
-	elementName = "Button";
-
+	std::string elementType;
+	elementType = "Button";
+	auto elementPos = glm::vec4(0.5f, 0.5f, 0.1f, 0.05f);
 	auto testButton = static_cast<CEGUI::PushButton*>(
-		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.5f, 0.5f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
+		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "Test" + elementType));
 	testButton->setText("Exit Game!");
 
-	elementName = "Editbox";
+	// Subscribe to event to be called on button click
+	testButton->subscribeEvent(CEGUI::PushButton::EventClicked, 
+		CEGUI::Event::Subscriber(&GameplayScreen::onExitClicked, this));
 
+	elementType = "Editbox";
+	elementPos = glm::vec4(0.2f, 0.2f, 0.1f, 0.05f);
 	auto testCombobox = static_cast<CEGUI::Editbox*>(
-		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.2f, 0.2f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
+		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "Test" + elementType));
 
+	// set custom mouse cursor
 	m_gui.setMouseCursor(schemeName + "/MouseArrow");
 	m_gui.showMouseCursor();
 	SDL_ShowCursor(0);
 
 #pragma endregion
+
 }
 
 void GameplayScreen::initGraphics()
@@ -293,4 +300,11 @@ void GameplayScreen::checkInput()
 		m_game->onSDLEvent(evnt);
 		m_gui.onSDLEvent(evnt);
 	}
+}
+
+bool GameplayScreen::onExitClicked(const CEGUI::EventArgs& eargs)
+{
+	//std::cout << "Quitting the Game!\n";
+	m_currentState = ge::ScreenState::EXIT_APPLICATION;
+	return true;
 }
