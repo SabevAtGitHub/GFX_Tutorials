@@ -33,82 +33,13 @@ void GameplayScreen::destroy()
 
 void GameplayScreen::onEntry()
 {
-	static const float CAMERA_SCALE = 28.f;
-	static const float WORLD_FLOOR_HEIGHT = -20.f;
-	static const float GRAVITY_RATE = -24.f;
-	static const int NUM_BOXES = 47;
-	static const float PLAYER_W = 1.0f, PLAYER_H = 2.0f;
+	initGraphics();
 
-	b2Vec2 gravity(0.f, GRAVITY_RATE);
-	m_world = std::make_unique<b2World>(gravity);
-	m_debugRenderer.init();
+	initActors();
 
-	// Make the ground
-	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0.f, WORLD_FLOOR_HEIGHT);
-	b2Body* groundBody = m_world->CreateBody(&groundBodyDef);
+	initLights();
 
-	// Make ground fixture
-	b2PolygonShape groundBoxShape;
-	groundBoxShape.SetAsBox(50.f, 10.f);
-	groundBody->CreateFixture(&groundBoxShape, 0.f);
-
-	// creating number of boxes
-	spawnBoxes(NUM_BOXES);
-
-	// Initialize spriteBatch
-	m_spriteBatch.init();
-
-	initShaders();
-
-	// init player
-	auto pos = glm::vec2(2.f, 25.f);
-	auto color = ge::ColorRGBA8(255, 255, 255, 255);
-	auto drawDims = glm::vec2(2.5f);
-	auto collisionDims = glm::vec2(1.25f, 2.3f);
-
-	m_player.init(m_world.get(), pos, drawDims, collisionDims, color, true);
-
-	// init the lights
-	m_playerLight.color = ge::ColorRGBA8(255, 255, 255, 128);
-	m_playerLight.pos = m_player.getPos();
-	m_playerLight.size = 20;
-
-	// init the lights
-	m_mouseLight.color = ge::ColorRGBA8(230, 20, 255, 128);
-	m_mouseLight.pos = m_player.getPos();
-	m_mouseLight.size = 35;
-
-	// Init the camera
-	m_camera.init(m_window->getWidth(), m_window->getHeight());
-	m_camera.setScale(CAMERA_SCALE);
-
-	//ge::GUI::init("GUI");
-	std::string schemeName = "AlfiskoSkin";
-
-	m_gui.init("GUI");
-	m_gui.loadScheme(schemeName);
-	m_gui.setFont("DejaVuSans-10");
-
-#pragma region TODO: TEST GUI ELEMENTS
-
-	std::string elementName;
-	elementName	= "Button";
-
-	auto testButton = static_cast<CEGUI::PushButton*>(
-		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.5f, 0.5f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
-	testButton->setText("Hello World!");
-
-	elementName = "Editbox";
-	
-	auto testCombobox = static_cast<CEGUI::Editbox*>(
-		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.2f, 0.2f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
-
-	m_gui.setMouseCursor(schemeName + "/MouseArrow");
-	m_gui.showMouseCursor();
-	SDL_ShowCursor(0);
-
-#pragma endregion
+	initGUI();
 }
 
 void GameplayScreen::onExit()
@@ -217,14 +148,42 @@ void GameplayScreen::draw()
 	
 }
 
-void GameplayScreen::checkInput()
+void GameplayScreen::initGUI()
+{	
+	//ge::GUI::init("GUI");
+	std::string schemeName = "AlfiskoSkin";
+
+	m_gui.init("GUI");
+	m_gui.loadScheme(schemeName);
+	m_gui.setFont("DejaVuSans-10");
+
+#pragma region TODO: TEST GUI ELEMENTS
+
+	std::string elementName;
+	elementName = "Button";
+
+	auto testButton = static_cast<CEGUI::PushButton*>(
+		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.5f, 0.5f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
+	testButton->setText("Hello World!");
+
+	elementName = "Editbox";
+
+	auto testCombobox = static_cast<CEGUI::Editbox*>(
+		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.2f, 0.2f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
+
+	m_gui.setMouseCursor(schemeName + "/MouseArrow");
+	m_gui.showMouseCursor();
+	SDL_ShowCursor(0);
+
+#pragma endregion
+}
+
+void GameplayScreen::initGraphics()
 {
-	SDL_Event evnt;
-	//Will keep looping until there are no more events to process
-	while (SDL_PollEvent(&evnt)) {
-		m_game->onSDLEvent(evnt);
-		m_gui.onSDLEvent(evnt);
-	}
+	// Initialize spriteBatch
+	m_spriteBatch.init();
+
+	initShaders();
 }
 
 void GameplayScreen::initShaders()
@@ -246,7 +205,59 @@ void GameplayScreen::initShaders()
 	m_lightProgram.linkShaders();
 }
 
-// creating number of boxes
+void GameplayScreen::initLights()
+{
+	// init the lights
+	m_playerLight.color = ge::ColorRGBA8(255, 255, 255, 128);
+	m_playerLight.pos = m_player.getPos();
+	m_playerLight.size = 20;
+
+	// init the lights
+	m_mouseLight.color = ge::ColorRGBA8(230, 20, 255, 128);
+	m_mouseLight.pos = m_player.getPos();
+	m_mouseLight.size = 35;
+}
+
+void GameplayScreen::initActors()
+{
+
+	static const float CAMERA_SCALE = 28.f;
+	static const float WORLD_FLOOR_HEIGHT = -20.f;
+	static const float GRAVITY_RATE = -24.f;
+	static const int NUM_BOXES = 47;
+	static const float PLAYER_W = 1.0f, PLAYER_H = 2.0f;
+
+	b2Vec2 gravity(0.f, GRAVITY_RATE);
+	m_world = std::make_unique<b2World>(gravity);
+	m_debugRenderer.init();
+
+	// Make the ground
+	b2BodyDef groundBodyDef;
+	groundBodyDef.position.Set(0.f, WORLD_FLOOR_HEIGHT);
+	b2Body* groundBody = m_world->CreateBody(&groundBodyDef);
+
+	// Make ground fixture
+	b2PolygonShape groundBoxShape;
+	groundBoxShape.SetAsBox(50.f, 10.f);
+	groundBody->CreateFixture(&groundBoxShape, 0.f);
+
+	// creating number of boxes
+	spawnBoxes(NUM_BOXES);
+
+	// init player
+	auto pos = glm::vec2(2.f, 25.f);
+	auto color = ge::ColorRGBA8(255, 255, 255, 255);
+	auto drawDims = glm::vec2(2.5f);
+	auto collisionDims = glm::vec2(1.25f, 2.3f);
+
+	m_player.init(m_world.get(), pos, drawDims, collisionDims, color, true);
+
+	// Init the camera
+	m_camera.init(m_window->getWidth(), m_window->getHeight());
+	m_camera.setScale(CAMERA_SCALE);
+
+}
+
 void GameplayScreen::spawnBoxes(int numBoxes)
 {
 	std::mt19937 rng;
@@ -272,3 +283,14 @@ void GameplayScreen::spawnBoxes(int numBoxes)
 	}
 
 }
+
+void GameplayScreen::checkInput()
+{
+	SDL_Event evnt;
+	//Will keep looping until there are no more events to process
+	while (SDL_PollEvent(&evnt)) {
+		m_game->onSDLEvent(evnt);
+		m_gui.onSDLEvent(evnt);
+	}
+}
+// creating number of boxes

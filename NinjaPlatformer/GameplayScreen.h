@@ -19,31 +19,28 @@ public:
 	GameplayScreen(ge::Window* window);
 	~GameplayScreen();
 	
-#pragma region Inherited via IGameScreen
+#pragma region Inherited
 
 	virtual int getNextScreenIndex() const override;
-
 	virtual int getPreviousScreenIndex() const override;
-
 	virtual void build() override;
-
 	virtual void destroy() override;
-
 	virtual void onEntry() override;
-
 	virtual void onExit() override;
-
 	virtual void update() override;
-
 	virtual void draw() override;
 
-#pragma endregion // Inherited via IGameScreen
+#pragma endregion // Inherited
 
 private:
 
-	void checkInput();
+	void initGUI();
+	void initGraphics();
 	void initShaders();
+	void initLights();
+	void initActors();
 	void spawnBoxes(int numBoxes);
+	void checkInput();
 
 private:
 
