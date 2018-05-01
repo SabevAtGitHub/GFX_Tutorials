@@ -11,6 +11,10 @@ namespace ge
 	class GUI
 	{
 	public:
+		static CEGUI::OpenGL3Renderer* getRenderer() { return m_renderer; }
+		static void setWidgetDestRect(CEGUI::Window* widget, const glm::vec4& destRectPerc, const glm::vec4 destRectPix);
+
+	public:
 		void init(const std::string&  resourceDir);
 		void destroy();
 		void draw();
@@ -27,10 +31,6 @@ namespace ge
 			const glm::vec4 destRectPix,
 			const std::string& name = "");
 		const CEGUI::GUIContext* getContext() { return m_context; }
-
-	public:
-		static CEGUI::OpenGL3Renderer* getRenderer() { return m_renderer; }
-		static void setWidgetDestRect(CEGUI::Window* widget, const glm::vec4& destRectPerc, const glm::vec4 destRectPix);
 
 	private:
 		static CEGUI::OpenGL3Renderer* m_renderer;

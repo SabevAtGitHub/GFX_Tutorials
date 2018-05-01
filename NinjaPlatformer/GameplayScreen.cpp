@@ -164,7 +164,7 @@ void GameplayScreen::initGUI()
 
 	auto testButton = static_cast<CEGUI::PushButton*>(
 		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.5f, 0.5f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
-	testButton->setText("Hello World!");
+	testButton->setText("Exit Game!");
 
 	elementName = "Editbox";
 
