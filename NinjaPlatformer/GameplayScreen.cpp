@@ -269,6 +269,7 @@ void GameplayScreen::spawnBoxes(int numBoxes)
 
 	m_boxTexture2D = ge::ResourceManager::getTexture("Assets/bricks_top.png");
 
+	// creating number of boxes
 	for (int i = 0; i < numBoxes; i++) {
 
 		Box newBox;
@@ -293,4 +294,3 @@ void GameplayScreen::checkInput()
 		m_gui.onSDLEvent(evnt);
 	}
 }
-// creating number of boxes

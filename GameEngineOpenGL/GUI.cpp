@@ -3,7 +3,11 @@
 
 namespace ge
 {
+#pragma region Static Init
+	
 	CEGUI::OpenGL3Renderer* GUI::m_renderer = nullptr;
+
+#pragma endregion
 
 	void GUI::init(const std::string & resourceDir)
 	{
@@ -82,6 +86,71 @@ namespace ge
 	{
 		m_context->getMouseCursor().hide();
 	}
+
+	void GUI::onSDLEvent(SDL_Event & evnt)
+	{
+		CEGUI::utf32 codePoint;
+
+		switch (evnt.type)
+		{
+		case SDL_MOUSEMOTION:
+			m_context->injectMousePosition(
+				(float)evnt.motion.x, (float)evnt.motion.y);
+			break;
+		case SDL_KEYDOWN:
+			m_context->injectKeyDown(
+				SDLKeyToCEGUIKey(evnt.key.keysym.sym));
+			break;
+		case SDL_KEYUP:
+			m_context->injectKeyUp(
+				SDLKeyToCEGUIKey(evnt.key.keysym.sym));
+			break;
+		case SDL_TEXTINPUT:
+			codePoint = 0;
+			for (int i = 0; evnt.text.text[i] != '\0'; i++)
+			{
+				codePoint |= ((CEGUI::utf32)evnt.text.text[i] << (i * 8));
+				m_context->injectChar(codePoint);
+			}
+
+			//m_context->
+		case SDL_MOUSEBUTTONDOWN:
+			m_context->injectMouseButtonDown(
+				SDLMouseBtnToCEGUIMouseBtn(evnt.button.button));
+			break;
+		case SDL_MOUSEBUTTONUP:
+			m_context->injectMouseButtonUp(
+				SDLMouseBtnToCEGUIMouseBtn(evnt.button.button));
+			break;
+		}
+	}
+
+	void GUI::loadScheme(const std::string & schemeName)
+	{
+		CEGUI::SchemeManager::getSingleton().createFromFile(schemeName + ".scheme");
+	}
+
+	void GUI::setFont(const std::string & fontFile)
+	{
+		CEGUI::FontManager::getSingleton().createFromFile(fontFile + ".font");
+		m_context->setDefaultFont(fontFile);
+	}
+
+	CEGUI::Window * GUI::createWidget(const std::string& type,
+		const glm::vec4& destRectPerc, const glm::vec4 destRectPix,
+		const std::string& name /* ="" */)
+	{
+		using namespace CEGUI;
+		// TODO: read the scheme name here...
+		auto newWindow = WindowManager::getSingleton().createWindow(type, name);
+		setWidgetDestRect(newWindow, destRectPerc, destRectPix);
+		m_root->addChild(newWindow);
+
+		return newWindow;
+	}
+
+
+#pragma region Helpers
 
 	CEGUI::Key::Scan SDLKeyToCEGUIKey(SDL_Keycode key)
 	{
@@ -203,68 +272,6 @@ namespace ge
 		}
 	}
 
-	void GUI::onSDLEvent(SDL_Event & evnt)
-	{
-		CEGUI::utf32 codePoint;
-
-		switch (evnt.type)
-		{
-		case SDL_MOUSEMOTION:
-			m_context->injectMousePosition(
-				(float)evnt.motion.x, (float)evnt.motion.y);
-			break;
-		case SDL_KEYDOWN:
-			m_context->injectKeyDown(
-				SDLKeyToCEGUIKey(evnt.key.keysym.sym));
-			break;
-		case SDL_KEYUP:
-			m_context->injectKeyUp(
-				SDLKeyToCEGUIKey(evnt.key.keysym.sym));
-			break;
-		case SDL_TEXTINPUT:
-			codePoint = 0;
-			for (int i = 0; evnt.text.text[i] != '\0'; i++)
-			{
-				codePoint |= ((CEGUI::utf32)evnt.text.text[i] << (i * 8));
-				m_context->injectChar(codePoint);
-			}
-
-			//m_context->
-		case SDL_MOUSEBUTTONDOWN:
-			m_context->injectMouseButtonDown(
-				SDLMouseBtnToCEGUIMouseBtn(evnt.button.button));
-			break;
-		case SDL_MOUSEBUTTONUP:
-			m_context->injectMouseButtonUp(
-				SDLMouseBtnToCEGUIMouseBtn(evnt.button.button));
-			break;
-		}
-	}
-
-	void GUI::loadScheme(const std::string & schemeName)
-	{
-		CEGUI::SchemeManager::getSingleton().createFromFile(schemeName + ".scheme");
-	}
-
-	void GUI::setFont(const std::string & fontFile)
-	{
-		CEGUI::FontManager::getSingleton().createFromFile(fontFile + ".font");
-		m_context->setDefaultFont(fontFile);
-	}
-
-	CEGUI::Window * GUI::createWidget(const std::string& type,
-		const glm::vec4& destRectPerc, const glm::vec4 destRectPix,
-		const std::string& name /* ="" */)
-	{
-		using namespace CEGUI;
-		// TODO: read the scheme name here...
-		auto newWindow = WindowManager::getSingleton().createWindow(type, name);
-		setWidgetDestRect(newWindow, destRectPerc, destRectPix);
-		m_root->addChild(newWindow);
-
-		return newWindow;
-	}
-
 	void GUI::setWidgetDestRect(CEGUI::Window * widget, const glm::vec4 & destRectPerc, const glm::vec4 destRectPix)
 	{
 		using namespace CEGUI;
@@ -274,5 +281,5 @@ namespace ge
 			UDim(destRectPerc.z, destRectPerc.z), UDim(destRectPerc.w, destRectPerc.w)));
 	}
 
-
+#pragma endregion
 }
