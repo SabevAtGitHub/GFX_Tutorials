@@ -91,6 +91,11 @@ void GameplayScreen::onEntry()
     auto textButton = static_cast<CEGUI::PushButton*>(
 		m_gui.createWidget("AlfiskoSkin/Button", glm::vec4(0.5f, 0.5f, 0.1f, 0.05f), glm::vec4(0.0f), "TestButton"));
 	textButton->setText("Hello World!");
+
+	m_gui.setMouseCursor("AlfiskoSkin/MouseArrow");
+	m_gui.showMouseCursor();
+	//MouseCursorImage
+
 }
 
 void GameplayScreen::onExit()

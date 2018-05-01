@@ -15,6 +15,10 @@ namespace ge
 		void destroy();
 		void draw();
 
+		void setMouseCursor(const std::string& cursorImage);
+		void showMouseCursor();
+		void hideMouseCursor();
+
 		void loadScheme(const std::string& schemeName);
 		void setFont(const std::string& fontFile);
 

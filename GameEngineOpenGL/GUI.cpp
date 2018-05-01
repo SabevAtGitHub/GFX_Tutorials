@@ -52,6 +52,21 @@ namespace ge
 		glEnable(GL_BLEND);
 	}
 
+	void GUI::setMouseCursor(const std::string & cursorImage)
+	{
+		m_context->getMouseCursor().setDefaultImage(cursorImage);
+	}
+
+	void GUI::showMouseCursor()
+	{
+		m_context->getMouseCursor().show();
+	}
+
+	void GUI::hideMouseCursor()
+	{
+		m_context->getMouseCursor().hide();
+	}
+
 	void GUI::loadScheme(const std::string & schemeName)
 	{
 		CEGUI::SchemeManager::getSingleton().createFromFile(schemeName + ".scheme");
