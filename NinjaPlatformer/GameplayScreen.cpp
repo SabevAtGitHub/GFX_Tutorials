@@ -36,10 +36,8 @@ void GameplayScreen::onEntry()
 	static const float CAMERA_SCALE = 28.f;
 	static const float WORLD_FLOOR_HEIGHT = -20.f;
 	static const float GRAVITY_RATE = -24.f;
-	static const int NUM_BOXES = 7;
+	static const int NUM_BOXES = 47;
 	static const float PLAYER_W = 1.0f, PLAYER_H = 2.0f;
-
-	ge::GUI::init("GUI");
 
 	b2Vec2 gravity(0.f, GRAVITY_RATE);
 	m_world = std::make_unique<b2World>(gravity);
@@ -85,6 +83,14 @@ void GameplayScreen::onEntry()
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
 	m_camera.setScale(CAMERA_SCALE);
 
+	//ge::GUI::init("GUI");
+
+	m_gui.init("GUI");
+	m_gui.loadScheme("AlfiskoSkin");
+	m_gui.setFont("DejaVuSans-10");
+    auto textButton = static_cast<CEGUI::PushButton*>(
+		m_gui.createWidget("AlfiskoSkin/Button", glm::vec4(0.5f, 0.5f, 0.1f, 0.05f), glm::vec4(0.0f), "TestButton"));
+	textButton->setText("Hello World!");
 }
 
 void GameplayScreen::onExit()
@@ -189,6 +195,8 @@ void GameplayScreen::draw()
 
 #pragma endregion // Render test lights
 
+	m_gui.draw();
+	
 }
 
 void GameplayScreen::checkInput()
