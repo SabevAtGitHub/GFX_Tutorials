@@ -84,18 +84,31 @@ void GameplayScreen::onEntry()
 	m_camera.setScale(CAMERA_SCALE);
 
 	//ge::GUI::init("GUI");
+	std::string schemeName = "AlfiskoSkin";
 
 	m_gui.init("GUI");
-	m_gui.loadScheme("AlfiskoSkin");
+	m_gui.loadScheme(schemeName);
 	m_gui.setFont("DejaVuSans-10");
-    auto textButton = static_cast<CEGUI::PushButton*>(
-		m_gui.createWidget("AlfiskoSkin/Button", glm::vec4(0.5f, 0.5f, 0.1f, 0.05f), glm::vec4(0.0f), "TestButton"));
-	textButton->setText("Hello World!");
 
-	m_gui.setMouseCursor("AlfiskoSkin/MouseArrow");
+#pragma region TODO: TEST GUI ELEMENTS
+
+	std::string elementName;
+	elementName	= "Button";
+
+	auto testButton = static_cast<CEGUI::PushButton*>(
+		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.5f, 0.5f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
+	testButton->setText("Hello World!");
+
+	elementName = "Editbox";
+	
+	auto testCombobox = static_cast<CEGUI::Editbox*>(
+		m_gui.createWidget(schemeName + "/" + elementName, glm::vec4(0.2f, 0.2f, 0.1f, 0.05f), glm::vec4(0.0f), "Test" + elementName));
+
+	m_gui.setMouseCursor(schemeName + "/MouseArrow");
 	m_gui.showMouseCursor();
-	//MouseCursorImage
+	SDL_ShowCursor(0);
 
+#pragma endregion
 }
 
 void GameplayScreen::onExit()
@@ -210,6 +223,7 @@ void GameplayScreen::checkInput()
 	//Will keep looping until there are no more events to process
 	while (SDL_PollEvent(&evnt)) {
 		m_game->onSDLEvent(evnt);
+		m_gui.onSDLEvent(evnt);
 	}
 }
 

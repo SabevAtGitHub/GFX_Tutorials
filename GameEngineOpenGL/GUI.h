@@ -3,6 +3,7 @@
 #include <CEGUI\RendererModules\OpenGL\GL3Renderer.h>
 #include <string>
 #include <memory>
+#include <SDL\SDL_events.h>
 #include <glm\glm.hpp>
 
 namespace ge
@@ -14,10 +15,12 @@ namespace ge
 		void init(const std::string&  resourceDir);
 		void destroy();
 		void draw();
+		void update();
 
 		void setMouseCursor(const std::string& cursorImage);
 		void showMouseCursor();
 		void hideMouseCursor();
+		void onSDLEvent(SDL_Event & evnt);
 
 		void loadScheme(const std::string& schemeName);
 		void setFont(const std::string& fontFile);
@@ -36,5 +39,6 @@ namespace ge
 		CEGUI::GUIContext* m_context = nullptr;
 		CEGUI::Scheme* m_scheme = nullptr;
 		CEGUI::Window* m_root = nullptr;
+		unsigned int m_lastTime = 0;
 	};
 }
