@@ -19,7 +19,7 @@ int MainMenuScreen::getNextScreenIndex() const
 
 int MainMenuScreen::getPreviousScreenIndex() const
 {
-	return NO_NEXT_SCREEN_INDEX;
+	return SCREEN_INDEX_NONE;
 }
 
 void MainMenuScreen::build()

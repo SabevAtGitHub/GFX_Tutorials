@@ -19,12 +19,12 @@ GameplayScreen::~GameplayScreen()
 
 int GameplayScreen::getNextScreenIndex() const
 {
-	return SCREEN_INDEX_MAINMENU;
+	return SCREEN_INDEX_NONE;
 }
 
 int GameplayScreen::getPreviousScreenIndex() const
 {
-	return NO_NEXT_SCREEN_INDEX;
+	return SCREEN_INDEX_MAINMENU;
 }
 
 void GameplayScreen::build()
@@ -179,14 +179,14 @@ void GameplayScreen::initGUI()
 
 #pragma region Main Menu button
 
-	//elementPos = glm::vec4(0.16f, 0.05f, 0.1f, 0.05f);
-	//auto mainMenuButton = static_cast<CEGUI::PushButton*>(
-	//	m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "MainManuButton"));
-	//mainMenuButton->setText("Main manu");
+	elementPos = glm::vec4(0.16f, 0.05f, 0.1f, 0.05f);
+	auto mainMenuButton = static_cast<CEGUI::PushButton*>(
+		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "MainManuButton"));
+	mainMenuButton->setText("Main manu");
 
-	//// Subscribe to event to be called on button click
-	//mainMenuButton->subscribeEvent(CEGUI::PushButton::EventClicked,
-	//	CEGUI::Event::Subscriber(&GameplayScreen::onGoToMainMenuClicked, this));
+	// Subscribe to event to be called on button click
+	mainMenuButton->subscribeEvent(CEGUI::PushButton::EventClicked,
+		CEGUI::Event::Subscriber(&GameplayScreen::onGoToMainMenuClicked, this));
 
 #pragma endregion
 
