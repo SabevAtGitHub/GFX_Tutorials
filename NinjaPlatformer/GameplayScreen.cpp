@@ -49,6 +49,8 @@ void GameplayScreen::onEntry()
 void GameplayScreen::onExit()
 {
 	m_debugRenderer.dispose();
+	m_gui.destroy();
+
 }
 
 void GameplayScreen::update()
@@ -316,6 +318,12 @@ void GameplayScreen::checkInput()
 	while (SDL_PollEvent(&evnt)) {
 		m_game->onSDLEvent(evnt);
 		m_gui.onSDLEvent(evnt);
+		switch (evnt.type)
+		{
+		case SDL_QUIT:
+			onExitClicked(CEGUI::EventArgs());
+			break;
+		}
 	}
 }
 

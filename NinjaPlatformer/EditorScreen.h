@@ -43,5 +43,8 @@ private:
 	ge::GUI m_gui;
 	ge::Camera2D m_camera; // Renders the scene
 	//int m_nextScreenIdx = SCREEN_INDEX_GAMEPLAY;
+	float m_colorPickerRed = 255.f;
+	float m_colorPickerGreen = 255.f;
+	float m_colorPickerBlue = 255.f;
 };
 

@@ -43,6 +43,7 @@ void EditorScreen::onEntry()
 
 void EditorScreen::onExit()
 {
+	m_gui.destroy();
 }
 
 void EditorScreen::update()
@@ -63,29 +64,30 @@ void EditorScreen::draw()
 void EditorScreen::initGUI()
 {
 	//ge::GUI::init("GUI");
-	std::string schemeName = "AlfiskoSkin";
+	std::string schemeName = "TaharezLook";
 
 	m_gui.init("GUI");
 	m_gui.loadScheme(schemeName);
 	m_gui.setFont("DejaVuSans-10");
 
-	std::string elementType = "Button";
+	std::string elementType = "Slider";
 
-#pragma region Exit Game button
 
-	auto elementPos = glm::vec4(0.45f, 0.57f, 0.1f, 0.05f);
-	auto exitButton = static_cast<CEGUI::PushButton*>(
-		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "ExitButton"));
-	exitButton->setText("Exit Game!");
+#pragma region ColorPicker slider
 
-	// Subscribe to event to be called on button click
-	exitButton->subscribeEvent(CEGUI::PushButton::EventClicked,
-		CEGUI::Event::Subscriber(&EditorScreen::onExitClicked, this));
+	auto elementPos = glm::vec4(0.2f, 0.20f, 0.02f, 0.2f);
+	std::string elementDescrib = { schemeName + "/" + elementType };
+
+	auto slider1 = static_cast<CEGUI::Slider*>(
+		m_gui.createWidget(elementDescrib, elementPos, glm::vec4(0.0f), "Slider1"));
+	slider1->setMaxValue(255.f);
+	slider1->setCurrentValue(m_colorPickerRed);
+
 
 #pragma endregion
 
 	// set custom mouse cursor
-	m_gui.setMouseCursor(schemeName + "/MouseArrow");
+	m_gui.setMouseCursor(std::string(schemeName + "/MouseArrow"));
 	m_gui.showMouseCursor();
 	SDL_ShowCursor(0);
 
@@ -98,6 +100,12 @@ void EditorScreen::checkInput()
 	//Will keep looping until there are no more events to process
 	while (SDL_PollEvent(&evnt)) {
 		m_gui.onSDLEvent(evnt);
+		switch (evnt.type)
+		{
+		case SDL_QUIT:
+			onExitClicked(CEGUI::EventArgs());
+			break;
+		}
 	}
 }
 

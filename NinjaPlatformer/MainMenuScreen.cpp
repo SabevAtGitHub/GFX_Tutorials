@@ -42,6 +42,7 @@ void MainMenuScreen::onEntry()
 
 void MainMenuScreen::onExit()
 {
+	m_gui.destroy();
 }
 
 void MainMenuScreen::update()
@@ -122,6 +123,12 @@ void MainMenuScreen::checkInput()
 	//Will keep looping until there are no more events to process
 	while (SDL_PollEvent(&evnt)) {
 		m_gui.onSDLEvent(evnt);
+		switch (evnt.type)
+		{
+		case SDL_QUIT:
+			onExitClicked(CEGUI::EventArgs());
+			break;
+		}
 	}
 }
 
