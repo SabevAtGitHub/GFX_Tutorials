@@ -3,6 +3,7 @@
 #include <GameEngineOpenGL\Window.h>
 #include <GameEngineOpenGL\Camera2D.h>
 #include <GameEngineOpenGL\GUI.h>
+#include "ScreenIndices.h"
 
 class MainMenuScreen : public ge::IGameScreen
 {
@@ -34,13 +35,13 @@ public:
 private:
 	void initGUI();
 	void checkInput();
-	bool onExitClicked(const CEGUI::EventArgs& eargs);
 	bool onPlayGameClicked(const CEGUI::EventArgs& eargs);
-
+	bool onEditorClicked(const CEGUI::EventArgs& eargs);
+	bool onExitClicked(const CEGUI::EventArgs& eargs);
 private:
 	ge::Window* m_window = nullptr;
 	ge::GUI m_gui;
 	ge::Camera2D m_camera; // Renders the scene
-
+	int m_nextScreenIdx = SCREEN_INDEX_GAMEPLAY;
 };
 

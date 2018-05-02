@@ -6,6 +6,7 @@
 #include <iostream>
 #include "ScreenIndices.h"
 
+
 GameplayScreen::GameplayScreen(ge::Window* window)
 	: m_window(window)
 {
@@ -176,16 +177,16 @@ void GameplayScreen::initGUI()
 
 #pragma endregion
 
-#pragma region Play Game button
+#pragma region Main Menu button
 
-	elementPos = glm::vec4(0.16f, 0.05f, 0.1f, 0.05f);
-	auto mainMenuButton = static_cast<CEGUI::PushButton*>(
-		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "MainManuButton"));
-	mainMenuButton->setText("Main manu");
+	//elementPos = glm::vec4(0.16f, 0.05f, 0.1f, 0.05f);
+	//auto mainMenuButton = static_cast<CEGUI::PushButton*>(
+	//	m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "MainManuButton"));
+	//mainMenuButton->setText("Main manu");
 
-	// Subscribe to event to be called on button click
-	mainMenuButton->subscribeEvent(CEGUI::PushButton::EventClicked,
-		CEGUI::Event::Subscriber(&GameplayScreen::onGoToMainMenuClicked, this));
+	//// Subscribe to event to be called on button click
+	//mainMenuButton->subscribeEvent(CEGUI::PushButton::EventClicked,
+	//	CEGUI::Event::Subscriber(&GameplayScreen::onGoToMainMenuClicked, this));
 
 #pragma endregion
 
@@ -198,7 +199,6 @@ void GameplayScreen::initGUI()
 	m_gui.setMouseCursor(schemeName + "/MouseArrow");
 	m_gui.showMouseCursor();
 	SDL_ShowCursor(0);
-
 
 }
 
