@@ -3,9 +3,9 @@
 #include <GameEngineOpenGL\IGameScreen.h>
 #include <GameEngineOpenGL\SpriteBatch.h>
 #include <GameEngineOpenGL\GLTexture.h>
-#include <GameEngineOpenGL\Window.h>
 #include <GameEngineOpenGL\GLSLProgram.h>
 #include <GameEngineOpenGL\DebugRenderer.h>
+#include <GameEngineOpenGL\Window.h>
 #include <GameEngineOpenGL\Camera2D.h>
 #include <GameEngineOpenGL\GUI.h>
 #include <Box2D\Box2D.h>

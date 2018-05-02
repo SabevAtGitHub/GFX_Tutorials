@@ -4,10 +4,12 @@
 #include <GameEngineOpenGL\Vertex.h>
 #include <random>
 #include <iostream>
+#include "ScreenIndices.h"
 
 GameplayScreen::GameplayScreen(ge::Window* window)
 	: m_window(window)
 {
+	m_screenIndex = SCREEN_INDEX_GAMEPLAY;
 }
 
 GameplayScreen::~GameplayScreen()
@@ -16,7 +18,7 @@ GameplayScreen::~GameplayScreen()
 
 int GameplayScreen::getNextScreenIndex() const
 {
-	return NO_NEXT_SCREEN_INDEX;
+	return SCREEN_INDEX_MAINMENU;
 }
 
 int GameplayScreen::getPreviousScreenIndex() const
@@ -50,9 +52,9 @@ void GameplayScreen::onExit()
 
 void GameplayScreen::update()
 {
+	m_player.update(m_game->inputManager);
 	m_camera.update();
 	checkInput();
-	m_player.update(m_game->inputManager);
 
 	// updating physics simulation
 	m_world->Step(1.f / 60.f, 6, 2);
@@ -146,35 +148,36 @@ void GameplayScreen::draw()
 #pragma endregion // Render test lights
 
 	m_gui.draw();
-	
+
 }
 
 void GameplayScreen::initGUI()
-{	
+{
 	//ge::GUI::init("GUI");
 	std::string schemeName = "AlfiskoSkin";
 
-	m_gui.init("GUI");
-	m_gui.loadScheme(schemeName);
+	//m_gui.init("GUI");
+	//m_gui.loadScheme(schemeName);
 	m_gui.setFont("DejaVuSans-10");
+
+	std::string elementType;
 
 #pragma region TODO: TEST GUI ELEMENTS
 
-	std::string elementType;
 	elementType = "Button";
 	auto elementPos = glm::vec4(0.5f, 0.5f, 0.1f, 0.05f);
 	auto testButton = static_cast<CEGUI::PushButton*>(
-		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "Test" + elementType));
+		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "TestButton"));
 	testButton->setText("Exit Game!");
 
 	// Subscribe to event to be called on button click
-	testButton->subscribeEvent(CEGUI::PushButton::EventClicked, 
+	testButton->subscribeEvent(CEGUI::PushButton::EventClicked,
 		CEGUI::Event::Subscriber(&GameplayScreen::onExitClicked, this));
 
 	elementType = "Editbox";
 	elementPos = glm::vec4(0.2f, 0.2f, 0.1f, 0.05f);
 	auto testCombobox = static_cast<CEGUI::Editbox*>(
-		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "Test" + elementType));
+		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "TestEditbox"));
 
 	// set custom mouse cursor
 	m_gui.setMouseCursor(schemeName + "/MouseArrow");
