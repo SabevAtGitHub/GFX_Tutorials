@@ -43,6 +43,7 @@ private:
 	void spawnBoxes(int numBoxes);
 	void checkInput();
 	bool onExitClicked(const CEGUI::EventArgs& eargs);
+	bool onGoToMainMenuClicked(const CEGUI::EventArgs& eargs);
 
 	Player m_player;
 	Light m_playerLight;

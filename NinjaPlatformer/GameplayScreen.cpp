@@ -156,16 +156,16 @@ void GameplayScreen::initGUI()
 	//ge::GUI::init("GUI");
 	std::string schemeName = "AlfiskoSkin";
 
-	//m_gui.init("GUI");
-	//m_gui.loadScheme(schemeName);
+	m_gui.init("GUI");
+	m_gui.loadScheme(schemeName);
 	m_gui.setFont("DejaVuSans-10");
 
 	std::string elementType;
 
-#pragma region TODO: TEST GUI ELEMENTS
+#pragma region Exit game button
 
 	elementType = "Button";
-	auto elementPos = glm::vec4(0.5f, 0.5f, 0.1f, 0.05f);
+	auto elementPos = glm::vec4(0.05f, 0.05f, 0.1f, 0.05f);
 	auto testButton = static_cast<CEGUI::PushButton*>(
 		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "TestButton"));
 	testButton->setText("Exit Game!");
@@ -173,6 +173,21 @@ void GameplayScreen::initGUI()
 	// Subscribe to event to be called on button click
 	testButton->subscribeEvent(CEGUI::PushButton::EventClicked,
 		CEGUI::Event::Subscriber(&GameplayScreen::onExitClicked, this));
+
+#pragma endregion
+
+#pragma region Play Game button
+
+	elementPos = glm::vec4(0.16f, 0.05f, 0.1f, 0.05f);
+	auto mainMenuButton = static_cast<CEGUI::PushButton*>(
+		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "MainManuButton"));
+	mainMenuButton->setText("Main manu");
+
+	// Subscribe to event to be called on button click
+	mainMenuButton->subscribeEvent(CEGUI::PushButton::EventClicked,
+		CEGUI::Event::Subscriber(&GameplayScreen::onGoToMainMenuClicked, this));
+
+#pragma endregion
 
 	elementType = "Editbox";
 	elementPos = glm::vec4(0.2f, 0.2f, 0.1f, 0.05f);
@@ -184,7 +199,6 @@ void GameplayScreen::initGUI()
 	m_gui.showMouseCursor();
 	SDL_ShowCursor(0);
 
-#pragma endregion
 
 }
 
@@ -309,5 +323,12 @@ bool GameplayScreen::onExitClicked(const CEGUI::EventArgs& eargs)
 {
 	//std::cout << "Quitting the Game!\n";
 	m_currentState = ge::ScreenState::EXIT_APPLICATION;
+	return true;
+}
+
+bool GameplayScreen::onGoToMainMenuClicked(const CEGUI::EventArgs& eargs)
+{
+	//std::cout << "Quitting the Game!\n";
+	m_currentState = ge::ScreenState::CHANGE_PREVIOUS;
 	return true;
 }

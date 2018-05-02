@@ -77,7 +77,7 @@ void MainMenuScreen::initGUI()
 
 	auto elementPos = glm::vec4(0.45f, 0.5f, 0.1f, 0.05f);
 	auto playGameButton = static_cast<CEGUI::PushButton*>(
-		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "Play" + elementType));
+		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "PlayButton"));
 	playGameButton->setText("Play Game!");
 
 	// Subscribe to event to be called on button click
@@ -88,9 +88,9 @@ void MainMenuScreen::initGUI()
 
 #pragma region Exit Game button
 
-	elementPos = glm::vec4(0.45f, 0.65f, 0.1f, 0.05f);
+	elementPos = glm::vec4(0.45f, 0.6f, 0.1f, 0.05f);
 	auto exitButton = static_cast<CEGUI::PushButton*>(
-		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "Exit" + elementType));
+		m_gui.createWidget(schemeName + "/" + elementType, elementPos, glm::vec4(0.0f), "ExitButton"));
 	exitButton->setText("Exit Game!");
 
 	// Subscribe to event to be called on button click
