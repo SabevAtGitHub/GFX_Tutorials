@@ -6,7 +6,7 @@
 
 
 Human::Human() : 
-	frames_(0)
+	m_numFrames(0)
 {
 }
 
@@ -46,16 +46,16 @@ void Human::update(const std::vector<std::string>& lvlData,
 
 	this->m_pos += this->m_dir * this->m_speed * deltaTime;
 
-	if (200 == frames_) {
+	if (200 == m_numFrames) {
 		this->m_dir = glm::rotate(this->m_dir, randRotate(randEngine));
-		frames_ = 0;
+		m_numFrames = 0;
 	}
 	else {
-		frames_++;
+		m_numFrames++;
 	}
 
 	if (collideWithLevel(lvlData)) {
 		this->m_dir = glm::rotate(this->m_dir, randRotate(randEngine));
-		frames_ = 0;
+		m_numFrames = 0;
 	}
 }

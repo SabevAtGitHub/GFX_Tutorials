@@ -15,6 +15,6 @@ public:
 		std::vector<Zombie*>& zombies,
 		float deltaTime) override;
 private:
-	int frames_;
+	int m_numFrames;
 };
 

@@ -14,9 +14,9 @@ Player::Player(glm::vec2 position, glm::vec2 direction,
 	m_dir = direction;
 	m_speed = initialSpeed;
 	m_inputManager = inputManager;
-	camera_ = camera2D;
+	m_camera2D = camera2D;
 	m_bullets = playerBullets;
-	currGunIdx_ = -1;
+	m_currGunIndex = -1;
 
 	// hardcoded color blue
 	m_color.setColor(255, 255, 255, 255);
@@ -26,19 +26,19 @@ Player::Player(glm::vec2 position, glm::vec2 direction,
 
 Player::~Player()
 {
-	for (size_t i = 0; i < guns_.size(); i++) {
-		delete guns_[i];
+	for (size_t i = 0; i < m_guns.size(); i++) {
+		delete m_guns[i];
 	}
 }
 
 void Player::addGun(Gun * gun)
 {
 	// adding gun to player's inventory
-	guns_.push_back(gun);
+	m_guns.push_back(gun);
 
 	// if no gun assigned as current, assign this gun
-	if (-1 == currGunIdx_) {
-		currGunIdx_ = 0;
+	if (-1 == m_currGunIndex) {
+		m_currGunIndex = 0;
 	}
 }
 
@@ -62,27 +62,27 @@ void Player::update(const std::vector<std::string>& lvlData,
 	}
 
 	// sycle trough guns
-	if (m_inputManager->isKeyDown(SDLK_1) && guns_.size() >= 0) {
-		currGunIdx_ = 0;
+	if (m_inputManager->isKeyDown(SDLK_1) && m_guns.size() >= 0) {
+		m_currGunIndex = 0;
 	}
-	if (m_inputManager->isKeyDown(SDLK_2) && guns_.size() >= 1) {
-		currGunIdx_ = 1;
+	if (m_inputManager->isKeyDown(SDLK_2) && m_guns.size() >= 1) {
+		m_currGunIndex = 1;
 	}
-	if (m_inputManager->isKeyDown(SDLK_3) && guns_.size() >= 2) {
-		currGunIdx_ = 2;
+	if (m_inputManager->isKeyDown(SDLK_3) && m_guns.size() >= 2) {
+		m_currGunIndex = 2;
 	}
 
 	auto mouseCoords = m_inputManager->getMouseCoords();
-	mouseCoords = camera_->covertScreenToWorld(mouseCoords);
+	mouseCoords = m_camera2D->covertScreenToWorld(mouseCoords);
 
 	auto playerCenterPos = this->m_pos;// +glm::vec2(AGENT_RADIUS);
 
 	m_dir = glm::normalize(mouseCoords - playerCenterPos);
 
-	if (-1 != currGunIdx_) {
+	if (-1 != m_currGunIndex) {
 
 
-		guns_[currGunIdx_]->fire(m_inputManager->isKeyDown(SDL_BUTTON_LEFT),
+		m_guns[m_currGunIndex]->fire(m_inputManager->isKeyDown(SDL_BUTTON_LEFT),
 			playerCenterPos, m_dir, *m_bullets, deltaTime);
 	}
 

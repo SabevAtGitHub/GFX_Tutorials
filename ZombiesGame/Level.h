@@ -15,20 +15,20 @@ public:
 	void draw();
 
 	// getters
-	int getWidth() const { return levelData_[0].size(); }
-	int getHeight() const { return levelData_.size(); }
-	int getNumHumans() const { return numHumans_; }
+	int getWidth() const { return m_levelData[0].size(); }
+	int getHeight() const { return m_levelData.size(); }
+	int getNumHumans() const { return m_numHumans; }
 
-	glm::vec2 getPlayerStartPos() const { return playerStartPos_; }
-	const std::vector<glm::vec2>& getZombiesStartPos() const { return zombiesStartPos_; }
-	const std::vector<std::string>& getLevelData() const { return levelData_; }
+	glm::vec2 getPlayerStartPos() const { return m_playerStartPos; }
+	const std::vector<glm::vec2>& getZombiesStartPos() const { return m_zombiesStartPos; }
+	const std::vector<std::string>& getLevelData() const { return m_levelData; }
 private:
 
-	std::vector<std::string> levelData_;
-	ge::SpriteBatch spriteBatch_;
+	std::vector<std::string> m_levelData;
+	ge::SpriteBatch m_spriteBatch;
 
-	glm::vec2 playerStartPos_;
-	std::vector<glm::vec2> zombiesStartPos_;
-	int numHumans_;
+	glm::vec2 m_playerStartPos;
+	std::vector<glm::vec2> m_zombiesStartPos;
+	int m_numHumans;
 };
 

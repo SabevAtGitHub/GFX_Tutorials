@@ -40,7 +40,7 @@ public:
 
 private:
 	ge::Window m_window;
-	ge::Camera2D camera_;
+	ge::Camera2D m_camera2D;
 	ge::Camera2D m_hudCamera;
 	ge::SpriteBatch m_agentSpriteBatch; /// to draw all agents
 	ge::SpriteBatch m_hudSpriteBatch; /// to draw hud text

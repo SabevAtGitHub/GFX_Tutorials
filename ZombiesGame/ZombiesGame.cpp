@@ -72,7 +72,7 @@ void ZombiesGame::initSystems()
 	m_audioEngine.init();
 
 	// set up the camera
-	camera_.init(scrW, scrH);
+	m_camera2D.init(scrW, scrH);
 	m_hudCamera.init(scrW, scrH);
 	m_hudCamera.setPosition(glm::vec2(scrW / 2, scrH / 2));
 
@@ -113,7 +113,7 @@ void ZombiesGame::initGameProps()
 	m_player = new Player(
 		m_levels[m_currLvl]->getPlayerStartPos(), 
 		glm::vec2(0.f, 1.f), PLAYER_SPEED, 3, 
-		&m_inputManager, &camera_, &m_bullets);
+		&m_inputManager, &m_camera2D, &m_bullets);
 	
 	// Add player to vecor of humans
 	m_humans.push_back(m_player);
@@ -164,7 +164,7 @@ void ZombiesGame::initShaders()
 void ZombiesGame::gameLoop()
 {
 	// camera scaling
-	camera_.setScale(CAMERA_SCALE);
+	m_camera2D.setScale(CAMERA_SCALE);
 
 	const auto DESIRED_FRAME_TIME = MILLISEC_PER_SEC / DESIRED_FPS;
 	auto prevTicks = SDL_GetTicks();
@@ -197,8 +197,8 @@ void ZombiesGame::gameLoop()
 		}
 		
 		// camera updating
-		camera_.setPosition(m_player->getPos()); // follow the player
-		camera_.update();
+		m_camera2D.setPosition(m_player->getPos()); // follow the player
+		m_camera2D.update();
 		m_hudCamera.update();
 		
 		drawGame(); // drawing the game
@@ -397,10 +397,10 @@ void ZombiesGame::processInput()
 		m_gameState = GameState::EXIT;
 	}
 	if (m_inputManager.isKeyDown(SDLK_q)) {
-		camera_.setScale(camera_.getScale() - 0.02f);
+		m_camera2D.setScale(m_camera2D.getScale() - 0.02f);
 	}
 	if (m_inputManager.isKeyDown(SDLK_e)) {
-		camera_.setScale(camera_.getScale() + 0.02f);
+		m_camera2D.setScale(m_camera2D.getScale() + 0.02f);
 	}
 
 	// add, remove bullets
@@ -432,7 +432,7 @@ void ZombiesGame::drawGame()
 	GLint pLocation = m_colorProgram.getUniformLocation("P");
 	
 	// grab the camera matrix
-	glm::mat4 cameraMatrix = camera_.getCameraMatrix();
+	glm::mat4 cameraMatrix = m_camera2D.getCameraMatrix();
 
 	// uploading the camera matrix to the GPU
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
@@ -449,14 +449,14 @@ void ZombiesGame::drawGame()
 	// draw humans, including draw player
 	for (size_t i = 0; i < m_humans.size(); i++) {
 
-		if (camera_.isInView(m_humans[i]->getPos(), agentDims)) {
+		if (m_camera2D.isInView(m_humans[i]->getPos(), agentDims)) {
 			m_humans[i]->draw(m_agentSpriteBatch);
 		}
 	}
 	
 	// draw zombies
 	for (size_t i = 0; i < m_zombies.size(); i++) {
-		if (camera_.isInView(m_zombies[i]->getPos(), agentDims)) {
+		if (m_camera2D.isInView(m_zombies[i]->getPos(), agentDims)) {
 			m_zombies[i]->draw(m_agentSpriteBatch);
 		}
 	}

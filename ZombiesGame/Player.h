@@ -29,10 +29,10 @@ public:
 private:
 
 	ge::InputManager* m_inputManager;
-	std::vector<Gun*> guns_;
-	ge::Camera2D* camera_;
+	std::vector<Gun*> m_guns;
+	ge::Camera2D* m_camera2D;
 	std::vector<Bullet>* m_bullets;
 
-	int currGunIdx_;
+	int m_currGunIndex;
 };
 

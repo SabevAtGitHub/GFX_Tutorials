@@ -19,18 +19,18 @@ Level::Level(const std::string & filePath)
 	// reading the first line,
 	// trowing the text and reading the number of humans
 	std::string tmp;
-	file >> tmp >> numHumans_;
+	file >> tmp >> m_numHumans;
 
 	// trow away the first line
 	std::getline(file, tmp); 
 
 	// reading level data
 	while (std::getline(file, tmp)) {
-		levelData_.push_back(tmp);
+		m_levelData.push_back(tmp);
 	}
 
-	spriteBatch_.init();
-	spriteBatch_.begin();
+	m_spriteBatch.init();
+	m_spriteBatch.begin();
 	
 	const auto uvRect = glm::vec4(0.f, 0.f, 1.f, 1.f);
 	ge::ColorRGBA8 color;
@@ -39,41 +39,41 @@ Level::Level(const std::string & filePath)
 	using rm = ge::ResourceManager;
 
 	// reading level file in to array of arrays
-	for (size_t y = 0; y < levelData_.size(); y++) {
-		for (size_t x = 0; x < levelData_[y].size(); x++) {
+	for (size_t y = 0; y < m_levelData.size(); y++) {
+		for (size_t x = 0; x < m_levelData[y].size(); x++) {
 
-			char tile = levelData_[y][x];
+			char tile = m_levelData[y][x];
 
 			glm::vec4 destRect(x * (int)TILE_WITH, y * (int)TILE_WITH, (int)TILE_WITH, (int)TILE_WITH);
 
 			// drawing the tiles
 			switch (tile) {
 			case '@':
-				playerStartPos_.x = x * TILE_WITH;
-				playerStartPos_.y = y * TILE_WITH;
-				levelData_[y][x] = '.'; // changing back to empty space
+				m_playerStartPos.x = x * TILE_WITH;
+				m_playerStartPos.y = y * TILE_WITH;
+				m_levelData[y][x] = '.'; // changing back to empty space
 				break;
 			case 'Z':
-				zombiesStartPos_.emplace_back(x * TILE_WITH, y * TILE_WITH);
-				levelData_[y][x] = '.'; // changing back to empty space
+				m_zombiesStartPos.emplace_back(x * TILE_WITH, y * TILE_WITH);
+				m_levelData[y][x] = '.'; // changing back to empty space
 				break;
 			case 'L':
-				spriteBatch_.draw(destRect, uvRect,
+				m_spriteBatch.draw(destRect, uvRect,
 					rm::getTexture("Textures/L_bricks.png").id,
 					0.f, color);
 				break;
 			case 'B':
-				spriteBatch_.draw(destRect, uvRect,
+				m_spriteBatch.draw(destRect, uvRect,
 					rm::getTexture("Textures/B_bricks.png").id,
 					0.f, color);
 				break;
 			case 'R':
-				spriteBatch_.draw(destRect, uvRect,
+				m_spriteBatch.draw(destRect, uvRect,
 					rm::getTexture("Textures/R_bricks.png").id,
 					0.f, color);
 				break;
 			case 'G':
-				spriteBatch_.draw(destRect, uvRect,
+				m_spriteBatch.draw(destRect, uvRect,
 					rm::getTexture("Textures/G_bricks.png").id,
 					0.f, color);
 				break;
@@ -86,12 +86,12 @@ Level::Level(const std::string & filePath)
 		}
 	}
 
-	spriteBatch_.end();
+	m_spriteBatch.end();
 }
 
 Level::~Level() { /* empty */ }
 
 void Level::draw()
 {
-	spriteBatch_.renderBatch();
+	m_spriteBatch.renderBatch();
 }
