@@ -25,11 +25,18 @@ namespace ge
 		void onSDLEvent(SDL_Event & evnt);
 		void loadScheme(const std::string& schemeName);
 		void setFont(const std::string& fontFile);
-		// Loolup the desired type and use static_cast to convert the Window* to it
+		
+		// Creates widget and is adding it as a child to the root window
+		// Use static_cast to convert the Window* to the desired type
 		CEGUI::Window* createWidget(const std::string& type,
 			const glm::vec4& destRectPerc,
 			const glm::vec4 destRectPix,
 			const std::string& name = "");
+
+		// Creates widget and is adding it as a child to the root window
+		// Use static_cast to convert the Window* to the desired type
+		CEGUI::Window* createWidget(CEGUI::Window* parent, const std::string& type, const glm::vec4& destRectPerc, const glm::vec4& destRectPix, const std::string& name = "");
+		
 		const CEGUI::GUIContext* getContext() { return m_context; }
 
 	private:

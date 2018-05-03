@@ -44,6 +44,11 @@ void Box::init(
 
 }
 
+void Box::destroy(b2World * world)
+{
+	world->DestroyBody(m_body);
+}
+
 void Box::draw(ge::SpriteBatch& spriteBatch)
 {
 	spriteBatch.draw(this->getDestRect(), m_uvRect,

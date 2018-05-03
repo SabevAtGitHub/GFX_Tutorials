@@ -20,7 +20,7 @@ public:
 
 	void init(b2World* world, glm::vec2 pos, glm::vec2 drawDims,
 		glm::vec2 collitionDims, ge::ColorRGBA8 color, bool fixedRotation);
-
+	void destroy(b2World* world);
 	void draw(ge::SpriteBatch& spriteBatch);
 	void drawDebug(ge::DebugRenderer& debugRenderer);
 

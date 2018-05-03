@@ -273,11 +273,16 @@ namespace ge
 		const glm::vec4& destRectPerc, const glm::vec4 destRectPix,
 		const std::string& name /* ="" */)
 	{
+		return createWidget(m_root, type, destRectPerc, destRectPix, name);
+	}
+
+	CEGUI::Window * GUI::createWidget(CEGUI::Window * parent, const std::string & type, const glm::vec4 & destRectPerc, const glm::vec4 & destRectPix, const std::string & name)
+	{
 		using namespace CEGUI;
 		// TODO: read the scheme name here...
 		auto newWindow = WindowManager::getSingleton().createWindow(type, name);
 		setWidgetDestRect(newWindow, destRectPerc, destRectPix);
-		m_root->addChild(newWindow);
+		parent->addChild(newWindow);
 
 		return newWindow;
 	}

@@ -20,6 +20,11 @@ void Player::init(b2World* world, glm::vec2 pos, glm::vec2 drawDims,
 	m_tileSheet.init(texture, glm::ivec2(10, 2));
 }
 
+void Player::destroy(b2World * world)
+{
+	m_capsule.destroy(world);
+}
+
 void Player::draw(ge::SpriteBatch& spriteBatch)
 {
 	b2Body * m_body = m_capsule.getBody();
@@ -34,7 +39,6 @@ void Player::draw(ge::SpriteBatch& spriteBatch)
 	int numTiles = 1;
 	auto vel = glm::vec2(m_body->GetLinearVelocity().x, m_body->GetLinearVelocity().y);
 	float animationSpeed = 0.2f;
-
 
 	if (m_onGround) { // ...on the ground..
 

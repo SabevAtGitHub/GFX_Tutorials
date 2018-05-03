@@ -11,7 +11,7 @@ public:
 
 	void init(b2World* world, glm::vec2 pos, glm::vec2 dims,
 		float density, float friction, bool fixedRotation = false);
-
+	void destroy(b2World* world);
 
 	void drawDebug(ge::DebugRenderer& debugRenderer);
 

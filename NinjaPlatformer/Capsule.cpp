@@ -52,6 +52,14 @@ void Capsule::init(b2World * world, glm::vec2 pos, glm::vec2 dims,
 
 }
 
+void Capsule::destroy(b2World * world)
+{
+	if (m_body) {
+		world->DestroyBody(m_body);
+		m_body = nullptr;
+	}
+}
+
 void Capsule::drawDebug(ge::DebugRenderer& debugRenderer)
 {
 	auto color = ge::ColorRGBA8(255, 255, 255, 255);
