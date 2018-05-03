@@ -44,7 +44,7 @@ private:
 	ge::Camera2D m_hudCamera;
 	ge::SpriteBatch m_agentSpriteBatch; /// to draw all agents
 	ge::SpriteBatch m_hudSpriteBatch; /// to draw hud text
-	ge::ParticleEngine2D particleEngine_;
+	ge::ParticleEngine2D m_particleEngine;
 	ge::ParticleBatch2D* m_bloodParticleBatch = nullptr;
 
 	ge::InputManager m_inputManager;

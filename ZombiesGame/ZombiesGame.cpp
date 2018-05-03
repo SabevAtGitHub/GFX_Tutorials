@@ -97,7 +97,7 @@ void ZombiesGame::initSystems()
 			{ p.pos += p.velocity * deltaTime; 
 			  p.color.a = (GLubyte)(p.life * 255.f); }); // lampda for blood particles custom behavior
 
-	particleEngine_.addParticleBatch(m_bloodParticleBatch);
+	m_particleEngine.addParticleBatch(m_bloodParticleBatch);
 
 	// setting the FPS limiter
 	m_fpsLimiter.setTargetFps(DESIRED_FPS);
@@ -190,7 +190,7 @@ void ZombiesGame::gameLoop()
 			updateBullets(deltaTime);
 
 			// patricles update
-			particleEngine_.update(deltaTime);
+			m_particleEngine.update(deltaTime);
 			
 			totalDeltaTime -=deltaTime;
 			timeSteps++;
@@ -471,7 +471,7 @@ void ZombiesGame::drawGame()
 	m_agentSpriteBatch.renderBatch();
 
 	// Render the particles, reusing agents sprite batch
-	particleEngine_.draw(&m_agentSpriteBatch);
+	m_particleEngine.draw(&m_agentSpriteBatch);
 
 	drawHud();  // drawing text on the screen
 
