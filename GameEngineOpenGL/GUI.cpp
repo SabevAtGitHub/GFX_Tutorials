@@ -135,9 +135,9 @@ namespace ge
 	{
 		using namespace CEGUI;
 		widget->setPosition(UVector2(
-			UDim(destRectPerc.x, destRectPerc.x), UDim(destRectPerc.y, destRectPerc.y)));
+			UDim(destRectPerc.x, destRectPix.x), UDim(destRectPerc.y, destRectPix.y)));
 		widget->setSize(USize(
-			UDim(destRectPerc.z, destRectPerc.z), UDim(destRectPerc.w, destRectPerc.w)));
+			UDim(destRectPerc.z, destRectPix.z), UDim(destRectPerc.w, destRectPix.w)));
 	}
 
 #pragma endregion

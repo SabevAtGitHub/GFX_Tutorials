@@ -6,11 +6,10 @@
 EditorScreen::EditorScreen(ge::Window* window)
 	:
 	m_window(window),
-	m_spriteFont("Fonts/chintzy.ttf", 31)
+	m_spriteFont("Fonts/chintzy.ttf", 16)
 {
 	m_screenIndex = SCREEN_INDEX_EDITOR;
 }
-
 
 EditorScreen::~EditorScreen()
 {
@@ -82,10 +81,15 @@ void EditorScreen::draw()
 	// uploading the camera matrix to the GPU
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
 
-	{// drawing the color picker quad
+	m_spriteBatch.begin();
+
+	auto wH = (float)m_window->getHeight();
+	auto wW = (float)m_window->getWidth();
+
+	// drawing the color picker quad
+	{
 		const float QUAD_SIZE = 75.0f;
-		auto wH = (float)m_window->getHeight();
-		auto sliderYMiddle = (m_bSlider->getYPosition().d_scale - m_bSlider->getHeight().d_scale * 2.0f) * wH + wH / 2.0f - QUAD_SIZE / 2.0f;
+		auto sliderYMiddle = wH / 2.0f - (m_bSlider->getYPosition().d_scale) * wH - QUAD_SIZE;
 
 		glm::vec4 destRect;
 		// some offset for x
@@ -97,17 +101,30 @@ void EditorScreen::draw()
 		auto uvRect = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 		auto color = ge::ColorRGBA8((GLubyte)m_rColorVal, (GLubyte)m_gColorVal, (GLubyte)m_bColorVal, 255);
 
-		m_spriteBatch.begin();
 		m_spriteBatch.draw(destRect, uvRect, m_blankTexture.id, 0.0f, color);
-		m_spriteBatch.end();
 	}
+
+	// drawing radio button lables
+	{
+		auto color = ge::ColorRGBA8(255, 255, 255, 255);
+		glm::vec2 pos;
+
+		pos.x = m_rigidRadioBtn->getXPosition().d_scale * wW - wW / 2.0f + m_rigidRadioBtn->getWidth().d_offset / 2.0f;
+		pos.y = wH / 2.0f - m_rigidRadioBtn->getYPosition().d_scale * wH;
+		m_spriteFont.draw(m_spriteBatch, "Rigid", pos, glm::vec2(1.0f), 0.0f, color, ge::Justification::MIDDLE);
+
+		pos.x = m_dynamicRadioBtn->getXPosition().d_scale * wW - wW / 2.0f + m_dynamicRadioBtn->getWidth().d_offset / 2.0f;
+		pos.y = wH / 2.0f - m_dynamicRadioBtn->getYPosition().d_scale * wH;
+		m_spriteFont.draw(m_spriteBatch, "Dynamic", pos, glm::vec2(1.0f), 0.0f, color, ge::Justification::MIDDLE);
+	}
+
+	m_spriteBatch.end();
 	m_spriteBatch.renderBatch();
 	m_textureProgram.unuse();
 
 	m_gui.draw();
 
 }
-
 
 void EditorScreen::initShaders()
 {
@@ -136,8 +153,9 @@ void EditorScreen::initGUI()
 #pragma region Sliders
 	{ // adding sliders
 		std::string typ = "Slider";
+
 		const float X_DIM = 0.02f, Y_DIM = 0.13f;
-		const float X_POS = 0.08f, Y_POS = 0.1f;
+		const float X_POS = 0.08f, Y_POS = 0.25f;
 		const float PADDING = 0.015f;
 
 		auto destRect = glm::vec4(X_POS, Y_POS, X_DIM, Y_DIM);
@@ -172,6 +190,40 @@ void EditorScreen::initGUI()
 	}
 #pragma endregion
 
+#pragma region Radio buttons
+	{
+		std::string typ = "RadioButton";
+
+		const float DIM_PX = 15.0f;
+		const float X_POS = 0.085f, Y_POS = 0.15f;
+		const float PADDING = 0.07f;
+
+		// rigid radio button
+		auto destRectPerc = glm::vec4(X_POS, Y_POS, 0.0f, 0.0f);
+		auto destRectPx = glm::vec4(0.0f, 0.0f, DIM_PX, DIM_PX);
+
+		m_rigidRadioBtn = static_cast<RadioButton*>(m_gui.createWidget(std::string(scheme + "/" + typ), destRectPerc, destRectPx, "rigidRadioBtn"));
+		m_rigidRadioBtn->subscribeEvent(RadioButton::EventMouseClick,
+			Event::Subscriber(&EditorScreen::onRigidMouseClick, this));
+
+		// dynamic radio button
+		destRectPerc = glm::vec4(X_POS + PADDING, Y_POS, 0.0f, 0.0f);
+		destRectPx = glm::vec4(0.0f, 0.0f, DIM_PX, DIM_PX);
+
+		m_dynamicRadioBtn = static_cast<RadioButton*>(m_gui.createWidget(std::string(scheme + "/" + typ), destRectPerc, destRectPx, "dynamicRadioBtn"));
+		m_dynamicRadioBtn->subscribeEvent(RadioButton::EventMouseClick,
+			Event::Subscriber(&EditorScreen::onDynamicMouseClick, this));
+
+
+		if (m_physicsMode == PhysicsMode::RIGID)
+		{
+			m_rigidRadioBtn->setSelected(true);
+		}
+		else if (m_physicsMode == PhysicsMode::DYNAMIC) {
+			m_dynamicRadioBtn->setSelected(true);
+		}
+	}
+#pragma endregion
 
 	// set custom mouse cursor
 	m_gui.setMouseCursor(std::string(scheme + "/MouseArrow"));
@@ -202,17 +254,29 @@ bool EditorScreen::onExitClicked(const CEGUI::EventArgs& eargs)
 	return true;
 }
 
-bool EditorScreen::onRedPickerChanged() {
+bool EditorScreen::onRedPickerChanged(const CEGUI::EventArgs& eargs) {
 	m_rColorVal = m_rSlider->getCurrentValue();
 	return true;
 }
 
-bool EditorScreen::onGreenPickerChanged() {
+bool EditorScreen::onGreenPickerChanged(const CEGUI::EventArgs& eargs) {
 	m_gColorVal = m_gSlider->getCurrentValue();
 	return true;
 }
 
-bool EditorScreen::onBluePickerChanged() {
+bool EditorScreen::onBluePickerChanged(const CEGUI::EventArgs& eargs) {
 	m_bColorVal = m_bSlider->getCurrentValue();
+	return true;
+}
+
+bool EditorScreen::onRigidMouseClick(const CEGUI::EventArgs& eargs)
+{
+	m_physicsMode = PhysicsMode::RIGID;
+	return true;
+}
+
+bool EditorScreen::onDynamicMouseClick(const CEGUI::EventArgs& eargs)
+{
+	m_physicsMode = PhysicsMode::DYNAMIC;
 	return true;
 }

@@ -9,6 +9,11 @@
 #include <GameEngineOpenGL\GUI.h>
 #include "ScreenIndices.h"
 
+
+enum class PhysicsMode {
+	RIGID, DYNAMIC,
+};
+
 class EditorScreen : public ge::IGameScreen
 {
 public:
@@ -42,9 +47,11 @@ private:
 	void initGUI();
 	void checkInput();
 	bool onExitClicked(const CEGUI::EventArgs& eargs);
-	bool onRedPickerChanged();
-	bool onGreenPickerChanged();
-	bool onBluePickerChanged();
+	bool onRedPickerChanged(const CEGUI::EventArgs& eargs);
+	bool onGreenPickerChanged(const CEGUI::EventArgs& eargs);
+	bool onBluePickerChanged(const CEGUI::EventArgs& eargs);
+	bool onRigidMouseClick(const CEGUI::EventArgs& eargs);
+	bool onDynamicMouseClick(const CEGUI::EventArgs& eargs);
 
 private:
 	ge::Window* m_window = nullptr;
@@ -55,6 +62,8 @@ private:
 	ge::GLSLProgram m_textureProgram;// Shader for the textures
 	ge::GLTexture m_blankTexture;
 
+	PhysicsMode m_physicsMode = PhysicsMode::RIGID;
+
 	float m_rColorVal = 255.f;
 	float m_gColorVal = 255.f;
 	float m_bColorVal = 0.0f;
@@ -62,5 +71,7 @@ private:
 	CEGUI::Slider* m_rSlider = nullptr;
 	CEGUI::Slider* m_gSlider = nullptr;
 	CEGUI::Slider* m_bSlider = nullptr;
+	CEGUI::RadioButton* m_rigidRadioBtn = nullptr;
+	CEGUI::RadioButton* m_dynamicRadioBtn = nullptr;
 };
 
