@@ -142,6 +142,20 @@ namespace ge
 		m_program.unuse();
 	}
 
+	void DebugRenderer::drawLine(const glm::vec2 & a, const glm::vec2 & b, const ColorRGBA8 & color)
+	{
+		int i = m_verts.size();
+		m_verts.resize(i + 2);
+
+		m_verts[i].pos = a;
+		m_verts[i].color = color;
+		m_verts[i + 1].pos = b;
+		m_verts[i + 1].color = color;
+
+		m_indices.push_back(i);
+		m_indices.push_back(i + 1);
+	}
+
 	void DebugRenderer::dispose()
 	{
 		if (m_vao)
