@@ -7,14 +7,14 @@ Gun::Gun(std::string gunName, int fireRate, int bulletsPerShot,
 	float spread, float bulletsSpeed, float bulletsDamage,
 	ge::SoundEffect soundEffect) :
 	/*initializer list*/
-	soundEffect_(soundEffect),
-	gunName_(gunName),
-	fireRate_(fireRate),
-	bulletsPerShot_(bulletsPerShot),
-	spread_(spread),
-	bulletsSpeed_(bulletsSpeed),
-	bulletsDamage_(bulletsDamage),
-	frameCounter_(0)
+	m_soundEffect(soundEffect),
+	m_gunName(gunName),
+	m_fireRate(fireRate),
+	m_bulletsPerShot(bulletsPerShot),
+	m_spread(spread),
+	m_bulletsSpeed(bulletsSpeed),
+	m_bulletsDamage(bulletsDamage),
+	m_frameCounter(0)
 {
 	/*empty*/
 }
@@ -27,19 +27,19 @@ Gun::~Gun()
 void Gun::fire(bool isMouseDown, const glm::vec2& position, const glm::vec2& direction,
 	std::vector<Bullet>& bullets, float detaTime)
 {
-	frameCounter_ += 1 * detaTime;
+	m_frameCounter += 1 * detaTime;
 	// randomize shooting direction based on the spread
 	std::mt19937 randEngine(static_cast<unsigned int>(time(nullptr)));
-	std::uniform_real_distribution<float> randRotate(-spread_, spread_);
+	std::uniform_real_distribution<float> randRotate(-m_spread, m_spread);
 
-	if (frameCounter_ >= fireRate_  && isMouseDown) {
-		soundEffect_.play();
+	if (m_frameCounter >= m_fireRate  && isMouseDown) {
+		m_soundEffect.play();
 		
-		for (int i = 0; i < bulletsPerShot_; i++) {
+		for (int i = 0; i < m_bulletsPerShot; i++) {
 			bullets.emplace_back(position, 
 								glm::rotate(direction, randRotate(randEngine)),
-								bulletsDamage_, bulletsSpeed_);
+								m_bulletsDamage, m_bulletsSpeed);
 		}
-		frameCounter_ = 0.f;
+		m_frameCounter = 0.f;
 	}
 }

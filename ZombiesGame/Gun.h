@@ -18,16 +18,14 @@ public:
 		std::vector<Bullet>& bullets, float detaTime);
 
 private:
-	ge::SoundEffect soundEffect_;
+	ge::SoundEffect m_soundEffect;
+	std::string m_gunName;
 
-	std::string gunName_;
-
-	int fireRate_; ///< Fire rate in terms of frames
-	int bulletsPerShot_;
-	float spread_;
-	
-	float bulletsSpeed_;
-	float bulletsDamage_;
-	float frameCounter_;
+	int m_fireRate; ///< Fire rate in terms of frames
+	int m_bulletsPerShot;
+	float m_spread;
+	float m_bulletsSpeed;
+	float m_bulletsDamage;
+	float m_frameCounter;
 };
 
