@@ -22,6 +22,7 @@ namespace ge {
 		glm::vec2 getPosition() { return m_pos; }
 		float getScale() { return m_scale; }
 		glm::mat4 getCameraMatrix() { return m_cameraMatrix; }
+		float getAspectRatio() const { return (float)m_scrW / (float)m_scrH; }
 
 	private:
 		glm::vec2 m_pos;

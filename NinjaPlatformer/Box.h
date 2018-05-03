@@ -17,7 +17,9 @@ public:
 		glm::vec2 dims, 
 		ge::GLTexture texture,
 		ge::ColorRGBA8 color, 
-		bool fixedRotation = false, 
+		bool fixedRotation, 
+		bool isDynamic,
+		float angle = 0.0f,
 		glm::vec4 uvRect = glm::vec4(0.f, 0.f, 1.f, 1.f));
 	void destroy(b2World* world);
 
@@ -41,5 +43,7 @@ private:
 	ge::ColorRGBA8 m_color;
 	ge::GLTexture m_texture2D;
 	glm::vec4 m_uvRect;
+	bool m_fixedRotation;
+	bool m_isDynamic;
 };
 
