@@ -39,12 +39,12 @@ public:
 	bool applyDamage(float damage);
 
 	// setters
-	void setPos(glm::vec2 newPos) { pos_ = newPos; }
-	void setDir(glm::vec2 newDir) { dir_ = newDir; }
-	void setSpeed(float speed) { speed_ = speed; }
+	void setPos(glm::vec2 newPos) { m_pos = newPos; }
+	void setDir(glm::vec2 newDir) { m_dir = newDir; }
+	void setSpeed(float speed) { m_speed = speed; }
 
 	// getters
-	glm::vec2 getPos() const { return pos_; }
+	glm::vec2 getPos() const { return m_pos; }
 	const float getRadius() const { return radius_; }
 protected:
 
@@ -53,9 +53,9 @@ protected:
 		std::vector<glm::vec2>& tilesPos, 
 		const std::vector<std::string>& lvlData);
 
-	glm::vec2 pos_;
-	glm::vec2 dir_;
-	float speed_;
+	glm::vec2 m_pos;
+	glm::vec2 m_dir;
+	float m_speed;
 	float health_;
 	int lives_;
 	const float radius_ = 20.f;

@@ -4,17 +4,17 @@
 #include <iostream>
 
 Agent::Agent() :
-	pos_(0.f, 0.f),
-	dir_(1.f, 0.f),
-	speed_(0.f),
+	m_pos(0.f, 0.f),
+	m_dir(1.f, 0.f),
+	m_speed(0.f),
 	lives_(1)
 { /* empty */ }
 
 Agent::Agent(glm::vec2 position, glm::vec2 direction, 
 	float speed, int numLives) :
-	pos_(position),
-	dir_(direction),
-	speed_(speed)
+	m_pos(position),
+	m_dir(direction),
+	m_speed(speed)
 { /*empty*/ }
 
 Agent::~Agent()
@@ -26,12 +26,12 @@ bool Agent::collideWithLevel(const std::vector<std::string>& lvlData)
 	// get the center positions of each collidable tile
 	// add add it to the the vector collisitonTilePos
 	std::vector<glm::vec2> collideTileCenters;
-	getCollisionTileCenter(this->pos_.x, this->pos_.y, collideTileCenters, lvlData);	// top left
-	getCollisionTileCenter(this->pos_.x, this->pos_.y + AGENT_WIDTH, 
+	getCollisionTileCenter(this->m_pos.x, this->m_pos.y, collideTileCenters, lvlData);	// top left
+	getCollisionTileCenter(this->m_pos.x, this->m_pos.y + AGENT_WIDTH, 
 						   collideTileCenters, lvlData);							// bottom left
-	getCollisionTileCenter(this->pos_.x + AGENT_WIDTH, 
-						   this->pos_.y + AGENT_WIDTH, collideTileCenters, lvlData); // bottom right
-	getCollisionTileCenter(this->pos_.x + AGENT_WIDTH, this->pos_.y, 
+	getCollisionTileCenter(this->m_pos.x + AGENT_WIDTH, 
+						   this->m_pos.y + AGENT_WIDTH, collideTileCenters, lvlData); // bottom right
+	getCollisionTileCenter(this->m_pos.x + AGENT_WIDTH, this->m_pos.y, 
 						   collideTileCenters, lvlData);							// top right
 
 	if (0 == collideTileCenters.size()) {
@@ -39,7 +39,7 @@ bool Agent::collideWithLevel(const std::vector<std::string>& lvlData)
 	}
 
 	// sorting collistion tiles by distance	
-	auto agentCenterPos = this->pos_ + glm::vec2(AGENT_RADIUS);
+	auto agentCenterPos = this->m_pos + glm::vec2(AGENT_RADIUS);
 	std::sort(collideTileCenters.begin(), collideTileCenters.end(),
 		[&](glm::vec2& a, glm::vec2& b) 
 			{return glm::length(agentCenterPos - a) < glm::length(agentCenterPos - b); });
@@ -59,7 +59,7 @@ bool Agent::collideWithLevel(const std::vector<std::string>& lvlData)
 bool Agent::collideWithAgent(Agent * agent)
 {
 	const float MIN_DISTANCE = AGENT_RADIUS * 2.f;
-	auto thisCenterPos  = this->pos_ + glm::vec2(AGENT_RADIUS);
+	auto thisCenterPos  = this->m_pos + glm::vec2(AGENT_RADIUS);
 	auto agentCenterPos = agent->getPos() + glm::vec2(AGENT_RADIUS);
 
 	auto distVec = thisCenterPos - agentCenterPos;
@@ -70,8 +70,8 @@ bool Agent::collideWithAgent(Agent * agent)
 		// normalizing distVec to get the direction
 		auto pushVec = glm::normalize(distVec) * (collisionDepth / 2.f);
 		// pushing each agent with half depth in the oposite direction
-		this->pos_ += pushVec;
-		agent->pos_ -= pushVec;
+		this->m_pos += pushVec;
+		agent->m_pos -= pushVec;
 		return true;
 	}
 	else {
@@ -82,10 +82,10 @@ bool Agent::collideWithAgent(Agent * agent)
 void Agent::draw(ge::SpriteBatch & spriteBatch)
 {
 	const auto uvRect = glm::vec4(0.f, 0.f, 1.f, 1.f);
-	glm::vec4 destRect(pos_.x , pos_.y, AGENT_WIDTH, AGENT_WIDTH);
+	glm::vec4 destRect(m_pos.x , m_pos.y, AGENT_WIDTH, AGENT_WIDTH);
 
 	// drawing
-	spriteBatch.draw(destRect, uvRect, textureId_, 0.f, color_, dir_);
+	spriteBatch.draw(destRect, uvRect, textureId_, 0.f, color_, m_dir);
 }
 
 bool Agent::applyDamage(float damage)
@@ -105,7 +105,7 @@ void Agent::collideWidthTile(const glm::vec2& tileCenterPos)
 
 	// finding the distance vector between tile center
 	// and the agent center
-	auto agentCenterPos = this->pos_ + glm::vec2(AGENT_RADIUS);
+	auto agentCenterPos = this->m_pos + glm::vec2(AGENT_RADIUS);
 	auto distVec = agentCenterPos - tileCenterPos;
 
 	float xDepth = MIN_DISTANCE - abs(distVec.x);
@@ -116,18 +116,18 @@ void Agent::collideWidthTile(const glm::vec2& tileCenterPos)
 		// checking in wich direction to move the agent
 		if (std::fmax(xDepth, 0.f) < std::fmax(yDepth, 0.f)) {
 			if (distVec.x < 0) {
-				this->pos_.x -= xDepth;
+				this->m_pos.x -= xDepth;
 			}
 			else {
-				this->pos_.x += xDepth;
+				this->m_pos.x += xDepth;
 			}
 		}
 		else {
 			if (distVec.y < 0) {
-				this->pos_.y -= yDepth;
+				this->m_pos.y -= yDepth;
 			}
 			else {
-				this->pos_.y += yDepth;
+				this->m_pos.y += yDepth;
 			}
 		}
 	}

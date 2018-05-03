@@ -25,9 +25,7 @@ void App::addScreens()
 	m_screenList->addScreen(m_gameplayScreen.get());
 	m_screenList->addScreen(m_editorScreen.get());
 
-
-	m_screenList->setScreen(m_editorScreen->getScreenIndex());
-	//m_screenList->setScreen(m_mainMenuScreen->getScreenIndex());
+	m_screenList->setScreen(m_mainMenuScreen->getScreenIndex());
 }
 
 void App::onExit()

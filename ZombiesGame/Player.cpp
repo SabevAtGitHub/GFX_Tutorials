@@ -10,9 +10,9 @@ Player::Player(glm::vec2 position, glm::vec2 direction,
 				ge::Camera2D* camera2D,
 				std::vector<Bullet> *playerBullets)
 {
-	pos_ = position;
-	dir_ = direction;
-	speed_ = initialSpeed;
+	m_pos = position;
+	m_dir = direction;
+	m_speed = initialSpeed;
 	inputMngr_ = inputManager;
 	camera_ = camera2D;
 	bullets_ = playerBullets;
@@ -49,16 +49,16 @@ void Player::update(const std::vector<std::string>& lvlData,
 {
 	// processing input - todo - move it from here someday
 	if (inputMngr_->isKeyDown(SDLK_w)) {
-		pos_.y += speed_ * deltaTime;
+		m_pos.y += m_speed * deltaTime;
 	}
 	if (inputMngr_->isKeyDown(SDLK_s)) {
-		pos_.y -= speed_ * deltaTime;
+		m_pos.y -= m_speed * deltaTime;
 	}
 	if (inputMngr_->isKeyDown(SDLK_d)) {
-		pos_.x += speed_ * deltaTime;
+		m_pos.x += m_speed * deltaTime;
 	}
 	if (inputMngr_->isKeyDown(SDLK_a)) {
-		pos_.x -= speed_ * deltaTime;
+		m_pos.x -= m_speed * deltaTime;
 	}
 
 	// sycle trough guns
@@ -75,15 +75,15 @@ void Player::update(const std::vector<std::string>& lvlData,
 	auto mouseCoords = inputMngr_->getMouseCoords();
 	mouseCoords = camera_->covertScreenToWorld(mouseCoords);
 
-	auto playerCenterPos = this->pos_;// +glm::vec2(AGENT_RADIUS);
+	auto playerCenterPos = this->m_pos;// +glm::vec2(AGENT_RADIUS);
 
-	dir_ = glm::normalize(mouseCoords - playerCenterPos);
+	m_dir = glm::normalize(mouseCoords - playerCenterPos);
 
 	if (-1 != currGunIdx_) {
 
 
 		guns_[currGunIdx_]->fire(inputMngr_->isKeyDown(SDL_BUTTON_LEFT),
-			playerCenterPos, dir_, *bullets_, deltaTime);
+			playerCenterPos, m_dir, *bullets_, deltaTime);
 	}
 
 	this->collideWithLevel(lvlData);

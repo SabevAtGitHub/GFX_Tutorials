@@ -20,7 +20,7 @@ public:
 	GameplayScreen(ge::Window* window);
 	~GameplayScreen();
 	
-#pragma region Inherited
+#pragma region Inherited via IGameScreen
 
 	virtual int getNextScreenIndex() const override;
 	virtual int getPreviousScreenIndex() const override;
@@ -31,7 +31,7 @@ public:
 	virtual void update() override;
 	virtual void draw() override;
 
-#pragma endregion // Inherited
+#pragma endregion Inherited via IGameScreen
 
 private:
 

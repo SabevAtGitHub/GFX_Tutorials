@@ -19,20 +19,20 @@ void Human::init(glm::vec2 initialPos, float initialSpeed)
 	static std::mt19937 randEngine(static_cast<unsigned int>(time(nullptr)));
 	static std::uniform_real_distribution<float> randDir(-1.f, 1.f);
 
-	this->pos_ = initialPos;
-	this->speed_ = initialSpeed;
+	this->m_pos = initialPos;
+	this->m_speed = initialSpeed;
 	this->color_.setColor(255, 255, 255, 255);
 	this->health_ =15.f;
 
 	// getting random direction
-	this->dir_ = glm::vec2(randDir(randEngine), randDir(randEngine));
+	this->m_dir = glm::vec2(randDir(randEngine), randDir(randEngine));
 
 	// just in case both randDir endup == 0
-	if (0 == this->dir_.length()) {
-		this->dir_ = glm::vec2(1.f, 0.f);
+	if (0 == this->m_dir.length()) {
+		this->m_dir = glm::vec2(1.f, 0.f);
 	}
 
-	this->dir_ = glm::normalize(this->dir_);
+	this->m_dir = glm::normalize(this->m_dir);
 	textureId_ = ge::ResourceManager::getTexture("Textures/human.png").id;
 }
 
@@ -44,10 +44,10 @@ void Human::update(const std::vector<std::string>& lvlData,
 	static std::mt19937 randEngine(static_cast<unsigned int>(time(nullptr)));
 	static std::uniform_real_distribution<float> randRotate(-20.1f, 20.1f);
 
-	this->pos_ += this->dir_ * this->speed_ * deltaTime;
+	this->m_pos += this->m_dir * this->m_speed * deltaTime;
 
 	if (200 == frames_) {
-		this->dir_ = glm::rotate(this->dir_, randRotate(randEngine));
+		this->m_dir = glm::rotate(this->m_dir, randRotate(randEngine));
 		frames_ = 0;
 	}
 	else {
@@ -55,7 +55,7 @@ void Human::update(const std::vector<std::string>& lvlData,
 	}
 
 	if (collideWithLevel(lvlData)) {
-		this->dir_ = glm::rotate(this->dir_, randRotate(randEngine));
+		this->m_dir = glm::rotate(this->m_dir, randRotate(randEngine));
 		frames_ = 0;
 	}
 }

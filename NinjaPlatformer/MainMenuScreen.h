@@ -11,26 +11,18 @@ public:
 	MainMenuScreen(ge::Window* window);
 	~MainMenuScreen();
 
-#pragma region TODO: TEST GUI ELEMENTS
+#pragma region Inherited via IGameScreen
 
-	// Inherited via IGameScreen
 	virtual int getNextScreenIndex() const override;
-
 	virtual int getPreviousScreenIndex() const override;
-
 	virtual void build() override;
-
 	virtual void destroy() override;
-
 	virtual void onEntry() override;
-
 	virtual void onExit() override;
-
 	virtual void update() override;
-
 	virtual void draw() override;
 
-#pragma endregion TODO: TEST GUI ELEMENTS
+#pragma endregion Inherited via IGameScreen
 
 private:
 	void initGUI();
@@ -38,6 +30,7 @@ private:
 	bool onPlayGameClicked(const CEGUI::EventArgs& eargs);
 	bool onEditorClicked(const CEGUI::EventArgs& eargs);
 	bool onExitClicked(const CEGUI::EventArgs& eargs);
+
 private:
 	ge::Window* m_window = nullptr;
 	ge::GUI m_gui;

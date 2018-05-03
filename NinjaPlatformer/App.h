@@ -16,7 +16,8 @@ public:
 	virtual void addScreens() override;
 	virtual void onExit() override;
 
-#pragma endregion // Inherited via IMainGame
+#pragma endregion Inherited via IMainGame
+
 private:
 	std::unique_ptr<MainMenuScreen> m_mainMenuScreen = nullptr;
 	std::unique_ptr<GameplayScreen> m_gameplayScreen = nullptr;
