@@ -39,33 +39,33 @@ public:
 	void addBlood(const glm::vec2& position, int numParticles);
 
 private:
-	ge::Window window_;
+	ge::Window m_window;
 	ge::Camera2D camera_;
-	ge::Camera2D hudCamera_;
-	ge::SpriteBatch agentSpriteBatch_; /// to draw all agents
-	ge::SpriteBatch hudSpriteBatch_; /// to draw hud text
+	ge::Camera2D m_hudCamera;
+	ge::SpriteBatch m_agentSpriteBatch; /// to draw all agents
+	ge::SpriteBatch m_hudSpriteBatch; /// to draw hud text
 	ge::ParticleEngine2D particleEngine_;
-	ge::ParticleBatch2D* bloodParticleBatch_ = nullptr;
+	ge::ParticleBatch2D* m_bloodParticleBatch = nullptr;
 
-	ge::InputManager inputMngr_;
-	ge::FpsLimiter fpsLimiter_;
-	GameState gameState_;		  // class in this header
-	ge::GLSLProgram colorProgram_; // used in void initShaders
+	ge::InputManager m_inputManager;
+	ge::FpsLimiter m_fpsLimiter;
+	GameState m_gameState;		  // enum class in this header
+	ge::GLSLProgram m_colorProgram; // used in void initShaders
 	ge::SpriteFont* m_spriteFont = nullptr;
-	ge::AudioManager audioEngine_;
+	ge::AudioManager m_audioEngine;
 	
-	int scrW_, scrH_;
-	float maxFps_, currFps_;
+	int scrW, scrH;
+	float m_maxFps, m_currFps;
 
-	std::vector<Level*> levels_;
-	int currLvl_;
+	std::vector<Level*> m_levels;
+	int m_currLvl;
 
-	Player* player_ = nullptr;
-	std::vector<Human*> humans_; ///< vector of all humans
-	std::vector<Zombie*> zombies_; ///< vector of all zombies
-	std::vector<Bullet> bullets_; ///< vector of all bullets
+	Player* m_player = nullptr;
+	std::vector<Human*> m_humans; ///< vector of all humans
+	std::vector<Zombie*> m_zombies; ///< vector of all zombies
+	std::vector<Bullet> m_bullets; ///< vector of all bullets
 
-	int humansKilled_;
-	int zombiesKilled_;
+	int m_humansKilled;
+	int m_zombiesKilled;
 };
 

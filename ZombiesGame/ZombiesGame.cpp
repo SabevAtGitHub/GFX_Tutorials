@@ -23,30 +23,30 @@ const float MILLISEC_PER_SEC = 1000.f;
 const float CAMERA_SCALE = 1.f / 2.5f;
 
 ZombiesGame::ZombiesGame() :
-	gameState_(GameState::PLAY),
-	scrW_(1366),
-	scrH_(768),
-	maxFps_(60.f),
-	currFps_(0),
-	player_(nullptr),
-	humansKilled_(0),
-	zombiesKilled_(0)
+	m_gameState(GameState::PLAY),
+	scrW(1366),
+	scrH(768),
+	m_maxFps(60.f),
+	m_currFps(0),
+	m_player(nullptr),
+	m_humansKilled(0),
+	m_zombiesKilled(0)
 { /* empty */ }
 
 // destructor
 ZombiesGame::~ZombiesGame() { 
 
-	for (size_t i = 0; i < levels_.size(); i++) {
-		delete levels_[i];
+	for (size_t i = 0; i < m_levels.size(); i++) {
+		delete m_levels[i];
 	}
 
 	// destroy humans
-	for (size_t i = 0; i < humans_.size(); i++) {
-		delete humans_[i];
+	for (size_t i = 0; i < m_humans.size(); i++) {
+		delete m_humans[i];
 	} 
 
-	for (size_t i = 0; i < zombies_.size(); i++) {
-		delete zombies_[i];
+	for (size_t i = 0; i < m_zombies.size(); i++) {
+		delete m_zombies[i];
 	}
 
 	delete m_spriteFont;
@@ -57,7 +57,7 @@ void ZombiesGame::run()
 	initSystems();
 	initGameProps();
 
-	auto music = audioEngine_.loadMusic("Sounds/Suspense Loop.wav");
+	auto music = m_audioEngine.loadMusic("Sounds/Suspense Loop.wav");
 	music.play(-1);
 
 	gameLoop();
@@ -69,82 +69,82 @@ void ZombiesGame::initSystems()
 	ge::init();
 
 	// initializing sound, must happen after ge::init()
-	audioEngine_.init();
+	m_audioEngine.init();
 
 	// set up the camera
-	camera_.init(scrW_, scrH_);
-	hudCamera_.init(scrW_, scrH_);
-	hudCamera_.setPosition(glm::vec2(scrW_ / 2, scrH_ / 2));
+	camera_.init(scrW, scrH);
+	m_hudCamera.init(scrW, scrH);
+	m_hudCamera.setPosition(glm::vec2(scrW / 2, scrH / 2));
 
 	// create the window
-	window_.create("Zombies Game", scrW_, scrH_, ge::WINDOW_SHOWN);
+	m_window.create("Zombies Game", scrW, scrH, ge::WINDOW_SHOWN);
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f); // light gray background
 
 	// Calling program to compile the shaders
 	initShaders();
-	agentSpriteBatch_.init();
-	hudSpriteBatch_.init();
+	m_agentSpriteBatch.init();
+	m_hudSpriteBatch.init();
 
 	// initializing sprite font 
 	// ( must be initialized after initializing SDL, OpenGL and shaders )
 	m_spriteFont = new ge::SpriteFont("Fonts/chintzy.ttf", 31);
 
 	// initializing particles
-	bloodParticleBatch_ = new ge::ParticleBatch2D();
-	bloodParticleBatch_->init( 1000, 0.05f, 
+	m_bloodParticleBatch = new ge::ParticleBatch2D();
+	m_bloodParticleBatch->init( 1000, 0.05f, 
 		ge::ResourceManager::getTexture("Textures/particle.png"),
 		[] (ge::Particle2D& p, float deltaTime)  
 			{ p.pos += p.velocity * deltaTime; 
 			  p.color.a = (GLubyte)(p.life * 255.f); }); // lampda for blood particles custom behavior
 
-	particleEngine_.addParticleBatch(bloodParticleBatch_);
+	particleEngine_.addParticleBatch(m_bloodParticleBatch);
 
 	// setting the FPS limiter
-	fpsLimiter_.setTargetFps(DESIRED_FPS);
+	m_fpsLimiter.setTargetFps(DESIRED_FPS);
 }
 
 void ZombiesGame::initGameProps()
 {
 	// initializing level 1
-	levels_.push_back(new Level("Levels/level_1.txt"));
-	currLvl_ = 0;
+	m_levels.push_back(new Level("Levels/level_1.txt"));
+	m_currLvl = 0;
 
 	// initializing player
-	player_ = new Player(
-		levels_[currLvl_]->getPlayerStartPos(), 
+	m_player = new Player(
+		m_levels[m_currLvl]->getPlayerStartPos(), 
 		glm::vec2(0.f, 1.f), PLAYER_SPEED, 3, 
-		&inputMngr_, &camera_, &bullets_);
+		&m_inputManager, &camera_, &m_bullets);
 	
 	// Add player to vecor of humans
-	humans_.push_back(player_);
+	m_humans.push_back(m_player);
 
 	// random POS to use when initializing humans
 	std::mt19937 randEngine;
 	randEngine.seed(static_cast<unsigned int>(time(nullptr)));
-	std::uniform_int_distribution <int> randX(1, levels_[currLvl_]->getWidth() - 2);
-	std::uniform_int_distribution <int> randY(1, levels_[currLvl_]->getHeight() - 2);
+	std::uniform_int_distribution <int> randX(1, m_levels[m_currLvl]->getWidth() - 2);
+	std::uniform_int_distribution <int> randY(1, m_levels[m_currLvl]->getHeight() - 2);
 	
 	// initializing humans
-	for (int i = 0; i < levels_[currLvl_]->getNumHumans(); i++) {		
-		humans_.push_back(new Human);
+	for (int i = 0; i < m_levels[m_currLvl]->getNumHumans(); i++) {		
+		m_humans.push_back(new Human);
 		auto pos = glm::vec2((float)randX(randEngine) * TILE_WITH, (float)randY(randEngine) * TILE_WITH);
-		humans_.back()->init(pos, HUMAN_SPEED);
+		m_humans.back()->init(pos, HUMAN_SPEED);
 	}
 
 	// initializing zombies
-	auto zombiePositions = levels_[currLvl_]->getZombiesStartPos();
+	auto zombiePositions = m_levels[m_currLvl]->getZombiesStartPos();
 	for (size_t i = 0; i < zombiePositions.size(); i++) {
-		zombies_.push_back(new Zombie);
-		zombies_.back()->init(zombiePositions[i], ZOMBIE_SPEED);
+		m_zombies.push_back(new Zombie);
+		m_zombies.back()->init(zombiePositions[i], ZOMBIE_SPEED);
 	}
 
 	// initializing guns
-	player_->addGun(new Gun("Magnum", 13, 2, 0.05f, BULLET_SPEED, 7.5f, 
-		audioEngine_.loadSoundEffect("Sounds/Glock.ogg")));
-	player_->addGun(new Gun("Shotgun", 22, 10, 0.3f, BULLET_SPEED, 4.5f,
-		audioEngine_.loadSoundEffect("Sounds/Hekler.ogg")));
-	player_->addGun(new Gun("MP5", 11, 4, 0.12f, BULLET_SPEED, 3.5f,
-		audioEngine_.loadSoundEffect("Sounds/Uzi.ogg")));
+	m_player->addGun(new Gun("Magnum", 13, 2, 0.05f, BULLET_SPEED, 7.5f, 
+		m_audioEngine.loadSoundEffect("Sounds/Glock.ogg")));
+	m_player->addGun(new Gun("Shotgun", 22, 10, 0.3f, BULLET_SPEED, 4.5f,
+		m_audioEngine.loadSoundEffect("Sounds/Hekler.ogg")));
+	m_player->addGun(new Gun("MP5", 11, 4, 0.12f, BULLET_SPEED, 3.5f,
+		m_audioEngine.loadSoundEffect("Sounds/Uzi.ogg")));
 
 }
 
@@ -152,13 +152,13 @@ void ZombiesGame::initShaders()
 {
 	// adding attributes for each variable in the shader files
 	// right now the entry point is the .vert file
-	colorProgram_.compileShadersFromFile("Shaders/colorShading.vert", "Shaders/colorShading.frag");
-	colorProgram_.addAttribute("vertexPos");
-	colorProgram_.addAttribute("vertexColor");
-	colorProgram_.addAttribute("vertexUV");
+	m_colorProgram.compileShadersFromFile("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+	m_colorProgram.addAttribute("vertexPos");
+	m_colorProgram.addAttribute("vertexColor");
+	m_colorProgram.addAttribute("vertexUV");
 
 	// linking the 2 shader files
-	colorProgram_.linkShaders();
+	m_colorProgram.linkShaders();
 }
 
 void ZombiesGame::gameLoop()
@@ -170,8 +170,8 @@ void ZombiesGame::gameLoop()
 	auto prevTicks = SDL_GetTicks();
 
 	// Game loop
-	while (gameState_ == GameState::PLAY) {
-		fpsLimiter_.beginFrame();  // start counting fps
+	while (m_gameState == GameState::PLAY) {
+		m_fpsLimiter.beginFrame();  // start counting fps
 
 		auto newTicks = SDL_GetTicks();
 		auto frameTicks = newTicks - prevTicks;
@@ -179,7 +179,7 @@ void ZombiesGame::gameLoop()
 		float totalDeltaTime = (float)frameTicks / DESIRED_FRAME_TIME;
 
 		checkVictory();		
-		inputMngr_.update();
+		m_inputManager.update();
 		processInput();			 // get user input
 
 		int timeSteps = 0; // this counter makes sure we don't spiral to death
@@ -197,18 +197,18 @@ void ZombiesGame::gameLoop()
 		}
 		
 		// camera updating
-		camera_.setPosition(player_->getPos()); // follow the player
+		camera_.setPosition(m_player->getPos()); // follow the player
 		camera_.update();
-		hudCamera_.update();
+		m_hudCamera.update();
 		
 		drawGame(); // drawing the game
 
-		currFps_ = fpsLimiter_.endFrame(); // returning current fps
+		m_currFps = m_fpsLimiter.endFrame(); // returning current fps
 
 		// print once every 10x frames
 		static int frameCounter = 0;
 		if (100 == frameCounter++) {
-			std::cout << "fps: " << currFps_ << std::endl;
+			std::cout << "fps: " << m_currFps << std::endl;
 			frameCounter = 0;
 		}
 	}
@@ -220,53 +220,53 @@ void ZombiesGame::gameLoop()
 void ZombiesGame::updateAgents(float deltaTime)
 {
 	// updating humans
-	for (size_t i = 0; i < humans_.size(); i++) {
-		humans_[i]->update(
-			levels_[currLvl_]->getLevelData(), 
-			humans_, 
-			zombies_, deltaTime);
+	for (size_t i = 0; i < m_humans.size(); i++) {
+		m_humans[i]->update(
+			m_levels[m_currLvl]->getLevelData(), 
+			m_humans, 
+			m_zombies, deltaTime);
 	}
 
 	// updating zombies
-	for (size_t i = 0; i < zombies_.size(); i++) {
-		zombies_[i]->update(
-			levels_[currLvl_]->getLevelData(),
-			humans_,
-			zombies_, deltaTime);
+	for (size_t i = 0; i < m_zombies.size(); i++) {
+		m_zombies[i]->update(
+			m_levels[m_currLvl]->getLevelData(),
+			m_humans,
+			m_zombies, deltaTime);
 	}
 
 	// updating all zombies collisions
-	for (size_t i = 0; i < zombies_.size(); i++) {
+	for (size_t i = 0; i < m_zombies.size(); i++) {
 
 		// updating collisions between zombies
-		for (size_t j = i + 1; j < zombies_.size(); j++) {
-			zombies_[i]->collideWithAgent(zombies_[j]);
+		for (size_t j = i + 1; j < m_zombies.size(); j++) {
+			m_zombies[i]->collideWithAgent(m_zombies[j]);
 		}
 
 		// updating collisions with humans
-		for (size_t j = 1; j < humans_.size(); j++) {
-			if (zombies_[i]->collideWithAgent(humans_[j])) {
+		for (size_t j = 1; j < m_humans.size(); j++) {
+			if (m_zombies[i]->collideWithAgent(m_humans[j])) {
 				// adding new zombie with human's position
-				zombies_.push_back(new Zombie);
-				zombies_.back()->init(humans_[j]->getPos(), ZOMBIE_SPEED);
+				m_zombies.push_back(new Zombie);
+				m_zombies.back()->init(m_humans[j]->getPos(), ZOMBIE_SPEED);
 
 				// deleting collided human
-				delete humans_[j];
-				humans_[j] = humans_.back();
-				humans_.pop_back();
+				delete m_humans[j];
+				m_humans[j] = m_humans.back();
+				m_humans.pop_back();
 			}
 		}
 
 		// updating collisions with player
-		if (zombies_[i]->collideWithAgent(player_)) {
+		if (m_zombies[i]->collideWithAgent(m_player)) {
 			ge::fatalError("Game Over!");
 		}
 	}
 
 	// updating collisions between humans
-	for (size_t i = 0; i < humans_.size(); i++) {
-		for (size_t j = i + 1; j < humans_.size(); j++) {
-			humans_[i]->collideWithAgent(humans_[j]);
+	for (size_t i = 0; i < m_humans.size(); i++) {
+		for (size_t j = i + 1; j < m_humans.size(); j++) {
+			m_humans[i]->collideWithAgent(m_humans[j]);
 		}
 	}
 }
@@ -276,12 +276,12 @@ void ZombiesGame::updateAgents(float deltaTime)
 /// </summary>
 void ZombiesGame::updateBullets(float deltaTime)
 {
-	for (size_t i = 0; i < bullets_.size();) {
+	for (size_t i = 0; i < m_bullets.size();) {
 
 		// collide bullets with level
-		if (bullets_[i].update(levels_[currLvl_]->getLevelData(), deltaTime)) {
-			bullets_[i] = bullets_.back();
-			bullets_.pop_back();
+		if (m_bullets[i].update(m_levels[m_currLvl]->getLevelData(), deltaTime)) {
+			m_bullets[i] = m_bullets.back();
+			m_bullets.pop_back();
 		}
 		else {
 			i++;
@@ -291,26 +291,26 @@ void ZombiesGame::updateBullets(float deltaTime)
 		bool bulletRemoved = false;
 
 		// check zombies
-		for (size_t i = 0; i < bullets_.size(); i++) {
-			for (size_t j = 0; j < zombies_.size();) {
-				if (bullets_[i].collideWithAgent(zombies_[j])) {
+		for (size_t i = 0; i < m_bullets.size(); i++) {
+			for (size_t j = 0; j < m_zombies.size();) {
+				if (m_bullets[i].collideWithAgent(m_zombies[j])) {
 					// Add blood
-					addBlood(bullets_[i].getPos(), 5);
+					addBlood(m_bullets[i].getPos(), 5);
 
 					// damaging the zombie /*true if the zombie died*/
-					if (zombies_[j]->applyDamage(bullets_[i].getDamage())) {
+					if (m_zombies[j]->applyDamage(m_bullets[i].getDamage())) {
 						// deleting killed zombie
-						delete zombies_[j];
-						zombies_[j] = zombies_.back();
-						zombies_.pop_back();
-						zombiesKilled_++;
+						delete m_zombies[j];
+						m_zombies[j] = m_zombies.back();
+						m_zombies.pop_back();
+						m_zombiesKilled++;
 					}
 					else {
 						j++;
 					}
 					// removing the bullet
-					bullets_[i] = bullets_.back();
-					bullets_.pop_back();
+					m_bullets[i] = m_bullets.back();
+					m_bullets.pop_back();
 					i--;
 					bulletRemoved = true;
 					break;
@@ -323,25 +323,25 @@ void ZombiesGame::updateBullets(float deltaTime)
 
 		// check humans
 		if (!bulletRemoved) {		
-			for (size_t j = 1; j < humans_.size();) {
-				if (bullets_[i].collideWithAgent(humans_[j])) {
+			for (size_t j = 1; j < m_humans.size();) {
+				if (m_bullets[i].collideWithAgent(m_humans[j])) {
 					// Add blood
-					addBlood(bullets_[i].getPos(), 5);
+					addBlood(m_bullets[i].getPos(), 5);
 
 					// damaging the human /*true if the zombie died*/
-					if (humans_[j]->applyDamage(bullets_[i].getDamage())) {
+					if (m_humans[j]->applyDamage(m_bullets[i].getDamage())) {
 						// deleting killed human
-						delete humans_[j];
-						humans_[j] = humans_.back();
-						humans_.pop_back();
-						humansKilled_++;
+						delete m_humans[j];
+						m_humans[j] = m_humans.back();
+						m_humans.pop_back();
+						m_humansKilled++;
 					}
 					else {
 						j++;
 					}
 					// removing the bullet
-					bullets_[i] = bullets_.back();
-					bullets_.pop_back();
+					m_bullets[i] = m_bullets.back();
+					m_bullets.pop_back();
 					i--;
 					break;
 				}
@@ -356,8 +356,8 @@ void ZombiesGame::updateBullets(float deltaTime)
 void ZombiesGame::checkVictory()
 {
 	// TODO: Support for multiple levels
-	if (zombies_.empty()) {
-		std::printf("\n*** You win! ***\n You killed %d zombies_ and %d humans_.\n Saved humans_ %d\n", zombiesKilled_, humansKilled_, humans_.size() - 1);
+	if (m_zombies.empty()) {
+		std::printf("\n*** You win! ***\n You killed %d m_zombies and %d m_humans.\n Saved m_humans %d\n", m_zombiesKilled, m_humansKilled, m_humans.size() - 1);
 		ge::fatalError("");
 	}
 }
@@ -372,34 +372,34 @@ void ZombiesGame::processInput()
 	while (SDL_PollEvent(&e)) {
 		switch (e.type) {
 		case SDL_QUIT:
-			gameState_ = GameState::EXIT;
+			m_gameState = GameState::EXIT;
 			break;
 		case SDL_MOUSEMOTION:
-			inputMngr_.setMouseCoords((float)e.motion.x, (float)e.motion.y);
+			m_inputManager.setMouseCoords((float)e.motion.x, (float)e.motion.y);
 			break;
 		case SDL_KEYDOWN:
-			inputMngr_.pressKey(e.key.keysym.sym);
+			m_inputManager.pressKey(e.key.keysym.sym);
 			break;
 		case SDL_KEYUP:
-			inputMngr_.releaseKey(e.key.keysym.sym);
+			m_inputManager.releaseKey(e.key.keysym.sym);
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			inputMngr_.pressKey(e.button.button);
+			m_inputManager.pressKey(e.button.button);
 			break;
 		case SDL_MOUSEBUTTONUP:
-			inputMngr_.releaseKey(e.button.button);
+			m_inputManager.releaseKey(e.button.button);
 			break;
 		}
 	}
 
 	// execute all input actions
-	if (inputMngr_.isKeyDown(SDLK_ESCAPE)) {
-		gameState_ = GameState::EXIT;
+	if (m_inputManager.isKeyDown(SDLK_ESCAPE)) {
+		m_gameState = GameState::EXIT;
 	}
-	if (inputMngr_.isKeyDown(SDLK_q)) {
+	if (m_inputManager.isKeyDown(SDLK_q)) {
 		camera_.setScale(camera_.getScale() - 0.02f);
 	}
-	if (inputMngr_.isKeyDown(SDLK_e)) {
+	if (m_inputManager.isKeyDown(SDLK_e)) {
 		camera_.setScale(camera_.getScale() + 0.02f);
 	}
 
@@ -419,17 +419,17 @@ void ZombiesGame::drawGame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// draw code goes here
-	colorProgram_.use();
+	m_colorProgram.use();
 
 	// this specifies which texture were binding, since multiple
 	// textures can be used at the same time in the shaders
 	glActiveTexture(GL_TEXTURE0);
-	GLint textureLocation = colorProgram_.getUniformLocation("mySampler");
+	GLint textureLocation = m_colorProgram.getUniformLocation("mySampler");
 	glUniform1i(textureLocation, 0);
 
 	// drawing / adjusting the camera here - todo - may change
 	// set the camera matrix and pass it ot shader
-	GLint pLocation = colorProgram_.getUniformLocation("P");
+	GLint pLocation = m_colorProgram.getUniformLocation("P");
 	
 	// grab the camera matrix
 	glm::mat4 cameraMatrix = camera_.getCameraMatrix();
@@ -440,45 +440,45 @@ void ZombiesGame::drawGame()
 	// drawing all game stuff
 
 	// draw level
-	levels_[currLvl_]->draw();
+	m_levels[m_currLvl]->draw();
 	
-	agentSpriteBatch_.begin();
+	m_agentSpriteBatch.begin();
 
 	const glm::vec2 agentDims(AGENT_RADIUS * 2.f);
 
 	// draw humans, including draw player
-	for (size_t i = 0; i < humans_.size(); i++) {
+	for (size_t i = 0; i < m_humans.size(); i++) {
 
-		if (camera_.isInView(humans_[i]->getPos(), agentDims)) {
-			humans_[i]->draw(agentSpriteBatch_);
+		if (camera_.isInView(m_humans[i]->getPos(), agentDims)) {
+			m_humans[i]->draw(m_agentSpriteBatch);
 		}
 	}
 	
 	// draw zombies
-	for (size_t i = 0; i < zombies_.size(); i++) {
-		if (camera_.isInView(zombies_[i]->getPos(), agentDims)) {
-			zombies_[i]->draw(agentSpriteBatch_);
+	for (size_t i = 0; i < m_zombies.size(); i++) {
+		if (camera_.isInView(m_zombies[i]->getPos(), agentDims)) {
+			m_zombies[i]->draw(m_agentSpriteBatch);
 		}
 	}
 
 	// draw bullets
-	for (size_t i = 0; i < bullets_.size(); i++) {
-		bullets_[i].draw(agentSpriteBatch_);
+	for (size_t i = 0; i < m_bullets.size(); i++) {
+		m_bullets[i].draw(m_agentSpriteBatch);
 	}
 
 	// drawing the agents
-	agentSpriteBatch_.end();
-	agentSpriteBatch_.renderBatch();
+	m_agentSpriteBatch.end();
+	m_agentSpriteBatch.renderBatch();
 
 	// Render the particles, reusing agents sprite batch
-	particleEngine_.draw(&agentSpriteBatch_);
+	particleEngine_.draw(&m_agentSpriteBatch);
 
 	drawHud();  // drawing text on the screen
 
-	colorProgram_.unuse();
+	m_colorProgram.unuse();
 
 	// using double buffer rendering to avoid flickering
-	window_.swapBuffer();
+	m_window.swapBuffer();
 }
 
 void ZombiesGame::drawHud()
@@ -486,26 +486,26 @@ void ZombiesGame::drawHud()
 	char buffer[256];
 
 	// set the camera matrix and pass it ot shader
-	GLint pLocation = colorProgram_.getUniformLocation("P");
+	GLint pLocation = m_colorProgram.getUniformLocation("P");
 
 	// grab the camera matrix
-	glm::mat4 cameraMatrix = hudCamera_.getCameraMatrix();
+	glm::mat4 cameraMatrix = m_hudCamera.getCameraMatrix();
 
 	// uploading the camera matrix to the GPU
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 
-	hudSpriteBatch_.begin();
+	m_hudSpriteBatch.begin();
 
-	sprintf_s(buffer, "Num Humans %d", humans_.size());
-	m_spriteFont->draw(hudSpriteBatch_, buffer, glm::vec2(0, 0), 
+	sprintf_s(buffer, "Num Humans %d", m_humans.size());
+	m_spriteFont->draw(m_hudSpriteBatch, buffer, glm::vec2(0, 0), 
 		glm::vec2(1.0f), 0.f, ge::ColorRGBA8(255, 255, 255, 255));
 
-	sprintf_s(buffer, "Num Zombies %d", zombies_.size());
-	m_spriteFont->draw(hudSpriteBatch_, buffer, glm::vec2(0, 32),
+	sprintf_s(buffer, "Num Zombies %d", m_zombies.size());
+	m_spriteFont->draw(m_hudSpriteBatch, buffer, glm::vec2(0, 32),
 		glm::vec2(1.f), 0.f, ge::ColorRGBA8(255, 255, 255, 255));
 
-	hudSpriteBatch_.end();
-	hudSpriteBatch_.renderBatch();
+	m_hudSpriteBatch.end();
+	m_hudSpriteBatch.renderBatch();
 }
 
 void ZombiesGame::addBlood(const glm::vec2& position, int numParticles)
@@ -518,7 +518,7 @@ void ZombiesGame::addBlood(const glm::vec2& position, int numParticles)
 	ge::ColorRGBA8 col(255, 0, 0, 255);
 
 	for (int i = 0; i < numParticles; i++) {
-		bloodParticleBatch_->addParticle(position, glm::rotate(velocity, randAngle(randEngine)), col, 10.f);
+		m_bloodParticleBatch->addParticle(position, glm::rotate(velocity, randAngle(randEngine)), col, 10.f);
 	}
 	// comment
 }

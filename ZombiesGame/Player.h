@@ -28,10 +28,10 @@ public:
 				float deltaTime) override;
 private:
 
-	ge::InputManager* inputMngr_;
+	ge::InputManager* m_inputManager;
 	std::vector<Gun*> guns_;
 	ge::Camera2D* camera_;
-	std::vector<Bullet>* bullets_;
+	std::vector<Bullet>* m_bullets;
 
 	int currGunIdx_;
 };

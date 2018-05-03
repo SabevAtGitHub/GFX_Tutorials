@@ -13,9 +13,9 @@ Player::Player(glm::vec2 position, glm::vec2 direction,
 	m_pos = position;
 	m_dir = direction;
 	m_speed = initialSpeed;
-	inputMngr_ = inputManager;
+	m_inputManager = inputManager;
 	camera_ = camera2D;
-	bullets_ = playerBullets;
+	m_bullets = playerBullets;
 	currGunIdx_ = -1;
 
 	// hardcoded color blue
@@ -48,31 +48,31 @@ void Player::update(const std::vector<std::string>& lvlData,
 	float deltaTime)
 {
 	// processing input - todo - move it from here someday
-	if (inputMngr_->isKeyDown(SDLK_w)) {
+	if (m_inputManager->isKeyDown(SDLK_w)) {
 		m_pos.y += m_speed * deltaTime;
 	}
-	if (inputMngr_->isKeyDown(SDLK_s)) {
+	if (m_inputManager->isKeyDown(SDLK_s)) {
 		m_pos.y -= m_speed * deltaTime;
 	}
-	if (inputMngr_->isKeyDown(SDLK_d)) {
+	if (m_inputManager->isKeyDown(SDLK_d)) {
 		m_pos.x += m_speed * deltaTime;
 	}
-	if (inputMngr_->isKeyDown(SDLK_a)) {
+	if (m_inputManager->isKeyDown(SDLK_a)) {
 		m_pos.x -= m_speed * deltaTime;
 	}
 
 	// sycle trough guns
-	if (inputMngr_->isKeyDown(SDLK_1) && guns_.size() >= 0) {
+	if (m_inputManager->isKeyDown(SDLK_1) && guns_.size() >= 0) {
 		currGunIdx_ = 0;
 	}
-	if (inputMngr_->isKeyDown(SDLK_2) && guns_.size() >= 1) {
+	if (m_inputManager->isKeyDown(SDLK_2) && guns_.size() >= 1) {
 		currGunIdx_ = 1;
 	}
-	if (inputMngr_->isKeyDown(SDLK_3) && guns_.size() >= 2) {
+	if (m_inputManager->isKeyDown(SDLK_3) && guns_.size() >= 2) {
 		currGunIdx_ = 2;
 	}
 
-	auto mouseCoords = inputMngr_->getMouseCoords();
+	auto mouseCoords = m_inputManager->getMouseCoords();
 	mouseCoords = camera_->covertScreenToWorld(mouseCoords);
 
 	auto playerCenterPos = this->m_pos;// +glm::vec2(AGENT_RADIUS);
@@ -82,8 +82,8 @@ void Player::update(const std::vector<std::string>& lvlData,
 	if (-1 != currGunIdx_) {
 
 
-		guns_[currGunIdx_]->fire(inputMngr_->isKeyDown(SDL_BUTTON_LEFT),
-			playerCenterPos, m_dir, *bullets_, deltaTime);
+		guns_[currGunIdx_]->fire(m_inputManager->isKeyDown(SDL_BUTTON_LEFT),
+			playerCenterPos, m_dir, *m_bullets, deltaTime);
 	}
 
 	this->collideWithLevel(lvlData);
