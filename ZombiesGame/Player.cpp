@@ -19,8 +19,8 @@ Player::Player(glm::vec2 position, glm::vec2 direction,
 	currGunIdx_ = -1;
 
 	// hardcoded color blue
-	color_.setColor(255, 255, 255, 255);
-	textureId_ = ge::ResourceManager::getTexture("Textures/player.png").id;
+	m_color.setColor(255, 255, 255, 255);
+	m_textureId = ge::ResourceManager::getTexture("Textures/player.png").id;
 }
 
 

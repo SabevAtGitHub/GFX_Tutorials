@@ -7,7 +7,7 @@ Agent::Agent() :
 	m_pos(0.f, 0.f),
 	m_dir(1.f, 0.f),
 	m_speed(0.f),
-	lives_(1)
+	m_numLives(1)
 { /* empty */ }
 
 Agent::Agent(glm::vec2 position, glm::vec2 direction, 
@@ -85,13 +85,13 @@ void Agent::draw(ge::SpriteBatch & spriteBatch)
 	glm::vec4 destRect(m_pos.x , m_pos.y, AGENT_WIDTH, AGENT_WIDTH);
 
 	// drawing
-	spriteBatch.draw(destRect, uvRect, textureId_, 0.f, color_, m_dir);
+	spriteBatch.draw(destRect, uvRect, m_textureId, 0.f, m_color, m_dir);
 }
 
 bool Agent::applyDamage(float damage)
 {
-	health_ -= damage;
-	return health_ <= 0;
+	m_health -= damage;
+	return m_health <= 0;
 }
 
 /// <summary>

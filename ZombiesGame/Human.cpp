@@ -21,8 +21,8 @@ void Human::init(glm::vec2 initialPos, float initialSpeed)
 
 	this->m_pos = initialPos;
 	this->m_speed = initialSpeed;
-	this->color_.setColor(255, 255, 255, 255);
-	this->health_ =15.f;
+	this->m_color.setColor(255, 255, 255, 255);
+	this->m_health =15.f;
 
 	// getting random direction
 	this->m_dir = glm::vec2(randDir(randEngine), randDir(randEngine));
@@ -33,7 +33,7 @@ void Human::init(glm::vec2 initialPos, float initialSpeed)
 	}
 
 	this->m_dir = glm::normalize(this->m_dir);
-	textureId_ = ge::ResourceManager::getTexture("Textures/human.png").id;
+	m_textureId = ge::ResourceManager::getTexture("Textures/human.png").id;
 }
 
 void Human::update(const std::vector<std::string>& lvlData,

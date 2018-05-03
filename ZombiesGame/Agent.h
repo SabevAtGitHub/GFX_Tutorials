@@ -45,7 +45,7 @@ public:
 
 	// getters
 	glm::vec2 getPos() const { return m_pos; }
-	const float getRadius() const { return radius_; }
+	const float getRadius() const { return m_radius; }
 protected:
 
 	void collideWidthTile(const glm::vec2& tilePos);
@@ -56,10 +56,10 @@ protected:
 	glm::vec2 m_pos;
 	glm::vec2 m_dir;
 	float m_speed;
-	float health_;
-	int lives_;
-	const float radius_ = 20.f;
-	ge::ColorRGBA8 color_; 
-	GLuint textureId_;
+	float m_health;
+	int m_numLives;
+	const float m_radius = 20.f;
+	ge::ColorRGBA8 m_color; 
+	GLuint m_textureId;
 };
 

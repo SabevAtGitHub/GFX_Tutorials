@@ -13,9 +13,9 @@ void Zombie::init(glm::vec2 initialPos, float initialSpeed)
 {
 	this->m_pos = initialPos;
 	this->m_speed = initialSpeed;
-	this->color_.setColor(255, 255, 255, 255);
-	this->health_ = 20.f;
-	textureId_ = ge::ResourceManager::getTexture("Textures/zombie.png").id;
+	this->m_color.setColor(255, 255, 255, 255);
+	this->m_health = 20.f;
+	m_textureId = ge::ResourceManager::getTexture("Textures/zombie.png").id;
 }
 
 void Zombie::update(const std::vector<std::string>& lvlData,
