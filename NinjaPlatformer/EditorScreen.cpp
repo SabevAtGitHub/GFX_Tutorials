@@ -6,7 +6,7 @@
 EditorScreen::EditorScreen(ge::Window* window)
 	:
 	m_window(window),
-	m_spriteFont("Fonts/Xcelsion.ttf", 32)
+	m_spriteFont("Fonts/chintzy.ttf", 31)
 {
 	m_screenIndex = SCREEN_INDEX_EDITOR;
 }
@@ -36,18 +36,15 @@ void EditorScreen::destroy()
 
 void EditorScreen::onEntry()
 {
-	static const float CAMERA_SCALE = 28.f;
+	static const float CAMERA_SCALE = 1.0f;
 	// Init the camera
 	m_camera.init(m_window->getWidth(), m_window->getHeight());
 	m_camera.setScale(CAMERA_SCALE);
 
 	initGUI();
-	m_spriteBatch.init();
-	
 	initShaders();
-
-	ge::ResourceManager::getTexture("Assets/blank.png");
-
+	m_spriteBatch.init();
+	m_blankTexture = ge::ResourceManager::getTexture("Assets/blank.png");
 }
 
 void EditorScreen::onExit()
@@ -67,21 +64,45 @@ void EditorScreen::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.2f, 0.08f, 0.55f, 1.f); // red
 
+	m_textureProgram.use();
+
+	// this specifies which texture were binding, since multiple
+	// textures can be used at the same time in the shaders
+	GLint textureLocation = m_textureProgram.getUniformLocation("mySampler");
+	glUniform1i(textureLocation, 0);
+	glActiveTexture(GL_TEXTURE0);
+
+	// grab the camera matrix
+	glm::mat4 projectionMatrix = m_camera.getCameraMatrix();
+
+	// drawing / adjusting the camera here - todo - may change
+	// set the camera matrix and pass it ot shader
+	GLint pLocation = m_textureProgram.getUniformLocation("P");
+
+	// uploading the camera matrix to the GPU
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
+
 	{// drawing the color picker quad
-		m_spriteBatch.begin();
+		const float QUAD_SIZE = 75.0f;
+		auto wH = (float)m_window->getHeight();
+		auto sliderYMiddle = (m_bSlider->getYPosition().d_scale - m_bSlider->getHeight().d_scale * 2.0f) * wH + wH / 2.0f - QUAD_SIZE / 2.0f;
 
 		glm::vec4 destRect;
-		destRect.x = m_bSlider->getPosition().d_x.px + 20.0f; // some offset
-		destRect.y = m_bSlider->getPosition().d_y.px;
-		destRect.z = 50.0f;
-		destRect.w = 50.0f;
+		// some offset for x
+		destRect.x = m_bSlider->getXPosition().d_scale * m_window->getWidth() + QUAD_SIZE / 1.5f - (float)m_window->getWidth() / 2.0f;
+		destRect.y = sliderYMiddle;
+		destRect.z = QUAD_SIZE;
+		destRect.w = QUAD_SIZE;
 
+		auto uvRect = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 		auto color = ge::ColorRGBA8((GLubyte)m_rColorVal, (GLubyte)m_gColorVal, (GLubyte)m_bColorVal, 255);
 
-		m_spriteBatch.draw(destRect, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 1 , 0.0f, color);
-
+		m_spriteBatch.begin();
+		m_spriteBatch.draw(destRect, uvRect, m_blankTexture.id, 0.0f, color);
 		m_spriteBatch.end();
 	}
+	m_spriteBatch.renderBatch();
+	m_textureProgram.unuse();
 
 	m_gui.draw();
 
@@ -115,9 +136,9 @@ void EditorScreen::initGUI()
 #pragma region Sliders
 	{ // adding sliders
 		std::string typ = "Slider";
-		const float X_DIM = 0.017f, Y_DIM = 0.13f;
+		const float X_DIM = 0.02f, Y_DIM = 0.13f;
 		const float X_POS = 0.08f, Y_POS = 0.1f;
-		const float PADDING = 0.022f;
+		const float PADDING = 0.015f;
 
 		auto destRect = glm::vec4(X_POS, Y_POS, X_DIM, Y_DIM);
 

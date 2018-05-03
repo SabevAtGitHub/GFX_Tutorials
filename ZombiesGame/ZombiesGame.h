@@ -51,7 +51,7 @@ private:
 	ge::FpsLimiter fpsLimiter_;
 	GameState gameState_;		  // class in this header
 	ge::GLSLProgram colorProgram_; // used in void initShaders
-	ge::SpriteFont* spriteFont_ = nullptr;
+	ge::SpriteFont* m_spriteFont = nullptr;
 	ge::AudioManager audioEngine_;
 	
 	int scrW_, scrH_;

@@ -43,7 +43,7 @@ namespace ge {
 		m_regLength = ce - cs + 1;
 		int padding = size / 8;
 
-		std::cout << m_regStart << " " << m_regLength << std::endl;
+		// std::cout << m_regStart << " " << m_regLength << std::endl;
 		// First measure all the regions
 		glm::ivec4* glyphRects = new glm::ivec4[m_regLength];
 		int i = 0, advance;
@@ -155,7 +155,7 @@ namespace ge {
 		m_glyphs = new CharGlyph[m_regLength + 1];
 		for (i = 0; i < m_regLength; i++) {
 			m_glyphs[i].character = (char)(cs + i);
-			std::cout << m_glyphs[i].character << std::endl;
+			// std::cout << m_glyphs[i].character << std::endl;
 			m_glyphs[i].size = glm::vec2(glyphRects[i].z, glyphRects[i].w);
 			m_glyphs[i].uvRect = glm::vec4(
 				(float)glyphRects[i].x / (float)bestWidth,

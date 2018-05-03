@@ -5,6 +5,7 @@
 #include <GameEngineOpenGL\SpriteBatch.h>
 #include <GameEngineOpenGL\SpriteFont.h>
 #include <GameEngineOpenGL\GLSLProgram.h>
+#include <GameEngineOpenGL\GLTexture.h>
 #include <GameEngineOpenGL\GUI.h>
 #include "ScreenIndices.h"
 
@@ -52,11 +53,11 @@ private:
 	ge::SpriteBatch m_spriteBatch;
 	ge::SpriteFont m_spriteFont;
 	ge::GLSLProgram m_textureProgram;// Shader for the textures
-	GLuint m_blankTexture = 0;
+	ge::GLTexture m_blankTexture;
 
 	float m_rColorVal = 255.f;
-	float m_gColorVal = 0.f;
-	float m_bColorVal = 128.f;
+	float m_gColorVal = 255.f;
+	float m_bColorVal = 0.0f;
 
 	CEGUI::Slider* m_rSlider = nullptr;
 	CEGUI::Slider* m_gSlider = nullptr;

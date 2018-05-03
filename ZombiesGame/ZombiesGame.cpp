@@ -49,7 +49,7 @@ ZombiesGame::~ZombiesGame() {
 		delete zombies_[i];
 	}
 
-	delete spriteFont_;
+	delete m_spriteFont;
 }
 
 void ZombiesGame::run()
@@ -87,7 +87,7 @@ void ZombiesGame::initSystems()
 
 	// initializing sprite font 
 	// ( must be initialized after initializing SDL, OpenGL and shaders )
-	spriteFont_ = new ge::SpriteFont("Fonts/chintzy.ttf", 31);
+	m_spriteFont = new ge::SpriteFont("Fonts/chintzy.ttf", 31);
 
 	// initializing particles
 	bloodParticleBatch_ = new ge::ParticleBatch2D();
@@ -497,11 +497,11 @@ void ZombiesGame::drawHud()
 	hudSpriteBatch_.begin();
 
 	sprintf_s(buffer, "Num Humans %d", humans_.size());
-	spriteFont_->draw(hudSpriteBatch_, buffer, glm::vec2(0, 0), 
+	m_spriteFont->draw(hudSpriteBatch_, buffer, glm::vec2(0, 0), 
 		glm::vec2(1.0f), 0.f, ge::ColorRGBA8(255, 255, 255, 255));
 
 	sprintf_s(buffer, "Num Zombies %d", zombies_.size());
-	spriteFont_->draw(hudSpriteBatch_, buffer, glm::vec2(0, 32),
+	m_spriteFont->draw(hudSpriteBatch_, buffer, glm::vec2(0, 32),
 		glm::vec2(1.f), 0.f, ge::ColorRGBA8(255, 255, 255, 255));
 
 	hudSpriteBatch_.end();
