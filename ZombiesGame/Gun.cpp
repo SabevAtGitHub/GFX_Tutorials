@@ -1,7 +1,7 @@
 #include "Gun.h"
 #include <random>
 #include <time.h>
-#include <glm\gtx\rotate_vector.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 Gun::Gun(std::string gunName, int fireRate, int bulletsPerShot,
 	float spread, float bulletsSpeed, float bulletsDamage,

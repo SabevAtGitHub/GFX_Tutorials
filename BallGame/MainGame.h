@@ -1,7 +1,7 @@
 #pragma once
 
-#include <GameEngineOpenGL\Camera2D.h>
-#include <GameEngineOpenGL\SpriteBatch.h>
+#include <GameEngineOpenGL/Camera2D.h>
+#include <GameEngineOpenGL/SpriteBatch.h>
 #include <GameEngineOpenGL/InputManager.h>
 #include <GameEngineOpenGL/Window.h>
 #include <GameEngineOpenGL/GLSLProgram.h>

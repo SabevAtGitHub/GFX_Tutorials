@@ -1,7 +1,7 @@
 #pragma once
 
-#include <GameEngineOpenGL\SpriteBatch.h>
-#include <GameEngineOpenGL\GLSLProgram.h>
+#include <GameEngineOpenGL/SpriteBatch.h>
+#include <GameEngineOpenGL/GLSLProgram.h>
 #include <vector>
 #include <memory>
 #include "Ball.h"

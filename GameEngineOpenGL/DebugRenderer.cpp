@@ -1,6 +1,6 @@
 #define _USE_MATH_DEFINES // for C++
 #include <cmath>
-#include <SDL\SDL.h>
+#include <SDL/SDL.h>
 #include "DebugRenderer.h"
 #include "ErrManager.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <GameEngineOpenGL\Vertex.h>
+#include <GameEngineOpenGL/Vertex.h>
 
 struct Cell;
 

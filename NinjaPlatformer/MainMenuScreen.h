@@ -1,8 +1,8 @@
 #pragma once
-#include <GameEngineOpenGL\IGameScreen.h>
-#include <GameEngineOpenGL\Window.h>
-#include <GameEngineOpenGL\Camera2D.h>
-#include <GameEngineOpenGL\GUI.h>
+#include <GameEngineOpenGL/IGameScreen.h>
+#include <GameEngineOpenGL/Window.h>
+#include <GameEngineOpenGL/Camera2D.h>
+#include <GameEngineOpenGL/GUI.h>
 #include "ScreenIndices.h"
 
 class MainMenuScreen : public ge::IGameScreen

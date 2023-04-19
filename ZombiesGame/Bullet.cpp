@@ -1,4 +1,4 @@
-#include <GameEngineOpenGL\ResourceManager.h>
+#include <GameEngineOpenGL/ResourceManager.h>
 #include "Bullet.h"
 #include "Agent.h"
 #include "Human.h"

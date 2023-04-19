@@ -1,5 +1,5 @@
 #include "Agent.h"
-#include <GameEngineOpenGL\ResourceManager.h>
+#include <GameEngineOpenGL/ResourceManager.h>
 #include <algorithm> 
 #include <iostream>
 

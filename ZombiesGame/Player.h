@@ -1,7 +1,7 @@
 #pragma once
 #include "Human.h"
-#include <GameEngineOpenGL\InputManager.h>
-#include <GameEngineOpenGL\Camera2D.h>
+#include <GameEngineOpenGL/InputManager.h>
+#include <GameEngineOpenGL/Camera2D.h>
 #include "Bullet.h"
 
 class Gun;

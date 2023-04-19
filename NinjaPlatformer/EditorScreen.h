@@ -1,12 +1,12 @@
 #pragma once
-#include <GameEngineOpenGL\IGameScreen.h>
-#include <GameEngineOpenGL\Window.h>
-#include <GameEngineOpenGL\Camera2D.h>
-#include <GameEngineOpenGL\SpriteBatch.h>
-#include <GameEngineOpenGL\SpriteFont.h>
-#include <GameEngineOpenGL\GLSLProgram.h>
-#include <GameEngineOpenGL\GLTexture.h>
-#include <GameEngineOpenGL\GUI.h>
+#include <GameEngineOpenGL/IGameScreen.h>
+#include <GameEngineOpenGL/Window.h>
+#include <GameEngineOpenGL/Camera2D.h>
+#include <GameEngineOpenGL/SpriteBatch.h>
+#include <GameEngineOpenGL/SpriteFont.h>
+#include <GameEngineOpenGL/GLSLProgram.h>
+#include <GameEngineOpenGL/GLTexture.h>
+#include <GameEngineOpenGL/GUI.h>
 #include "ScreenIndices.h"
 
 

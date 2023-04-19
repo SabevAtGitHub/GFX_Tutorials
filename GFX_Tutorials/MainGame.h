@@ -1,14 +1,14 @@
 #pragma once
-#include <SDL\SDL.h>
-#include <GL\glew.h>
-#include <GameEngineOpenGL\Sprite.h>
-#include <GameEngineOpenGL\GLSLProgram.h>
-#include <GameEngineOpenGL\GLTexture.h>
-#include <GameEngineOpenGL\Window.h>
-#include <GameEngineOpenGL\Camera2D.h>
-#include <GameEngineOpenGL\SpriteBatch.h>
-#include <GameEngineOpenGL\InputManager.h>
-#include <GameEngineOpenGL\Timing.h>
+#include <SDL/SDL.h>
+#include <GL/glew.h>
+#include <GameEngineOpenGL/Sprite.h>
+#include <GameEngineOpenGL/GLSLProgram.h>
+#include <GameEngineOpenGL/GLTexture.h>
+#include <GameEngineOpenGL/Window.h>
+#include <GameEngineOpenGL/Camera2D.h>
+#include <GameEngineOpenGL/SpriteBatch.h>
+#include <GameEngineOpenGL/InputManager.h>
+#include <GameEngineOpenGL/Timing.h>
 #include <vector>
 #include "Bullet.h"
 

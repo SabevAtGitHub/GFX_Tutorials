@@ -1,5 +1,5 @@
 #pragma once
-#include <GameEngineOpenGL\IMainGame.h>
+#include <GameEngineOpenGL/IMainGame.h>
 #include "GameplayScreen.h"
 #include "MainMenuScreen.h"
 #include "EditorScreen.h"

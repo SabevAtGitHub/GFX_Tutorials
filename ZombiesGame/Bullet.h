@@ -1,6 +1,6 @@
 #pragma once
-#include <glm\glm.hpp>
-#include <GameEngineOpenGL\SpriteBatch.h>
+#include <glm/glm.hpp>
+#include <GameEngineOpenGL/SpriteBatch.h>
 #include <vector>
 
 class Agent;

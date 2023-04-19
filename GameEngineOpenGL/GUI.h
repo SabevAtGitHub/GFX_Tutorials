@@ -1,13 +1,13 @@
 #pragma once
-#include <CEGUI\CEGUI.h>
-#include <CEGUI\RendererModules\OpenGL\GL3Renderer.h>
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/OpenGL/GL3Renderer.h>
 #include <string>
 #include <memory>
-#include <SDL\SDL_events.h>
-#include <glm\glm.hpp>
+#include <SDL/SDL_events.h>
+#include <glm/glm.hpp>
 
 namespace ge
-{
+{GUI
 	class GUI
 	{
 	public:

@@ -1,6 +1,6 @@
 #include "Zombie.h"
 #include "Human.h"
-#include <GameEngineOpenGL\ResourceManager.h>
+#include <GameEngineOpenGL/ResourceManager.h>
 
 Zombie::Zombie()
 { /*empty*/ }

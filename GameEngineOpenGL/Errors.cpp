@@ -1,7 +1,7 @@
 #include "ErrManager.h"
 #include <iostream>
-#include <SDL\SDL.h>
-#include <GL\glew.h>
+#include <SDL/SDL.h>
+#include <GL/glew.h>
 #include <cstdlib>
 
 namespace ge {

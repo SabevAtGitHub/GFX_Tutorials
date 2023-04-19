@@ -1,7 +1,7 @@
 #include "GameplayScreen.h"
-#include <GameEngineOpenGL\ResourceManager.h>
-#include <GameEngineOpenGL\IMainGame.h>
-#include <GameEngineOpenGL\Vertex.h>
+#include <GameEngineOpenGL/ResourceManager.h>
+#include <GameEngineOpenGL/IMainGame.h>
+#include <GameEngineOpenGL/Vertex.h>
 #include <random>
 #include <iostream>
 #include "ScreenIndices.h"

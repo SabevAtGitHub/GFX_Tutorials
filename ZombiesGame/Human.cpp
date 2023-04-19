@@ -1,8 +1,8 @@
 #include "Human.h"
-#include <GameEngineOpenGL\ResourceManager.h>
+#include <GameEngineOpenGL/ResourceManager.h>
 #include <random>
 #include <time.h>
-#include <glm\gtx\rotate_vector.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 
 Human::Human() : 

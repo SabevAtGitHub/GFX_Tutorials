@@ -1,15 +1,15 @@
 #pragma once
 
-#include <GameEngineOpenGL\Window.h>
-#include <GameEngineOpenGL\Camera2D.h>
-#include <GameEngineOpenGL\InputManager.h>
-#include <GameEngineOpenGL\GLSLProgram.h>
-#include <GameEngineOpenGL\Timing.h>
-#include <GameEngineOpenGL\SpriteBatch.h>
-#include <GameEngineOpenGL\SpriteFont.h>
-#include <GameEngineOpenGL\AudioManager.h>
-#include <GameEngineOpenGL\ParticleEngine2D.h>
-#include <GameEngineOpenGL\ParticleBatch2D.h>
+#include <GameEngineOpenGL/Window.h>
+#include <GameEngineOpenGL/Camera2D.h>
+#include <GameEngineOpenGL/InputManager.h>
+#include <GameEngineOpenGL/GLSLProgram.h>
+#include <GameEngineOpenGL/Timing.h>
+#include <GameEngineOpenGL/SpriteBatch.h>
+#include <GameEngineOpenGL/SpriteFont.h>
+#include <GameEngineOpenGL/AudioManager.h>
+#include <GameEngineOpenGL/ParticleEngine2D.h>
+#include <GameEngineOpenGL/ParticleBatch2D.h>
 
 #include "Level.h"
 #include "Player.h"

@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
-#include <GL\glew.h>
+#include <GL/glew.h>
 #include "Vertex.h"
 
 namespace ge {

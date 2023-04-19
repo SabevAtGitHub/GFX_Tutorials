@@ -1,7 +1,7 @@
 #pragma once
-#include <GameEngineOpenGL\Vertex.h>
-#include <GameEngineOpenGL\SpriteBatch.h>
-#include <glm\glm.hpp>
+#include <GameEngineOpenGL/Vertex.h>
+#include <GameEngineOpenGL/SpriteBatch.h>
+#include <glm/glm.hpp>
 
 class Light
 {

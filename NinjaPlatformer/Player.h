@@ -1,8 +1,8 @@
 #pragma once
-#include <GameEngineOpenGL\SpriteBatch.h>
-#include <GameEngineOpenGL\TileSheet.h>
-#include <GameEngineOpenGL\InputManager.h>
-#include <GameEngineOpenGL\DebugRenderer.h>
+#include <GameEngineOpenGL/SpriteBatch.h>
+#include <GameEngineOpenGL/TileSheet.h>
+#include <GameEngineOpenGL/InputManager.h>
+#include <GameEngineOpenGL/DebugRenderer.h>
 #include "Box.h"
 #include "Capsule.h"
 

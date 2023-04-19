@@ -1,7 +1,6 @@
-#pragma once
+#include <SDL2/SDL.h>
 
-#include <SDL\SDL.h>
-#include <GL\glew.h>
+#include <GL/glew.h>
 #include "GameEngineOpenGL.h"
 
 namespace ge {

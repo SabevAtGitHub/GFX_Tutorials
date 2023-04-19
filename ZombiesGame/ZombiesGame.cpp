@@ -1,8 +1,8 @@
 #include "ZombiesGame.h"
-#include <GameEngineOpenGL\GameEngineOpenGL.h>
-#include <GameEngineOpenGL\ResourceManager.h>
-#include <GameEngineOpenGL\ErrManager.h>
-#include <glm\gtx\rotate_vector.hpp>
+#include <GameEngineOpenGL/GameEngineOpenGL.h>
+#include <GameEngineOpenGL/ResourceManager.h>
+#include <GameEngineOpenGL/ErrManager.h>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include <time.h>
 #include <random>

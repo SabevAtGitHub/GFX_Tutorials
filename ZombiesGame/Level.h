@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <GameEngineOpenGL\SpriteBatch.h>
+#include <GameEngineOpenGL/SpriteBatch.h>
 
 const float TILE_WITH = 64.f;
 const float TILE_RADIUS = TILE_WITH / 2.f;

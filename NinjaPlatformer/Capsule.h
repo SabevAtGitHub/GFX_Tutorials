@@ -1,7 +1,7 @@
 #pragma once
 #include <Box2D\Box2D.h>
-#include <glm\glm.hpp>
-#include <GameEngineOpenGL\DebugRenderer.h>
+#include <glm/glm.hpp>
+#include <GameEngineOpenGL/DebugRenderer.h>
 
 class Capsule
 {

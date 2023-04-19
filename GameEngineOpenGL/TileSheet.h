@@ -1,6 +1,6 @@
 #pragma once
 #include "GLTexture.h"
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 
 namespace ge
 {

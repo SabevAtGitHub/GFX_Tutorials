@@ -1,8 +1,8 @@
 #include "Level.h"
 #include <fstream>
 #include <iostream>
-#include <GameEngineOpenGL\ErrManager.h>
-#include <GameEngineOpenGL\ResourceManager.h>
+#include <GameEngineOpenGL/ErrManager.h>
+#include <GameEngineOpenGL/ResourceManager.h>
 
 
 Level::Level(const std::string & filePath)

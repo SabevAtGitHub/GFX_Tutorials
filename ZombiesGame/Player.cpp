@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "Gun.h"
-#include <GameEngineOpenGL\ResourceManager.h>
-#include <SDL\SDL.h>
+#include <GameEngineOpenGL/ResourceManager.h>
+#include <SDL/SDL.h>
 
 
 Player::Player(glm::vec2 position, glm::vec2 direction,

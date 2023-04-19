@@ -1,5 +1,5 @@
 #include "Bullet.h"
-#include <GameEngineOpenGL\ResourceManager.h>
+#include <GameEngineOpenGL/ResourceManager.h>
 
 Bullet::Bullet(glm::vec2 position, glm::vec2 direction,
 	float velocity, int lifeTime)

@@ -1,5 +1,5 @@
 #include "MainMenuScreen.h"
-#include <SDL\SDL_events.h>
+#include <SDL/SDL_events.h>
 
 
 MainMenuScreen::MainMenuScreen(ge::Window* window)

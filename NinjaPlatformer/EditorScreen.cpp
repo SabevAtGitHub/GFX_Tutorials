@@ -1,6 +1,6 @@
 #include "EditorScreen.h"
-#include <SDL\SDL_events.h>
-#include <GameEngineOpenGL\ResourceManager.h>
+#include <SDL/SDL_events.h>
+#include <GameEngineOpenGL/ResourceManager.h>
 
 
 EditorScreen::EditorScreen(ge::Window* window)

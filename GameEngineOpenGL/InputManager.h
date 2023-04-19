@@ -1,6 +1,6 @@
 #pragma once
 #include <unordered_map>
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 
 namespace ge {
 	class InputManager

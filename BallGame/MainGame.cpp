@@ -1,9 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS // To shut up the compiler about sprintf...
 #include "MainGame.h"
 
-#include <GameEngineOpenGL\GameEngineOpenGL.h>
-#include <GameEngineOpenGL\ResourceManager.h>
-#include <SDL\SDL.h>
+#include <GameEngineOpenGL/GameEngineOpenGL.h>
+#include <GameEngineOpenGL/ResourceManager.h>
+#include <SDL/SDL.h>
 #include <random>
 #include <ctime>
 #include <algorithm>

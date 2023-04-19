@@ -1,9 +1,9 @@
 #include "MainGame.h"
 #include <iostream>
 #include <string>
-#include <GameEngineOpenGL\ErrManager.h>
-#include <GameEngineOpenGL\GameEngineOpenGL.h>
-#include <GameEngineOpenGL\ResourceManager.h>
+#include <GameEngineOpenGL/ErrManager.h>
+#include <GameEngineOpenGL/GameEngineOpenGL.h>
+#include <GameEngineOpenGL/ResourceManager.h>
 
 
 BallGameMainGame::BallGameMainGame() :

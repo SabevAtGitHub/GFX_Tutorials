@@ -1,8 +1,8 @@
  #pragma once
 #include <string>
 #include <vector>
-#include <glm\glm.hpp>
-#include <GameEngineOpenGL\AudioManager.h>
+#include <glm/glm.hpp>
+#include <GameEngineOpenGL/AudioManager.h>
 
 #include "Bullet.h"
 
