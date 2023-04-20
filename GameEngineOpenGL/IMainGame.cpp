@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "IMainGame.h"
 #include "Timing.h"
 #include "GameEngineOpenGL.h"

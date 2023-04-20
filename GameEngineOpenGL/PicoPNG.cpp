@@ -1,6 +1,9 @@
 #include <vector>
 
 namespace ge {
+
+	using std::size_t;
+
 	/*
 	decodePNG: The picoPNG function, decodes a PNG file buffer in memory, into a raw pixel buffer.
 	out_image: output parameter, this will contain the raw pixels after decoding.
@@ -22,7 +25,12 @@ namespace ge {
 	works for trusted PNG files. Use LodePNG instead of picoPNG if you need this information.
 	return: 0 if success, not 0 if some error occured.
 	*/
-	int decodePNG(std::vector<unsigned char>& out_image, unsigned long& image_width, unsigned long& image_height, const unsigned char* in_png, size_t in_size, bool convert_to_rgba32)
+	int decodePNG(std::vector<unsigned char>& out_image,
+								unsigned long& image_width,
+								unsigned long& image_height,
+								const unsigned char* in_png,
+								size_t in_size,
+								bool convert_to_rgba32)
 	{
 		// picoPNG version 20101224
 		// Copyright (c) 2005-2010 Lode Vandevenne

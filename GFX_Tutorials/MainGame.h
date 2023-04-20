@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <GameEngineOpenGL/Sprite.h>
 #include <GameEngineOpenGL/GLSLProgram.h>

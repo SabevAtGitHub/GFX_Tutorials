@@ -12,9 +12,10 @@ namespace ge {
 	/// </summary>
 	void InputManager::update()
 	{
-		for each (auto& key in m_keyMap) {
+		for(auto& key : m_keyMap) {
 			m_prevKeyMap[key.first] = key.second;
 		}
+		
 	}
 
 	void InputManager::pressKey(unsigned int keyId)

@@ -1,5 +1,5 @@
 #include "GUI.h"
-#include <SDL/SDL_timer.h>
+#include <SDL2/SDL_timer.h>
 
 namespace ge
 {

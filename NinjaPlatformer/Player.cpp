@@ -1,5 +1,5 @@
 #include "Player.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <GameEngineOpenGL/ResourceManager.h>
 #include <iostream>
 

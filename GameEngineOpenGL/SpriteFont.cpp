@@ -1,7 +1,7 @@
 #include "SpriteFont.h"
 #include "SpriteBatch.h"
 #include "ErrManager.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 
 

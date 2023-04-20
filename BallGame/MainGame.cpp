@@ -3,7 +3,7 @@
 
 #include <GameEngineOpenGL/GameEngineOpenGL.h>
 #include <GameEngineOpenGL/ResourceManager.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <random>
 #include <ctime>
 #include <algorithm>
