@@ -1,6 +1,7 @@
 
 add_library(
     GameEngineOpenGL
+    STATIC
     GameEngineOpenGL.h
     GameEngineOpenGL.cpp
     AudioManager.h
@@ -56,4 +57,19 @@ target_include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-target_link_libraries(GameEngineOpenGL SDL2main SDL2, GL, glm)
+set(OpenGL_GL_PREFERENCE GLVND)
+
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(glm REQUIRED)
+
+target_link_libraries(GameEngineOpenGL
+    OpenGL
+    SDL2main
+    SDL2
+    SDL2_ttf
+    GLEW
+    glm::glm
+)
+

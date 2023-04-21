@@ -17,6 +17,7 @@ namespace ge {
 		void offsetScale(float offset) { m_scale += offset; if (m_scale < 0.001f) m_scale = 0.001f; m_needsMatrixUpdate = true; }
 		// setters
 		void setPosition(glm::vec2& newPos) { m_pos = newPos; m_needsMatrixUpdate = true; }
+		void setPosition(float x, float y) { m_pos = glm::vec2(x, y); m_needsMatrixUpdate = true; }
 		void setScale(float newScale) { m_scale = newScale; m_needsMatrixUpdate = true; }
 		// getters
 		glm::vec2 getPosition() { return m_pos; }

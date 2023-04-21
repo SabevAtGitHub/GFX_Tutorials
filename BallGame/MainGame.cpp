@@ -71,11 +71,11 @@ void MainGame::init() {
     glClearColor(0.0, 0.0, 0.0, 1.0);
     m_camera.init(m_screenWidth, m_screenHeight);
     // Point the camera to the center of the screen
-    m_camera.setPosition(glm::vec2(m_screenWidth / 2.0f, m_screenHeight / 2.0f));
+    m_camera.setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
     
     m_spriteBatch.init();
     // Initialize sprite font
-    m_spriteFont = std::make_unique<ge::SpriteFont>("Fonts/chintzy.ttf", 40);
+    m_spriteFont = std::make_unique<ge::SpriteFont>("Fonts/chintzy.ttf", 20);
 
     // Compile our texture shader
     m_textureProgram.compileShadersFromFile("Shaders/textureShading.vert", "Shaders/textureShading.frag");
