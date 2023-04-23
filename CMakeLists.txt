@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.22.1)
 project(GFXTutorials)
 
 if(NOT "${CMAKE_CXX_STANDARD}")

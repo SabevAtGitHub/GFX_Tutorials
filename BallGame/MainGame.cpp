@@ -75,10 +75,11 @@ void MainGame::init() {
     
     m_spriteBatch.init();
     // Initialize sprite font
-    m_spriteFont = std::make_unique<ge::SpriteFont>("Fonts/chintzy.ttf", 20);
+    m_spriteFont = std::make_unique<ge::SpriteFont>("Assets/Fonts/chintzy.ttf", 20);
 
     // Compile our texture shader
-    m_textureProgram.compileShadersFromFile("Shaders/textureShading.vert", "Shaders/textureShading.frag");
+    m_textureProgram.compileShadersFromFile(
+        "Assets/Shaders/textureShading.vert", "Assets/Shaders/textureShading.frag");
     m_textureProgram.addAttribute("vertexPosition");
     m_textureProgram.addAttribute("vertexColor");
     m_textureProgram.addAttribute("vertexUV");
@@ -193,7 +194,7 @@ void MainGame::initBalls() {
 
         // Add ball
         m_balls.emplace_back(ballToSpawn->radius, ballToSpawn->mass, pos, direction * ballToSpawn->randSpeed(randomEngine),
-                             ge::ResourceManager::getTexture("Textures/circle.png").id,
+                             ge::ResourceManager::getTexture("Assets/Textures/circle.png").id,
                              ballToSpawn->color);
         // Add the ball do the grid. IF YOU EVER CALL EMPLACE BACK AFTER INIT BALLS, m_grid will have DANGLING POINTERS!
         m_grid->addBall(&m_balls.back());

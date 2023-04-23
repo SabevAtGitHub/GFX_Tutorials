@@ -6,7 +6,8 @@ void BallRenderer::renderBalls(ge::SpriteBatch& spriteBatch, const std::vector<B
     // Lazily initialize the program
     if (m_program == nullptr) {
         m_program = std::make_unique<ge::GLSLProgram>();
-        m_program->compileShadersFromFile("Shaders/textureShading.vert", "Shaders/textureShading.frag");
+        m_program->compileShadersFromFile(
+            "Assets/Shaders/textureShading.vert", "Assets/Shaders/textureShading.frag");
         m_program->addAttribute("vertexPosition");
         m_program->addAttribute("vertexColor");
         m_program->addAttribute("vertexUV");
